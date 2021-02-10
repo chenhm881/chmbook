@@ -12,31 +12,8 @@
         <typeAlias alias="LinkedHashMap" type="java.util.LinkedHashMap" />
         <typeAlias alias="ArrayList" type="java.util.ArrayList" />
         <typeAlias alias="LinkedList" type="java.util.LinkedList" />
-    </ty
-            i:wq
-:
-
-            peAliases>
+    </typeAliases>
     <mappers>
         <mapper resource="mappers/ArticleMapper.xml" />
     </mappers>
 </configuration>
-i
-
-
-ii
-
-:wq:wq
-:
-
-
-
-
-
-
-:wq
-
-    :wq    :wq:wqi::wq
-
-
-        wq::wq:wqiii
