@@ -1,0 +1,25 @@
+spring:
+  application:
+    name: oauth2-server
+server:
+  port: 8771
+
+eureka:
+  instance:
+    instance-id: ${spring.cloud.client.ipaddress}:${spring.application.name}:${server.port}:@project.version@
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      default-zone: http://eureka8761.com:8761/eureka
+
+mybatis:
+  config-location:  classpath:mybatis-config.xml
+  type-aliases-package: com.chm.book.oauth2.domain
+  configuration:
+    map-underscore-to-camel-case: true
+
+rsa:
+  key:
+    publicKeyPath: oauth2/rsa_public_key.pem
+    privateKeyPath: oauth2/rsa_private_key_pkcs8.pem

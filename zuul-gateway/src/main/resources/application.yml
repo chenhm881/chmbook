@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: zuul-gateway
+server:
+  port: 8180
+
+zuul:
+  routes:
+    blog-service:
+      serviceId: blog-service
+      stripPrefix: true
+      path: /blog-service/**
+
+eureka:
+  instance:
+    instance-id: ${spring.cloud.client.ipaddress}:${spring.application.name}:${server.port}:@project.version@
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      default-zone: http://eureka8761.com:8761/eureka

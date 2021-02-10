@@ -1,0 +1,38 @@
+spring:
+  application:
+    name: blog-service
+  datasource:
+    type: com.alibaba.druid.pool.xa.DruidXADataSource
+    master:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      url: jdbc:mysql://47.98.163.117:3306/ming_blog?useSSL=false&allowMultiQueries=true&autoReconnect=true
+      username: root
+      password: 123456
+    cluster:
+    - key: configurationmaster
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      url: jdbc:mysql://47.98.163.117:3306/ming_blog?useSSL=false&allowMultiQueries=true&autoReconnect=true
+      username: root
+      password: 123456
+
+server:
+  port: 8181
+
+eureka:
+  instance:
+    instance-id: ${spring.cloud.client.ipaddress}:${spring.application.name}:${server.port}:@project.version@
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      default-zone: http://eureka8761.com:8761/eureka
+
+mybatis:
+  config-location:  classpath:mybatis-config.xml
+  type-aliases-package: com.chm.book.blog.domain
+  configuration:
+    map-underscore-to-camel-case: true
+
+oauth2:
+  key:
+    publicKey: oauth2/rsa_public_key.pem
