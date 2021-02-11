@@ -15,5 +15,6 @@
     </typeAliases>
     <mappers>
         <mapper resource="mappers/ClientDetailsMapper.xml" />
+        <mapper resource="mappers/SysUserMapper.xml" />
     </mappers>
 </configuration>

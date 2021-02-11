@@ -3,14 +3,20 @@ package com.chm.book.oauth2.config;
 import com.chm.book.oauth2.domain.SysUser;
 import com.chm.book.oauth2.service.JwtClientDetailsService;
 import com.chm.book.oauth2.service.UserService;
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.mybatis.spring.SqlSessionFactoryBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
+import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.jwt.crypto.sign.RsaSigner;
 import org.springframework.security.jwt.crypto.sign.RsaVerifier;
@@ -25,6 +31,7 @@ import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 
+import javax.sql.DataSource;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
 import java.util.HashMap;
@@ -34,6 +41,9 @@ import java.util.Map;
 @Configuration
 @EnableAuthorizationServer
 public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
+
+    @Autowired
+    private Environment env;
 
     @Autowired
     private RsaKeyProperties prop;
@@ -74,10 +84,10 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
             public OAuth2AccessToken enhance(OAuth2AccessToken accessToken, OAuth2Authentication authentication) {
                 Authentication userAuthentication = authentication.getUserAuthentication();
 
-                SysUser sysUser = (SysUser) authentication.getUserAuthentication().getPrincipal();
+                User user = (User) authentication.getUserAuthentication().getPrincipal();
 
                 final Map<String, Object> additionalInformation = new HashMap<>();
-                additionalInformation.put("user", sysUser);
+                additionalInformation.put("user", user);
 
                 ((DefaultOAuth2AccessToken) accessToken).setAdditionalInformation(additionalInformation);
                 return super.enhance(accessToken, authentication);
@@ -117,4 +127,13 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
        return new JwtClientDetailsService();
     }
 
+    @Bean
+    public SqlSessionFactory sqlSessionFactory(DataSource dataSource) throws Exception {
+        SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();
+        sqlSessionFactoryBean.setDataSource(dataSource);
+        sqlSessionFactoryBean.setTypeAliasesPackage(env.getProperty("mybatis.type-aliases-package"));
+        sqlSessionFactoryBean.setConfigLocation(
+                new DefaultResourceLoader().getResource(env.getProperty("mybatis.config-location")));
+        return sqlSessionFactoryBean.getObject();
+    }
 }

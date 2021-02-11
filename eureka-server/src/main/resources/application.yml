@@ -12,3 +12,7 @@ eureka:
     fetch-registry: false
     service-url:
       default-zone: http://eureka8761.com:8761/eureka
+
+logging:
+  level:
+    com.chm.book.oauth2.mapper.*: debug

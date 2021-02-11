@@ -36,3 +36,4 @@ mybatis:
 oauth2:
   key:
     publicKey: oauth2/rsa_public_key.pem
+

@@ -1,8 +1,17 @@
 spring:
   application:
     name: oauth2-server
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://47.98.163.117:3306/security_authority?useSSL=false&allowMultiQueries=true&autoReconnect=true
+    username: root
+    password: 123456
+
 server:
   port: 8771
+
+
 
 eureka:
   instance:
@@ -21,5 +30,5 @@ mybatis:
 
 rsa:
   key:
-    publicKeyPath: oauth2/rsa_public_key.pem
+    publicKeyPath: oauth2/id_rsa_public.pub
     privateKeyPath: oauth2/rsa_private_key_pkcs8.pem
