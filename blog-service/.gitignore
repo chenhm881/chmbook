@@ -35,3 +35,7 @@ build/
 .mvn
 mvnw
 mvnw.cmd
+
+log/
+tmlog.lck
+tmlog5.log

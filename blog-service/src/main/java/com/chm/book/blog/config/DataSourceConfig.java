@@ -21,7 +21,7 @@ import javax.transaction.SystemException;
 
 
 @Configuration
-@MapperScan(basePackages = "com.oneforma.mapper")
+@MapperScan(basePackages = "com.chm.book.blog.mapper")
 public class DataSourceConfig {
 
     @Autowired
