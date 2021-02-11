@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: article-service
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://47.98.163.117:3306/security_authority?useSSL=false&allowMultiQueries=true&autoReconnect=true
+    username: root
+    password: 123456
+
+server:
+  port: 8182
+
+rsa:
+  key:
+    publicKeyPath: oauth2/rsa_public_key.pem

@@ -1,6 +1,5 @@
 package com.chm.book.oauth2.config;
 
-import com.chm.book.oauth2.domain.SysUser;
 import com.chm.book.oauth2.service.JwtClientDetailsService;
 import com.chm.book.oauth2.service.UserService;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -16,7 +15,6 @@ import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.jwt.crypto.sign.RsaSigner;
 import org.springframework.security.jwt.crypto.sign.RsaVerifier;
@@ -50,7 +48,6 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 
     @Autowired
     private UserService userService;
-
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
