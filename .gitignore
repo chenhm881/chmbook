@@ -3,3 +3,6 @@ log/
 tmlog.lck
 tmlog5.log
 tmlog*
+rmlog.log.lck
+rmlog.log*
+

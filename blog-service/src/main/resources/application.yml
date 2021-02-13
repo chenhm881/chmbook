@@ -29,6 +29,8 @@ spring:
 #        preferTokenInfo: false
       sso:
         login-path: http://localhost:8771/login
+  jta:
+    log-dir: classpath:tx-logs
 server:
   port: 8181
   servlet:
