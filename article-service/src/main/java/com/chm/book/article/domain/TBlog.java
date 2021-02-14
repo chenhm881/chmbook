@@ -1,8 +1,17 @@
 package com.chm.book.article.domain;
 
+
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+
+import java.io.Serializable;
 import java.util.Date;
 
-public class TBlog {
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString
+public class TBlog implements Serializable {
     private Long id;
 
     private Boolean appreciation;

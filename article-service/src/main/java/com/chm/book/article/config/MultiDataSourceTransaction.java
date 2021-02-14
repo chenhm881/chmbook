@@ -40,7 +40,6 @@ public class MultiDataSourceTransaction implements Transaction{
         mainDatabaseIdentification = DataSourceContextHolder.getDatabaseType();
     }
 
-
     /**
      * {@inheritDoc}
      */

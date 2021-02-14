@@ -3,6 +3,7 @@
 <configuration>
     <settings>
         <setting name="defaultStatementTimeout" value="86400000"/>
+        <setting name = "cacheEnabled" value = "true" />
     </settings>
     <typeAliases>
         <typeAlias alias="Integer" type="java.lang.Integer" />

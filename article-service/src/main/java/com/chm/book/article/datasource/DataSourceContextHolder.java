@@ -2,10 +2,13 @@ package com.chm.book.article.datasource;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class DataSourceContextHolder {
 
     public static List<String> dataSourceIds = new ArrayList<>();
+
+    public static final String DEFAULT_DS = "master";
 
     private static final ThreadLocal<String> contextHolder = new ThreadLocal<>();
 
@@ -14,7 +17,7 @@ public class DataSourceContextHolder {
     }
 
     public static String getDatabaseType() {
-        return contextHolder.get();
+        return Optional.ofNullable(contextHolder.get()).orElse(DEFAULT_DS);
     }
 
     public static void clearDatabaseType() {

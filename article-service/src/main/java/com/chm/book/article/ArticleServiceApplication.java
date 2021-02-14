@@ -5,6 +5,7 @@ import com.chm.book.article.datasource.DynamicDataSourceRegister;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Import;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 
@@ -12,6 +13,7 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
 @SpringBootApplication
 @Import({DynamicDataSourceRegister.class})
 @EnableResourceServer
+@EnableCaching
 public class ArticleServiceApplication {
 
 	public static void main(String[] args) {
