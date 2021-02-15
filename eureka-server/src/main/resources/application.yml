@@ -15,4 +15,4 @@ eureka:
 
 logging:
   level:
-    com.chm.book.oauth2.mapper.*: debug
+    com.chm.book.eureka.mapper.*: debug
