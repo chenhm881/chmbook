@@ -11,16 +11,15 @@ spring:
 server:
   port: 8771
 
-
-
 eureka:
   instance:
-    instance-id: ${spring.cloud.client.ipaddress}:${spring.application.name}:${server.port}:@project.version@
+    prefer-ip-address: true
+    instance-id: ${spring.cloud.client.ipaddress}:${spring.application.name}:${server.port}
   client:
     register-with-eureka: true
     fetch-registry: true
     service-url:
-      default-zone: http://eureka8761.com:8761/eureka
+      defaultZone: http://eureka-server:8761/eureka
 
 mybatis:
   config-location:  classpath:mybatis-config.xml
