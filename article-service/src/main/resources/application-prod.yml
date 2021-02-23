@@ -29,3 +29,13 @@ mybatis:
   type-aliases-package: com.chm.book.article.domain
   configuration:
     map-underscore-to-camel-case: true
+
+eureka:
+  instance:
+    prefer-ip-address: true
+    instance-id: ${spring.cloud.client.ipaddress}:${spring.application.name}:${server.port}:@project.version@
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://eureka-server:8762/eureka

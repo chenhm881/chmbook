@@ -1,21 +1,45 @@
 spring:
   application:
     name: zuul-gateway
+
 server:
   port: 8180
 
-zuul:
-  routes:
-    blog-service:
-      serviceId: blog-service
-      stripPrefix: true
-      path: /blog-service/**
-
 eureka:
   instance:
-    instance-id: ${spring.cloud.client.ipaddress}:${spring.application.name}:${server.port}:@project.version@
+    prefer-ip-address: true
+    instance-id: bookzuul.com
   client:
     register-with-eureka: true
-    fetch-registry: true
+    fetch-registery: true
     service-url:
-      default-zone: http://eureka8761.com:8761/eureka
+      defaultZone: http://eureka-server:8762/eureka
+
+zuul:
+  sensitive-headers: Cookie,Set-Cookie
+  host:
+    connect-timeout-millis: 3000
+    socket-timeout-millis: 3000
+#  ignored-services: "*"
+  routes:
+    auth:
+      path: /uaa/**
+      service-id: oauth2-server
+      strip-prefix: true
+      custom-sensitive-headers: true
+    myticket:
+      service-id: article-service
+      path: /article-service/**
+      stripPrefix: true
+
+ribbon:
+  ReadTimeout: 3000
+  ConnectTimeout: 3000
+
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeout-in-milliseconds: 3000

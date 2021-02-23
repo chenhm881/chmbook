@@ -5,30 +5,15 @@ spring:
     type: com.alibaba.druid.pool.xa.DruidXADataSource
     master:
       driver-class-name: com.mysql.cj.jdbc.Driver
-      url: jdbc:mysql://47.98.163.117:3306/ming_blog?useSSL=false&allowMultiQueries=true&autoReconnect=true
+      url: jdbc:mysql://47.98.163.117:32306/ming_blog?useSSL=false&allowMultiQueries=true&autoReconnect=true
       username: root
-      password: 123456
+      password: mysql
     cluster:
     - key: database2
       driver-class-name: com.mysql.cj.jdbc.Driver
-      url: jdbc:mysql://47.98.163.117:3306/ming_blog?useSSL=false&allowMultiQueries=true&autoReconnect=true
+      url: jdbc:mysql://47.98.163.117:32306/ming_blog?useSSL=false&allowMultiQueries=true&autoReconnect=true
       username: root
-      password: 123456
-
-  security:
-    oauth2:
-      client:
-        clientId: blog
-        clientSecret: 123456
-        accessTokenUri: http://localhost:8771/oauth/token
-        userAuthorizationUri: http://localhost:8771/oauth/authorize
-        pre-established-redirect-uri: http://localhost:8181/hello
-      resource:
-        tokenInfoUri: http://localhost:8771/oauth/check_token
-#        userInfoUri: http://localhost:8080/user
-#        preferTokenInfo: false
-      sso:
-        login-path: http://localhost:8771/login
+      password: mysql
   jta:
     log-dir: classpath:tx-logs
 server:
@@ -39,14 +24,16 @@ server:
         name: OAUTH2SESSION
 #    context-path: /blog-service
 
-#eureka:
-#  instance:
-#    instance-id: ${spring.cloud.client.ipaddress}:${spring.application.name}:${server.port}:@project.version@
-#  client:
-#    register-with-eureka: true
-#    fetch-registry: true
-#    service-url:
-#      default-zone: http://eureka8761.com:8761/eureka
+eureka:
+  instance:
+    prefer-ip-address: true
+    instance-id: ${spring.cloud.client.ipaddress}:${spring.application.name}:${server.port}:@project.version@
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://eureka-server:8762/eureka
+
 security:
   oauth2:
     client:
@@ -54,10 +41,12 @@ security:
       clientSecret: 123456
       accessTokenUri: http://localhost:8771/oauth/token
       userAuthorizationUri: http://localhost:8771/oauth/authorize
-      pre-established-redirect-uri: http://localhost:8181
+      pre-established-redirect-uri: http://localhost:8181/hello
     resource:
-        tokenInfoUri: http://localhost:8771/oauth/check_token
-        #        userInfoUri: http://localhost:8080/user
+      tokenInfoUri: http://localhost:8771/oauth/check_token
+#        jwk:
+#          key-set-uri: http://localhost:8771/oauth/token_key
+      userInfoUri: http://localhost:8771/user
         #        preferTokenInfo: false
     sso:
       login-path: /

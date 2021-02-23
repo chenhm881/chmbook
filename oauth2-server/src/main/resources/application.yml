@@ -4,9 +4,9 @@ spring:
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://47.98.163.117:3306/security_authority?useSSL=false&allowMultiQueries=true&autoReconnect=true
+    url: jdbc:mysql://47.98.163.117:32306/security_authority?useSSL=false&allowMultiQueries=true&autoReconnect=true
     username: root
-    password: 123456
+    password: mysql
 
 server:
   port: 8771
@@ -19,7 +19,7 @@ eureka:
     register-with-eureka: true
     fetch-registry: true
     service-url:
-      defaultZone: http://eureka-server:8761/eureka
+      defaultZone: http://eureka-server:8762/eureka
 
 mybatis:
   config-location:  classpath:mybatis-config.xml
