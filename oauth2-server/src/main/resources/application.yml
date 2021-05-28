@@ -19,7 +19,7 @@ eureka:
     register-with-eureka: true
     fetch-registry: true
     service-url:
-      defaultZone: http://47.98.163.117:8762/eureka
+      defaultZone: http://oauth2-server:8762/eureka
 
 mybatis:
   config-location:  classpath:mybatis-config.xml
