@@ -28,7 +28,7 @@ eureka:
     register-with-eureka: true
     fetch-registry: true
     service-url:
-      defaultZone: http://eureka-server:8762/eureka
+      defaultZone: http://172.17.0.2:8762/eureka
 
 server:
   port: 8182
