@@ -87,15 +87,14 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
             @Override
             public OAuth2AccessToken enhance(OAuth2AccessToken accessToken, OAuth2Authentication authentication) {
                 Authentication userAuthentication = authentication.getUserAuthentication();
-
-                List<SimpleGrantedAuthority> authorities = new ArrayList<>();
-                authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
-                User user = new User("admin",  bCryptPasswordEncoder.encode("123"), authorities);
-                //User user = (User) authentication.getUserAuthentication().getPrincipal();
-
+                User user;
+                if (userAuthentication == null) {
+                    user = (User)userService.loadUserByClientId(String.valueOf(authentication.getPrincipal()));
+                } else {
+                    user = (User) authentication.getUserAuthentication().getPrincipal();
+                }
                 final Map<String, Object> additionalInformation = new HashMap<>();
                 additionalInformation.put("user", user);
-
                 ((DefaultOAuth2AccessToken) accessToken).setAdditionalInformation(additionalInformation);
                 return super.enhance(accessToken, authentication);
             }

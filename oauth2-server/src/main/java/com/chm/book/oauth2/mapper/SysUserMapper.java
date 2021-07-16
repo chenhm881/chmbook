@@ -9,4 +9,5 @@ import org.springframework.stereotype.Repository;
 public interface SysUserMapper {
 
     SysUser selectSysUser(String username);
+    SysUser selectSysUserByClientId(String clientId);
 }

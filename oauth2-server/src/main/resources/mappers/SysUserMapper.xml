@@ -11,4 +11,9 @@
       select * from sys_user
       where username = #{username}
     </select>
+
+    <select id="selectSysUserByClientId" resultMap="resultMap">
+        select * from sys_user user inner join oauth_client_user client_user on user.username = client_user.username
+        where client_user.client_id = #{clientId} limit 1
+    </select>
 </mapper>
