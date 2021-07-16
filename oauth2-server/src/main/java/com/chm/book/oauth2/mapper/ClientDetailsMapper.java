@@ -5,6 +5,8 @@ import org.apache.ibatis.annotations.Mapper;
 import org.springframework.security.oauth2.provider.client.BaseClientDetails;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Mapper
 @Repository
 public interface ClientDetailsMapper {

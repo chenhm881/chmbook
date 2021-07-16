@@ -1,6 +1,6 @@
 package com.chm.book.article.config;
 
-import com.chm.book.article.domain.TBlog;
+import com.chm.book.article.domain.Posts;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
@@ -20,7 +20,7 @@ public class RedisConfig {
     @Bean
     public RedisCacheManager blogCacheManager(RedisTemplate redisTemplate) {
         RedisCacheWriter redisCacheWriter = RedisCacheWriter.nonLockingRedisCacheWriter(redisTemplate.getConnectionFactory());
-        RedisSerializationContext.SerializationPair<TBlog> valuePair = RedisSerializationContext.SerializationPair
+        RedisSerializationContext.SerializationPair<Posts> valuePair = RedisSerializationContext.SerializationPair
                 .fromSerializer(redisTemplate.getValueSerializer());
 
         RedisCacheConfiguration redisCacheConfiguration = RedisCacheConfiguration.defaultCacheConfig()

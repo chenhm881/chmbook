@@ -13,7 +13,7 @@ eureka:
     register-with-eureka: true
     fetch-registery: true
     service-url:
-      defaultZone: http://eureka-server:8762/eureka
+      defaultZone: http://localhost:8762/eureka
 
 zuul:
   sensitive-headers: Cookie,Set-Cookie

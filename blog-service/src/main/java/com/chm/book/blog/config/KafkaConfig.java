@@ -1,6 +1,5 @@
-package com.heiio.bookkafka.config;
+package com.chm.book.blog.config;
 
-import com.heiio.bookkafka.serialization.BlogSerializer;
 import org.apache.kafka.clients.admin.AdminClient;
 import org.apache.kafka.clients.admin.AdminClientConfig;
 import org.apache.kafka.clients.admin.NewTopic;
@@ -12,11 +11,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.annotation.EnableKafka;
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
-import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
-import org.springframework.kafka.core.DefaultKafkaProducerFactory;
-import org.springframework.kafka.core.KafkaAdmin;
-import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.kafka.core.ProducerFactory;
+import org.springframework.kafka.core.*;
 import org.springframework.kafka.transaction.KafkaTransactionManager;
 
 import java.util.HashMap;
@@ -67,7 +62,7 @@ public class KafkaConfig {
         //props.put(ProducerConfig.BUFFER_MEMORY_CONFIG, bufferMemory);
         //序列化手段
         props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
-        props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, BlogSerializer.class);
+        //props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, BlogSerializer.class);
         //producer端的消息确认机制,-1和all都表示消息不仅要写入本地的leader中还要写入对应的副本中
         props.put(ProducerConfig.ACKS_CONFIG, "-1");//单个brok 推荐使用'1'
         //单条消息的最大值以字节为单位,默认值为1048576
@@ -90,7 +85,7 @@ public class KafkaConfig {
         //一次拉取消息数量
         props.put(ConsumerConfig.MAX_POLL_RECORDS_CONFIG, "5");
         props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringSerializer.class);
-        props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, BlogSerializer.class);
+        //props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, BlogSerializer.class);
         return props;
     }
 

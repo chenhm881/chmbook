@@ -16,6 +16,9 @@ spring:
         password: mysql
   redis:
     host: 47.98.163.117
+    port: 32379
+    timeout: 5000
+    password: redis
 
 ribbon:
   eureka:
@@ -28,7 +31,7 @@ eureka:
     register-with-eureka: true
     fetch-registry: true
     service-url:
-      defaultZone: http://172.17.0.2:8762/eureka
+      defaultZone: http://eureka-server:8762/eureka
 
 server:
   port: 8182

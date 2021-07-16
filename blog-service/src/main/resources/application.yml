@@ -16,6 +16,16 @@ spring:
       password: mysql
   jta:
     log-dir: classpath:tx-logs
+
+  kafka:
+    bootstrap-servers: 47.98.163.117:32092
+    producer:
+      transaction-id-prefix: kafka_tx
+      acks: 1
+      retries: 3
+    consumer:
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
 server:
   port: 8181
   servlet:
@@ -23,6 +33,13 @@ server:
       cookie:
         name: OAUTH2SESSION
 #    context-path: /blog-service
+
+feign:
+  circuitbreaker:
+    enabled: true
+
+hystrix:
+  shareSecurityContext: true
 
 eureka:
   instance:
@@ -38,7 +55,7 @@ security:
   oauth2:
     client:
       clientId: blog
-      clientSecret: 123456
+      clientSecret: 123
       accessTokenUri: http://localhost:8771/oauth/token
       userAuthorizationUri: http://localhost:8771/oauth/authorize
       pre-established-redirect-uri: http://localhost:8181/hello

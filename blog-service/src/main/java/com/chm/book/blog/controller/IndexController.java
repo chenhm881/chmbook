@@ -23,10 +23,18 @@ public class IndexController {
 
     @RequestMapping("/hello")
     public String helloWorld(Authentication user) {
-        ticketService.findTicket("hello");
+        //ticketService.findTicket("hello");
         OAuth2AuthenticationDetails details = (OAuth2AuthenticationDetails)user.getDetails();
-        articleService.find();
-        return "Hello World";
+        String getValue = articleService.find();
+        return getValue;
+    }
+
+    @RequestMapping("/hi")
+    public String hi(Authentication user) {
+        //ticketService.findTicket("hello");
+        OAuth2AuthenticationDetails details = (OAuth2AuthenticationDetails)user.getDetails();
+        String getValue = articleService.select();
+        return getValue;
     }
     @RequestMapping("/user")
     public Authentication getUser(Authentication user) {

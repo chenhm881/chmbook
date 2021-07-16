@@ -6,5 +6,6 @@ git
 test-zuul/
 test-service/
 consumer-service/
+article-service/posts*
 
 
