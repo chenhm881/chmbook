@@ -35,4 +35,17 @@ public class UserService implements UserDetailsService {
             return null;
         }
     }
+
+    public UserDetails loadUserByClientId(String clientId) throws UsernameNotFoundException {
+        SysUser sysUser = sysUserMapper.selectSysUserByClientId(clientId);
+        List<SimpleGrantedAuthority> authorities = new ArrayList<>();
+        authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
+        User user = new User(sysUser.getUsername(), bCryptPasswordEncoder.encode(sysUser.getPassword()), authorities);
+        if (user != null) {
+            return user;
+        } else {
+            return null;
+        }
+    }
+
 }
