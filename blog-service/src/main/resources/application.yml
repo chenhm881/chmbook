@@ -49,7 +49,7 @@ eureka:
     register-with-eureka: true
     fetch-registry: true
     service-url:
-      defaultZone: http://eureka-server:8762/eureka
+      defaultZone: http://10.104.72.168:8762/eureka
 
 security:
   oauth2:
