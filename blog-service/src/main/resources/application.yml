@@ -56,14 +56,14 @@ security:
     client:
       clientId: blog
       clientSecret: 123
-      accessTokenUri: http://localhost:8771/oauth/token
-      userAuthorizationUri: http://localhost:8771/oauth/authorize
-      pre-established-redirect-uri: http://localhost:8181/hello
+      accessTokenUri: http://47.98.163.117:31073/oauth/token
+      userAuthorizationUri: http://47.98.163.117:31073/oauth/authorize
+      pre-established-redirect-uri: http://47.98.163.117:31075/hello
     resource:
-      tokenInfoUri: http://localhost:8771/oauth/check_token
+      tokenInfoUri: http://47.98.163.117:31073/oauth/check_token
 #        jwk:
 #          key-set-uri: http://localhost:8771/oauth/token_key
-      userInfoUri: http://localhost:8771/user
+      userInfoUri: http://47.98.163.117:31073/user
         #        preferTokenInfo: false
     sso:
       login-path: /

@@ -27,12 +27,14 @@ public class JwtClientDetailsService implements ClientDetailsService, ClientRegi
         String grantTypes = oauthClientDetails.getAuthorizedGrantTypes();
         String authorities = oauthClientDetails.getAuthorities();
         String redirectUris = oauthClientDetails.getRegisteredRedirectUris();
+        String autoApproveScopes = oauthClientDetails.getAutoApproveScopes();
 
         BaseClientDetails details = new BaseClientDetails(clientId, resourceIds, scopes, grantTypes, authorities, redirectUris);
         details.setAccessTokenValiditySeconds(oauthClientDetails.getAccessTokenValiditySeconds());
         details.setRefreshTokenValiditySeconds(oauthClientDetails.getRefreshTokenValiditySeconds());
         details.setClientId(oauthClientDetails.getClientId());
         details.setClientSecret(bCryptPasswordEncoder.encode(oauthClientDetails.getClientSecret()));
+        details.isAutoApprove(autoApproveScopes);
         return details;
     }
 
