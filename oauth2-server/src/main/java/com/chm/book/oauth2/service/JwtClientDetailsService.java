@@ -8,6 +8,7 @@ import org.springframework.security.oauth2.provider.*;
 import org.springframework.security.oauth2.provider.client.BaseClientDetails;
 import org.springframework.security.oauth2.provider.client.JdbcClientDetailsService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class JwtClientDetailsService implements ClientDetailsService, ClientRegistrationService {
@@ -27,14 +28,15 @@ public class JwtClientDetailsService implements ClientDetailsService, ClientRegi
         String grantTypes = oauthClientDetails.getAuthorizedGrantTypes();
         String authorities = oauthClientDetails.getAuthorities();
         String redirectUris = oauthClientDetails.getRegisteredRedirectUris();
-        String autoApproveScopes = oauthClientDetails.getAutoApproveScopes();
+        List<String> autoApproveScopes = new ArrayList<>();
+        autoApproveScopes.add(oauthClientDetails.getAutoApproveScopes());
 
         BaseClientDetails details = new BaseClientDetails(clientId, resourceIds, scopes, grantTypes, authorities, redirectUris);
         details.setAccessTokenValiditySeconds(oauthClientDetails.getAccessTokenValiditySeconds());
         details.setRefreshTokenValiditySeconds(oauthClientDetails.getRefreshTokenValiditySeconds());
         details.setClientId(oauthClientDetails.getClientId());
         details.setClientSecret(bCryptPasswordEncoder.encode(oauthClientDetails.getClientSecret()));
-        details.isAutoApprove(autoApproveScopes);
+        details.setAutoApproveScopes(autoApproveScopes);
         return details;
     }
 
