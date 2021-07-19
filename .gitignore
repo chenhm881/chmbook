@@ -8,4 +8,13 @@ test-service/
 consumer-service/
 article-service/posts*
 
+article-service/src/main/resources/application-prod.yml
+article-service/src/main/resources/application.yml
+
+blog-service/src/main/resources/application.yml
+oauth2-server/src/main/resources/application.yml
+eureka-server/src/main/resources/application.yml
+zuul-gateway/src/main/resources/application.yml
+
+
 
