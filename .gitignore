@@ -15,6 +15,3 @@ blog-service/src/main/resources/application.yml
 oauth2-server/src/main/resources/application.yml
 eureka-server/src/main/resources/application.yml
 zuul-gateway/src/main/resources/application.yml
-
-
-
