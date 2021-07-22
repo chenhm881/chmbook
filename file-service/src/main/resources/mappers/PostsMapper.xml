@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chm.book.files.mapper.PostsMapper">
+  <resultMap id="BaseResultMap" type="com.chm.book.files.domain.Posts">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="category_id" jdbcType="INTEGER" property="categoryId" />
+    <result column="locale" jdbcType="VARCHAR" property="locale" />
+    <result column="file_url" jdbcType="VARCHAR" property="fileUrl" />
+    <result column="filename" jdbcType="VARCHAR" property="filename" />
+    <result column="metadata" jdbcType="DOUBLE" property="metadata" />
+    <result column="check_time" jdbcType="BIGINT" property="checkTime" />
+    <result column="upload_time" jdbcType="BIGINT" property="uploadTime" />
+    <result column="validation" jdbcType="INTEGER" property="validation" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="reference_id" jdbcType="INTEGER" property="referenceId" />
+    <result column="review_id" jdbcType="INTEGER" property="reviewId" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.chm.book.files.domain.Posts">
+    <result column="json_string" jdbcType="LONGVARCHAR" property="jsonString" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, category_id, locale, file_url, filename, metadata, check_time, upload_time, validation, 
+    status, reference_id, review_id
+  </sql>
+  <sql id="Blob_Column_List">
+    json_string
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from file_raw
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from file_raw
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.chm.book.files.domain.Posts">
+    insert into file_raw (id, category_id, locale, 
+      file_url, filename, metadata, 
+      check_time, upload_time, validation, 
+      status, reference_id, review_id, 
+      json_string)
+    values (#{id,jdbcType=INTEGER}, #{categoryId,jdbcType=INTEGER}, #{locale,jdbcType=VARCHAR}, 
+      #{fileUrl,jdbcType=VARCHAR}, #{filename,jdbcType=VARCHAR}, #{metadata,jdbcType=DOUBLE}, 
+      #{checkTime,jdbcType=BIGINT}, #{uploadTime,jdbcType=BIGINT}, #{validation,jdbcType=INTEGER}, 
+      #{status,jdbcType=INTEGER}, #{referenceId,jdbcType=INTEGER}, #{reviewId,jdbcType=INTEGER}, 
+      #{jsonString,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.chm.book.files.domain.Posts">
+    insert into file_raw
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="categoryId != null">
+        category_id,
+      </if>
+      <if test="locale != null">
+        locale,
+      </if>
+      <if test="fileUrl != null">
+        file_url,
+      </if>
+      <if test="filename != null">
+        filename,
+      </if>
+      <if test="metadata != null">
+        metadata,
+      </if>
+      <if test="checkTime != null">
+        check_time,
+      </if>
+      <if test="uploadTime != null">
+        upload_time,
+      </if>
+      <if test="validation != null">
+        validation,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="referenceId != null">
+        reference_id,
+      </if>
+      <if test="reviewId != null">
+        review_id,
+      </if>
+      <if test="jsonString != null">
+        json_string,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="categoryId != null">
+        #{categoryId,jdbcType=INTEGER},
+      </if>
+      <if test="locale != null">
+        #{locale,jdbcType=VARCHAR},
+      </if>
+      <if test="fileUrl != null">
+        #{fileUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="filename != null">
+        #{filename,jdbcType=VARCHAR},
+      </if>
+      <if test="metadata != null">
+        #{metadata,jdbcType=DOUBLE},
+      </if>
+      <if test="checkTime != null">
+        #{checkTime,jdbcType=BIGINT},
+      </if>
+      <if test="uploadTime != null">
+        #{uploadTime,jdbcType=BIGINT},
+      </if>
+      <if test="validation != null">
+        #{validation,jdbcType=INTEGER},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="referenceId != null">
+        #{referenceId,jdbcType=INTEGER},
+      </if>
+      <if test="reviewId != null">
+        #{reviewId,jdbcType=INTEGER},
+      </if>
+      <if test="jsonString != null">
+        #{jsonString,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.chm.book.files.domain.Posts">
+    update file_raw
+    <set>
+      <if test="categoryId != null">
+        category_id = #{categoryId,jdbcType=INTEGER},
+      </if>
+      <if test="locale != null">
+        locale = #{locale,jdbcType=VARCHAR},
+      </if>
+      <if test="fileUrl != null">
+        file_url = #{fileUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="filename != null">
+        filename = #{filename,jdbcType=VARCHAR},
+      </if>
+      <if test="metadata != null">
+        metadata = #{metadata,jdbcType=DOUBLE},
+      </if>
+      <if test="checkTime != null">
+        check_time = #{checkTime,jdbcType=BIGINT},
+      </if>
+      <if test="uploadTime != null">
+        upload_time = #{uploadTime,jdbcType=BIGINT},
+      </if>
+      <if test="validation != null">
+        validation = #{validation,jdbcType=INTEGER},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="referenceId != null">
+        reference_id = #{referenceId,jdbcType=INTEGER},
+      </if>
+      <if test="reviewId != null">
+        review_id = #{reviewId,jdbcType=INTEGER},
+      </if>
+      <if test="jsonString != null">
+        json_string = #{jsonString,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.chm.book.files.domain.Posts">
+    update file_raw
+    set category_id = #{categoryId,jdbcType=INTEGER},
+      locale = #{locale,jdbcType=VARCHAR},
+      file_url = #{fileUrl,jdbcType=VARCHAR},
+      filename = #{filename,jdbcType=VARCHAR},
+      metadata = #{metadata,jdbcType=DOUBLE},
+      check_time = #{checkTime,jdbcType=BIGINT},
+      upload_time = #{uploadTime,jdbcType=BIGINT},
+      validation = #{validation,jdbcType=INTEGER},
+      status = #{status,jdbcType=INTEGER},
+      reference_id = #{referenceId,jdbcType=INTEGER},
+      review_id = #{reviewId,jdbcType=INTEGER},
+      json_string = #{jsonString,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.chm.book.files.domain.Posts">
+    update file_raw
+    set category_id = #{categoryId,jdbcType=INTEGER},
+      locale = #{locale,jdbcType=VARCHAR},
+      file_url = #{fileUrl,jdbcType=VARCHAR},
+      filename = #{filename,jdbcType=VARCHAR},
+      metadata = #{metadata,jdbcType=DOUBLE},
+      check_time = #{checkTime,jdbcType=BIGINT},
+      upload_time = #{uploadTime,jdbcType=BIGINT},
+      validation = #{validation,jdbcType=INTEGER},
+      status = #{status,jdbcType=INTEGER},
+      reference_id = #{referenceId,jdbcType=INTEGER},
+      review_id = #{reviewId,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

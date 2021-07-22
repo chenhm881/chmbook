@@ -1,0 +1,51 @@
+spring:
+  application:
+    name: file-service
+  datasource:
+    type: com.alibaba.druid.pool.xa.DruidXADataSource
+    master:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      url: jdbc:mysql://47.98.163.117:32306/file_storage?useSSL=false&allowMultiQueries=true&autoReconnect=true
+      username: root
+      password: mysql
+    cluster:
+      - key: database2
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://47.98.163.117:32306/file_storage?useSSL=false&allowMultiQueries=true&autoReconnect=true
+        username: root
+        password: mysql
+  redis:
+    host: 47.98.163.117
+    port: 32379
+    timeout: 5000
+    password: redis
+
+ribbon:
+  eureka:
+    enabled: true
+eureka:
+  instance:
+    prefer-ip-address: true
+    instance-id: ${spring.cloud.client.ipaddress}:${spring.application.name}:${server.port}:@project.version@
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://eureka-server:8762/eureka
+
+server:
+  port: 8183
+  servlet:
+    session:
+      cookie:
+        name: FILESESSION
+
+rsa:
+  key:
+    publicKeyPath: oauth2/rsa_public_key.pem
+
+mybatis:
+  config-location:  classpath:mybatis-config.xml
+  type-aliases-package: com.chm.book.file.domain
+  configuration:
+    map-underscore-to-camel-case: true
