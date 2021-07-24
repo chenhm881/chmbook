@@ -24,7 +24,7 @@ public class ArticleServiceImp implements FallbackFactory<ArticleService> {
             }
 
             @Override
-            public String select() {
+            public String addFiles() {
                 return msg;
             }
         });

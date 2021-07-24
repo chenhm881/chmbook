@@ -31,6 +31,10 @@ zuul:
       service-id: article-service
       path: /article-service/**
       stripPrefix: true
+    fileService:
+      service-id: file-service
+      path: /file-service/**
+      stripPrefix: true
 
 ribbon:
   ReadTimeout: 3000

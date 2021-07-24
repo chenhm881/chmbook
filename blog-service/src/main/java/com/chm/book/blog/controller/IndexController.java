@@ -21,6 +21,7 @@ public class IndexController {
     private ArticleService articleService;
 
 
+
     @RequestMapping("/hello")
     public String helloWorld(Authentication user) {
         //ticketService.findTicket("hello");
@@ -33,7 +34,7 @@ public class IndexController {
     public String hi(Authentication user) {
         //ticketService.findTicket("hello");
         OAuth2AuthenticationDetails details = (OAuth2AuthenticationDetails)user.getDetails();
-        String getValue = articleService.select();
+        String getValue = articleService.addFiles();
         return getValue;
     }
     @RequestMapping("/user")

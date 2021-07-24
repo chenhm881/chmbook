@@ -2,17 +2,13 @@ package com.chm.book.files.service;
 
 
 import com.chm.book.files.inteface.IScan;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.io.File;
 import java.util.Map;
-import java.util.function.Consumer;
-import java.util.function.Function;
+
 
 @Component
-public abstract class TSVScan implements IScan {
-
+public class TSVScan implements IScan {
 
 
     private String currentFileName = "";
@@ -24,4 +20,8 @@ public abstract class TSVScan implements IScan {
 
     private StringBuilder errorMessages;
 
+    @Override
+    public void action(Integer projectId, Map<Integer, String> dirs, String fileLocation, String action) {
+
+    }
 }

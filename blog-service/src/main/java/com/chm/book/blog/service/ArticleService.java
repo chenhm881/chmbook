@@ -15,8 +15,8 @@ public interface ArticleService {
     public String find();
 
 
-    @PostMapping(value = "/article-service/api/select")
+    @PostMapping(value = "/file-service/api/addFiles")
 //    public String find(@RequestHeader("Authorization") String signature);
-    public String select();
+    public String addFiles();
 
 }

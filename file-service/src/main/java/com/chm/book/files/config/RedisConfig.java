@@ -1,6 +1,6 @@
 package com.chm.book.files.config;
 
-import com.chm.book.files.domain.Files;
+import com.chm.book.files.domain.FileRaw;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
@@ -20,7 +20,7 @@ public class RedisConfig {
     @Bean
     public RedisCacheManager blogCacheManager(RedisTemplate redisTemplate) {
         RedisCacheWriter redisCacheWriter = RedisCacheWriter.nonLockingRedisCacheWriter(redisTemplate.getConnectionFactory());
-        RedisSerializationContext.SerializationPair<Files> valuePair = RedisSerializationContext.SerializationPair
+        RedisSerializationContext.SerializationPair<FileRaw> valuePair = RedisSerializationContext.SerializationPair
                 .fromSerializer(redisTemplate.getValueSerializer());
 
         RedisCacheConfiguration redisCacheConfiguration = RedisCacheConfiguration.defaultCacheConfig()

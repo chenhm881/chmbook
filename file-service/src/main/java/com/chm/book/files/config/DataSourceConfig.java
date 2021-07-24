@@ -21,7 +21,7 @@ import javax.transaction.SystemException;
 
 
 @Configuration
-@MapperScan(basePackages = "com.chm.book.article.mapper")
+@MapperScan(basePackages = "com.chm.book.files.mapper")
 public class DataSourceConfig {
 
     @Autowired

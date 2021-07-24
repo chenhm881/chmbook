@@ -16,7 +16,7 @@ import java.security.interfaces.RSAPublicKey;
 @Configuration
 public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 
-    private static final String RESOURCE_ID = "article-service";
+    private static final String RESOURCE_ID = "file-service";
 
     @Autowired
     private RsaKeyProperties prop;

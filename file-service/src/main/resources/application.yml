@@ -5,13 +5,13 @@ spring:
     type: com.alibaba.druid.pool.xa.DruidXADataSource
     master:
       driver-class-name: com.mysql.cj.jdbc.Driver
-      url: jdbc:mysql://47.98.163.117:32306/file_storage?useSSL=false&allowMultiQueries=true&autoReconnect=true
+      url: jdbc:mysql://47.98.163.117:32306/article_storage?useSSL=false&allowMultiQueries=true&autoReconnect=true
       username: root
       password: mysql
     cluster:
       - key: database2
         driver-class-name: com.mysql.cj.jdbc.Driver
-        url: jdbc:mysql://47.98.163.117:32306/file_storage?useSSL=false&allowMultiQueries=true&autoReconnect=true
+        url: jdbc:mysql://47.98.163.117:32306/article_storage?useSSL=false&allowMultiQueries=true&autoReconnect=true
         username: root
         password: mysql
   redis:

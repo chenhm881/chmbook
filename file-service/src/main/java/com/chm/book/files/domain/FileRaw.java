@@ -1,6 +1,6 @@
 package com.chm.book.files.domain;
 
-public class Files {
+public class FileRaw {
     private Integer id;
 
     private Integer categoryId;
