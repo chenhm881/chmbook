@@ -14,11 +14,8 @@ import java.util.stream.IntStream;
 @Service
 public class ExecuteScan {
 
-
-
     @Autowired
     private ScanFile scanFile;
-
 
     @Autowired
     private ScanFactory scanFactory;

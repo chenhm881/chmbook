@@ -21,6 +21,8 @@ public class OAKScan implements IScan {
     @Autowired
     private OAKPiece oakPiece;
 
+    @Autowired
+    private AudioJsonStore audioJsonStore;
 
     private static Integer count = 1000;
 
@@ -46,6 +48,8 @@ public class OAKScan implements IScan {
                 oakPiece.checkDirection((Map<String, Object>) inputObj, projectId);
         try {
             scanFile.ScanEntrance(fileLocation, dirs, checkDirection, execute);
+
+            audioJsonStore.store(fileRawList);
         } catch (Exception e) {
             e.printStackTrace();
         }
