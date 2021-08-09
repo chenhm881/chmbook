@@ -5,6 +5,7 @@ import com.chm.book.article.command.BlogHystrixObservableCommand;
 import com.chm.book.article.domain.TBlog;
 import com.chm.book.article.service.BlogService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import rx.Observable;
@@ -21,7 +22,7 @@ public class IndexController {
     @Autowired
     private BlogService blogService;
 
-
+    @CrossOrigin
     @RequestMapping("hello")
     public String helloWorld() {
         //int a = 5/0;

@@ -22,7 +22,7 @@
     check_time, validation, status, reference_id, json_string)
     VALUES
     <foreach collection="list" item="c" separator=",">
-      (#{categoryId}, #{c.locale}, #{c.fileUrl}, #{c.filename}, #{c.metadata},
+      (#{c.categoryId}, #{c.locale}, #{c.fileUrl}, #{c.filename}, #{c.metadata},
        #{c.checkTime}, #{c.validation}, #{c.status}, #{c.referenceId}, #{c.jsonString})
     </foreach>
   </insert>

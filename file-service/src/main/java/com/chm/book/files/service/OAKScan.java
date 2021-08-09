@@ -9,6 +9,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -29,7 +30,7 @@ public class OAKScan implements IScan {
     private String currentFileName = "";
 
     @Override
-    public void action(Integer projectId, Map<Integer, String> dirs, String fileLocation, String action) {
+    public void action(Integer categoryId, Map<Integer, String> dirs, String fileLocation, String action) {
 
         List<FileRaw> fileRawList = new ArrayList<>();
 
@@ -40,12 +41,12 @@ public class OAKScan implements IScan {
             currentFileName = file.getPath();
             Map<Integer, String> dir = (Map<Integer, String>) fileLevelMap.get("dir");
 
-            FileRaw fileRaw = oakPiece.check(file, dir, projectId);;
-            fileRawList.add(fileRaw);
+            FileRaw fileRaw = oakPiece.check(file, dir, categoryId);
+            Optional.ofNullable(fileRaw).ifPresent(fileRawNew ->  fileRawList.add(fileRaw));
         };
 
         Function<Object, Integer> checkDirection = inputObj ->
-                oakPiece.checkDirection((Map<String, Object>) inputObj, projectId);
+                oakPiece.checkDirection((Map<String, Object>) inputObj, categoryId);
         try {
             scanFile.ScanEntrance(fileLocation, dirs, checkDirection, execute);
 

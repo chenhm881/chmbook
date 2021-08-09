@@ -1,12 +1,11 @@
-package com.chm.book.files.domain;
+package com.chm.book.files.domain.audiopiece;
 
-import com.chm.book.files.domain.audiopiece.InfoResult;
 import lombok.Data;
 
 import java.util.List;
 
 @Data
-public class FileRawJson {
+public class FileJsonInfo {
     private String CompareKey;
     private String Locale;
     private String CorpusName;
@@ -15,5 +14,3 @@ public class FileRawJson {
     private List<InfoResult> Result;
     private String jsonString;
 }
-
-

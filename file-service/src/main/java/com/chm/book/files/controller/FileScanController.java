@@ -16,14 +16,12 @@ public class FileScanController {
     @Autowired
     private FileScanService fileScanService;
 
-
+    @CrossOrigin
     @RequestMapping("addFiles")
-    public ResponseEntity<Map<String,Object>> scanOnDemand() {
-        Map<String, Object> param = new HashMap<>();
-        param.put("projectId", 1);
-        param.put("location", "E:\\oneforma\\tmp\\TSV\\en-GB\\en-GB-PT-FY20-0430");
-        Integer projectId = Integer.valueOf(param.get("projectId").toString());
-        String fixedLocation = param.get("location").toString();
+    public ResponseEntity<Map<String,Object>> scanOnDemand(@RequestBody Map<String, Object> params) {
+
+        Integer projectId = Integer.valueOf(params.get("projectId").toString());
+        String fixedLocation = params.get("location").toString();
         Map<String,Object> initializedMap = new HashMap<>();
         initializedMap.put("data", fileScanService.addFolderScanning(projectId, fixedLocation, "add"));
         initializedMap.put("status", HttpStatus.OK);

@@ -15,9 +15,6 @@ import java.util.stream.IntStream;
 public class ExecuteScan {
 
     @Autowired
-    private ScanFile scanFile;
-
-    @Autowired
     private ScanFactory scanFactory;
 
     @Setter
@@ -39,6 +36,13 @@ public class ExecuteScan {
         Collections.reverse(folders);
         dirs = IntStream.range(0, folders.size()).boxed().collect(Collectors.toMap(i -> i + 1, folders::get, (a, b) -> b));
         this.scanningAction(projectId, dirs, fixedLocation, action);
+    }
+
+    public void regularExecute(Integer projectId)  {
+
+        String location = "E:\\oneforma\\tmp\\TSV";
+        Map<Integer, String> dirs = new HashMap<>();
+        this.scanningAction(projectId, dirs, location, "add");
     }
 
     private void recursivePathParent(String locationPath, String fixedLocation, List<String> folders) {

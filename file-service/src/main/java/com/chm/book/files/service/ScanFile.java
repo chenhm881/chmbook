@@ -46,9 +46,10 @@ public class ScanFile {
                     dir.put(level, value);
 
                     Map<String, Object> fileLevelMap = new HashMap<>();
-
+                    fileLevelMap.put("file", file);
+                    fileLevelMap.put("key", level);
+                    fileLevelMap.put("dir", dir);
                     Integer existed = checkDirection.apply(fileLevelMap);
-                    if (existed == 1) break;
 
                     scanDirection(file, level, dir, checkDirection, execute);
                 } else {
