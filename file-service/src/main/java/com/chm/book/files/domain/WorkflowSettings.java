@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 public class WorkflowSettings {
     @JsonIgnore
     private String id;
-    private Integer projectId;
+    private Integer categoryId;
     private Integer workflowId;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss")
     private LocalDateTime start;

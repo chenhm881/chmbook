@@ -6,20 +6,15 @@ import com.netflix.hystrix.*;
 import lombok.Getter;
 import rx.Observable;
 import rx.Observer;
-import rx.Subscriber;
-import rx.Subscription;
 import rx.functions.Action1;
 import rx.functions.Func0;
 import rx.functions.Func2;
 import rx.functions.Func3;
 import rx.observables.AsyncOnSubscribe;
-import rx.observables.ConnectableObservable;
 import rx.observables.SyncOnSubscribe;
-import rx.schedulers.Schedulers;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 public class BlogHystrixObservableCommand extends HystrixObservableCommand<List<TBlog>> {
 

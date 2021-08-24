@@ -16,5 +16,6 @@
     </typeAliases>
     <mappers>
         <mapper resource="mappers/TBlogMapper.xml" />
+        <mapper resource="mappers/ArticleMapper.xml" />
     </mappers>
 </configuration>

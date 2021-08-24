@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+       Copyright 2015-2019 the original author or authors.
+       Licensed under the Apache License, Version 2.0 (the "License");
+       you may not use this file except in compliance with the License.
+       You may obtain a copy of the License at
+          http://www.apache.org/licenses/LICENSE-2.0
+       Unless required by applicable law or agreed to in writing, software
+       distributed under the License is distributed on an "AS IS" BASIS,
+       WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+       See the License for the specific language governing permissions and
+       limitations under the License.
+-->
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chm.book.files.mapper.WorkflowSettingsMapper">
+
+    <resultMap id="resultMap" type="com.chm.book.files.domain.WorkflowSettings">
+        <result column="category_id" property="categoryId" jdbcType="INTEGER"/>
+        <result column="workflow_id" property="workflowId" jdbcType="INTEGER"/>
+        <result column="start" property="start" jdbcType="DATE"/>
+        <result column="end" property="end" jdbcType="DATE"/>
+        <result column="enable" property="enable" jdbcType="BIT"/>
+        <result column="days" property="days" jdbcType="VARCHAR"/>
+        <result column="hours" property="hours" jdbcType="VARCHAR"/>
+        <result column="matter_info" property="matterInfo" jdbcType="VARCHAR"/>
+        <result column="triggered_by" property="triggeredBy" jdbcType="VARCHAR"/>
+        <result column="updated_date" property="updatedDate" jdbcType="DATE"/>
+    </resultMap>
+
+    <select id="findWorkflowSettings" resultMap="resultMap" parameterType="Integer">
+        select * from workflow_settings where category_id = ${categoryId} and workflow_id = ${workflowId}
+    </select>
+
+    <update id="update" parameterType="com.chm.book.files.domain.WorkflowSettings">
+        UPDATE workflow_settings set start = #{start}, end = #{end}, enable = #{enable}, days = #{days}, hours = #{hours}, matter_info = #{matterInfo},
+        triggered_by = #{triggeredBy}, updated_date = #{updatedDate}
+        WHERE category_id = ${categoryId} and workflow_id = ${workflowId}
+    </update>
+
+    <insert id="insert" parameterType="com.chm.book.files.domain.WorkflowSettings">
+        <selectKey keyProperty="id" resultType="String" order="BEFORE">
+            select replace(uuid(),'-','') from dual
+        </selectKey>
+        INSERT INTO workflow_settings (id, category_id, workflow_id, start, end, enable, days, hours, matter_info, triggered_by, updated_date)
+        VALUES ( #{id}, #{categoryId}, #{workflowId}, #{start}, #{end}, #{enable}, #{days}, #{hours} , #{matterInfo}, #{triggeredBy}, #{updatedDate} )
+    </insert>
+
+    <insert id="insertOrUpdate" parameterType="com.chm.book.files.domain.WorkflowSettings">
+        INSERT INTO workflow_settings (category_id, workflow_id, start, end, enable, days, hours, matter_info, triggered_by, updated_date)
+        VALUES (#{categoryId}, #{workflowId}, #{start}, #{end}, #{enable}, #{days}, #{hours} , #{matterInfo}, #{triggeredBy}, #{updatedDate} )
+        ON DUPLICATE KEY UPDATE
+        start = values(start), end = values(end), enable = values(enable), days = values(days), hours = values(hours),
+        triggered_by = values(triggered_by), updated_date = values(updated_date)
+    </insert>
+
+    <update id="updateMatterInfo">
+        UPDATE workflow_settings set matter_info = #{matterInfo}
+        WHERE category_id = ${categoryId} and workflow_id = ${workflowId}
+    </update>
+</mapper>

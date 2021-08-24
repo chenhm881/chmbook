@@ -1,17 +1,22 @@
 package com.chm.book.blog.controller;
 
+import com.chm.book.blog.domain.Article;
 import com.chm.book.blog.service.ArticleService;
 import com.chm.book.blog.service.TicketService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.security.oauth2.provider.authentication.OAuth2AuthenticationDetails;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @RestController
+@CrossOrigin
 public class IndexController {
 
     @Autowired
@@ -23,9 +28,9 @@ public class IndexController {
 
 
     @RequestMapping("/hello")
-    public String helloWorld(Authentication user) {
+    public String helloWorld() {
         //ticketService.findTicket("hello");
-        OAuth2AuthenticationDetails details = (OAuth2AuthenticationDetails)user.getDetails();
+        //OAuth2AuthenticationDetails details = (OAuth2AuthenticationDetails)user.getDetails();
         String getValue = articleService.find();
         return getValue;
     }
@@ -42,4 +47,48 @@ public class IndexController {
         return user;
     }
 
+    @CrossOrigin
+    @RequestMapping("/articles")
+    public ResponseEntity<Map<String,Object>> getArticles( @RequestBody Map<String, Object> params) {
+//        List<Article> articles = new ArrayList<>();
+//        Article article = new Article();
+//        article.setId(1);
+//        article.setContent("article 1");
+//        articles.add(article);
+//        Map<String, Object> responseMap = new HashMap<>();
+//        responseMap.put("status", HttpStatus.OK.value());
+//        responseMap.put("data", articles);
+//        responseMap.put("message", "message1");
+//        responseMap.put("tags", new ArrayList<>());
+//        ResponseEntity<Map<String,Object>> articleEntity = new ResponseEntity<>(responseMap, HttpStatus.OK);
+
+        List<Article> articles = articleService.getArticles();
+        Map<String, Object> responseMap = new HashMap<>();
+        responseMap.put("status", HttpStatus.OK.value());
+        responseMap.put("data", articles);
+        responseMap.put("message", "message1");
+        ResponseEntity<Map<String,Object>> articleEntity = new ResponseEntity<>(responseMap, HttpStatus.OK);
+        return articleEntity;
+    }
+
+    @CrossOrigin
+    @RequestMapping("/article/{id}")
+    public ResponseEntity<Map<String,Object>> getArticle( @PathVariable Integer id) {
+        Article article = articleService.getArticle();
+        Map<String, Object> responseMap = new HashMap<>();
+        responseMap.put("status", HttpStatus.OK.value());
+        responseMap.put("data", article);
+        responseMap.put("message", "message1");
+        responseMap.put("category", 1);
+        responseMap.put("tags", new Integer[] {1, 2});
+        ResponseEntity<Map<String,Object>> articleEntity = new ResponseEntity<>(responseMap, HttpStatus.OK);
+        return articleEntity;
+    }
+
+    @CrossOrigin
+    @RequestMapping("/saveArticle")
+    public ResponseEntity<Map<String,Object>> saveArticle( @RequestBody Article article) {
+        ResponseEntity<Map<String,Object>> articleEntity  = articleService.saveArticle(article);
+        return articleEntity;
+    }
 }

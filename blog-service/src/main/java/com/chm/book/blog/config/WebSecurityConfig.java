@@ -1,13 +1,12 @@
 package com.chm.book.blog.config;
 
+import org.springframework.boot.autoconfigure.security.oauth2.client.EnableOAuth2Sso;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.web.authentication.HttpStatusEntryPoint;
-
-
+//
 //@Configuration
+//@EnableOAuth2Sso
 //public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //
 //    @Override
@@ -17,11 +16,9 @@ import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 //                .and()
 //                .csrf()
 //                .disable()
-//                //.addFilterBefore(oauth2ClientAuthenticationProcessingFilter, BasicAuthenticationFilter.class)
-//                .exceptionHandling(e -> e
-//                        .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
-//                )
+//                .formLogin().loginPage("/login").permitAll().and()
 //                .authorizeRequests()
+//                .antMatchers("/articles").permitAll()
 //                .anyRequest().authenticated();
 //
 //    }

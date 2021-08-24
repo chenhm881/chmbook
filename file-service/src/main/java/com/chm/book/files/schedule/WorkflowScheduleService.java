@@ -20,18 +20,18 @@ public class WorkflowScheduleService {
     @Autowired
     private QuartzScheduleService quartzScheduleService;
 
-    private static String jobGroup = "engineerMC";
+    private static String jobGroup = "fileService";
 
     public void runTask(WorkflowSettings workflowSettings){
-        Integer projectId = workflowSettings.getProjectId(),
+        Integer categoryId = workflowSettings.getCategoryId(),
                 workflowId = workflowSettings.getWorkflowId();
         boolean enable = workflowSettings.getEnable();
-        String jobName = projectId + "_" + workflowId;
+        String jobName = categoryId + "_" + workflowId;
         try {
             Boolean jobExisted = quartzScheduleService.checkExists(jobName, jobGroup);
             if(jobExisted) {
                 if(enable) {updateTask(workflowSettings);}
-                else {unscheduleTask(projectId, workflowId);}
+                else {unscheduleTask(categoryId, workflowId);}
             } else {
                 if(enable) addTask(workflowSettings);
             }
@@ -72,7 +72,7 @@ public class WorkflowScheduleService {
     }
 
     private TaskEntity createTaskEntity(WorkflowSettings workflowSettings) {
-        Integer projectId = workflowSettings.getProjectId(),
+        Integer projectId = workflowSettings.getCategoryId(),
                 workflowId = workflowSettings.getWorkflowId();
         String days = workflowSettings.getDays(),
                 hours = workflowSettings.getHours();

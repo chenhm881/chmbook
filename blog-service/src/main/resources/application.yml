@@ -54,11 +54,12 @@ eureka:
 security:
   oauth2:
     client:
-      clientId: blog
+      clientId: article
       clientSecret: 123
       accessTokenUri: http://localhost:8771/oauth/token
       userAuthorizationUri: http://localhost:8771/oauth/authorize
-      pre-established-redirect-uri: http://localhost:8181/hello
+      #pre-established-redirect-uri: http://localhost:8181/hello
+      scope:
     resource:
       tokenInfoUri: http://localhost:8771/oauth/check_token
 #        jwk:

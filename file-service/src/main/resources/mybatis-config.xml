@@ -16,5 +16,6 @@
     </typeAliases>
     <mappers>
         <mapper resource="mappers/FileRawMapper.xml" />
+        <mapper resource="mappers/WorkflowSettingsMapper.xml" />
     </mappers>
 </configuration>

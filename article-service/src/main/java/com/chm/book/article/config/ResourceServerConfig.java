@@ -49,7 +49,9 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
                 .disable()
                 .formLogin()
                 .and()
-                .authorizeRequests().anyRequest().authenticated();
+                .authorizeRequests()
+                .antMatchers("/api/articles", "/api/article/**", "/api/saveArticle").permitAll()
+                .anyRequest().authenticated();
     }
 
     @Bean
