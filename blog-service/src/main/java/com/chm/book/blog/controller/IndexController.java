@@ -1,6 +1,8 @@
 package com.chm.book.blog.controller;
 
 import com.chm.book.blog.domain.Article;
+import com.chm.book.blog.domain.ArticleTags;
+import com.chm.book.blog.entityconvert.ArticleConvert;
 import com.chm.book.blog.service.ArticleService;
 import com.chm.book.blog.service.TicketService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +12,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.provider.authentication.OAuth2AuthenticationDetails;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,7 +26,8 @@ public class IndexController {
     @Autowired
     private ArticleService articleService;
 
-
+    @Autowired
+    private ArticleConvert articleConvert;
 
     @RequestMapping("/hello")
     public String helloWorld() {
@@ -74,7 +76,7 @@ public class IndexController {
     @CrossOrigin
     @RequestMapping("/article/{id}")
     public ResponseEntity<Map<String,Object>> getArticle( @PathVariable Integer id) {
-        Article article = articleService.getArticle();
+        Article article = articleService.getArticle(id);
         Map<String, Object> responseMap = new HashMap<>();
         responseMap.put("status", HttpStatus.OK.value());
         responseMap.put("data", article);
@@ -87,8 +89,10 @@ public class IndexController {
 
     @CrossOrigin
     @RequestMapping("/saveArticle")
-    public ResponseEntity<Map<String,Object>> saveArticle( @RequestBody Article article) {
-        ResponseEntity<Map<String,Object>> articleEntity  = articleService.saveArticle(article);
+    public ResponseEntity<Map<String,Object>> saveArticle(@RequestBody ArticleTags articleTags) {
+        Article article = articleConvert.covertToArticle(articleTags);
+        List<Integer> tags = articleTags.getTags();
+        ResponseEntity<Map<String,Object>> articleEntity  = articleService.saveArticle(article, tags);
         return articleEntity;
     }
 }

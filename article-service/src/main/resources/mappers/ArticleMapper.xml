@@ -36,18 +36,18 @@
   </select>
 
   <insert id="insertOrUpdate" parameterType="com.chm.book.article.domain.Article" keyColumn="id" keyProperty="id" useGeneratedKeys="true">
-    insert into article (comment_counts, create_date,
+    insert into article (id, comment_counts, create_date,
       summary, title, view_counts,
       like_count, weight, status,
       author_id, category_id, content,
       content_html)
-    values (#{commentCounts,jdbcType=INTEGER}, #{createDate,jdbcType=TIMESTAMP},
+    values (#{id}, #{commentCounts,jdbcType=INTEGER}, #{createDate,jdbcType=TIMESTAMP},
       #{summary,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, #{viewCounts,jdbcType=INTEGER},
       #{likeCount,jdbcType=INTEGER}, #{weight,jdbcType=INTEGER}, #{status,jdbcType=INTEGER},
       #{authorId,jdbcType=BIGINT}, #{categoryId,jdbcType=INTEGER}, #{content,jdbcType=LONGVARCHAR},
       #{contentHtml,jdbcType=LONGVARCHAR})
     ON DUPLICATE KEY UPDATE
-      summary = values(summary), title = values(title),
+      summary = values(summary), title = values(title), category_id = values(category_id),
       content = values(content), content_html = values(content_html)
   </insert>
 </mapper>

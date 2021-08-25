@@ -62,8 +62,8 @@ public class IndexController {
     }
 
     @CrossOrigin
-    @RequestMapping("/saveArticle")
-    public ResponseEntity<Map<String,Object>> saveArticle( @RequestBody Article article) {
+    @RequestMapping("saveArticle")
+    public ResponseEntity<Map<String,Object>> saveArticle(@RequestBody Article article, @RequestParam List<Integer> tags) {
 
         Integer returnInt = articleService.save(article);
         Map<String, Object> responseMap = new HashMap<>();

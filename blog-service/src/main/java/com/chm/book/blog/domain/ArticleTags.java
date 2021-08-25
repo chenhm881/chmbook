@@ -3,9 +3,10 @@ package com.chm.book.blog.domain;
 import lombok.Data;
 
 import java.util.Date;
+import java.util.List;
 
 @Data
-public class Article {
+public class ArticleTags {
     private Integer id;
 
     private Integer commentCounts;
@@ -31,4 +32,9 @@ public class Article {
     private String content;
 
     private String contentHtml;
+
+    private List<Integer> tags;
+
+    private Article article;
+
 }
