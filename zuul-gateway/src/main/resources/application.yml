@@ -37,8 +37,8 @@ zuul:
       stripPrefix: true
 
 ribbon:
-  ReadTimeout: 3000
-  ConnectTimeout: 3000
+  ReadTimeout: 30000
+  ConnectTimeout: 30000
 
 hystrix:
   command:
@@ -46,6 +46,6 @@ hystrix:
       execution:
         isolation:
           thread:
-            timeout-in-milliseconds: 3000
+            timeout-in-milliseconds: 30000
         timeout:
           enabled: false

@@ -17,5 +17,7 @@
     <mappers>
         <mapper resource="mappers/TBlogMapper.xml" />
         <mapper resource="mappers/ArticleMapper.xml" />
+        <mapper resource="mappers/TagMapper.xml" />
+        <mapper resource="mappers/CategoryMapper.xml" />
     </mappers>
 </configuration>

@@ -8,6 +8,7 @@ import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.cloud.openfeign.EnableFeignClients;
+import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.cloud.openfeign.FeignClientsConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
@@ -22,7 +23,6 @@ import org.springframework.web.client.RestTemplate;
 @EnableOAuth2Sso
 @EnableDiscoveryClient
 @EnableFeignClients
-
 public class BlogApplication {
 
 	public static void main(String[] args) {

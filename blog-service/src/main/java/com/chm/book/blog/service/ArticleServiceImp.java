@@ -1,6 +1,7 @@
 package com.chm.book.blog.service;
 
 import com.chm.book.blog.domain.Article;
+import com.chm.book.blog.domain.ArticleEntity;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,7 +35,7 @@ public class ArticleServiceImp implements FallbackFactory<ArticleService> {
             }
 
             @Override
-            public List<Article> getArticles() {
+            public List<ArticleEntity> getArticles() {
                 return null;
             }
 
@@ -44,7 +45,7 @@ public class ArticleServiceImp implements FallbackFactory<ArticleService> {
             }
 
             @Override
-            public ResponseEntity<Map<String, Object>> saveArticle(Article article, List<Integer> tags) {
+            public ResponseEntity<Map<String, Object>> saveArticle(ArticleEntity articleEntity, List<Integer> tags) {
                 return null;
             }
         });

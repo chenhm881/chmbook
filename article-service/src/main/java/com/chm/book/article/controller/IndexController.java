@@ -1,10 +1,11 @@
 package com.chm.book.article.controller;
 
 import com.chm.book.article.command.BlogHystrixObservableCommand;
-import com.chm.book.article.domain.Article;
-import com.chm.book.article.domain.TBlog;
+import com.chm.book.article.domain.*;
 import com.chm.book.article.service.ArticleService;
 import com.chm.book.article.service.BlogService;
+import com.chm.book.article.service.CategoryService;
+import com.chm.book.article.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +24,12 @@ public class IndexController {
 
     @Autowired
     private ArticleService articleService;
+
+    @Autowired
+    private TagService tagService;
+
+    @Autowired
+    private CategoryService categoryService;
 
     @CrossOrigin
     @RequestMapping("hello")
@@ -43,15 +50,13 @@ public class IndexController {
 //        else {
 //            return "failure";
 //        }
-
         return "hello article";
-
     }
 
     @RequestMapping("articles")
-    public List<Article> getArticles() {
-        List<Article> articles = articleService.getArticles();
-        return articles;
+    public List<ArticleEntity> getArticles() {
+        List<ArticleEntity> entities = articleService.getArticles();
+        return entities;
     }
 
     @RequestMapping("article/{id}")
@@ -63,29 +68,28 @@ public class IndexController {
 
     @CrossOrigin
     @RequestMapping("saveArticle")
-    public ResponseEntity<Map<String,Object>> saveArticle(@RequestBody Article article, @RequestParam List<Integer> tags) {
+    public ResponseEntity<Map<String,Object>> saveArticle(@RequestBody ArticleEntity articleEntity, @RequestParam List<Integer> tags) {
 
-        Integer returnInt = articleService.save(article);
+        Integer returnInt = articleService.save(articleEntity);
         Map<String, Object> responseMap = new HashMap<>();
-        ResponseEntity<Map<String,Object>> articleEntity;
+        ResponseEntity<Map<String,Object>> responseEntity;
         if(returnInt > 0) {
             responseMap.put("status", HttpStatus.OK.value());
-            responseMap.put("data", article);
+            responseMap.put("data", articleEntity);
             responseMap.put("message", "message1");
-            articleEntity = new ResponseEntity<>(responseMap, HttpStatus.OK);
+            responseEntity = new ResponseEntity<>(responseMap, HttpStatus.OK);
         } else {
             responseMap.put("status", HttpStatus.SERVICE_UNAVAILABLE.value());
             responseMap.put("message", "Save failed");
-            articleEntity = new ResponseEntity<>(responseMap, HttpStatus.SERVICE_UNAVAILABLE);
+            responseEntity = new ResponseEntity<>(responseMap, HttpStatus.SERVICE_UNAVAILABLE);
         }
-        return articleEntity;
+        return responseEntity;
     }
 
     @RequestMapping("select")
     public String getCacheBlog()
     {
         final List<TBlog>[] list = new List[]{new ArrayList<>()};
-
         BlogHystrixObservableCommand observableCommand = new BlogHystrixObservableCommand(blogService);
         observableCommand.setId(62);
         Observable<List<TBlog>> observe = observableCommand.observe();
@@ -106,8 +110,20 @@ public class IndexController {
                                   list[0] = tBlogList;
                               }
                           });
-
         //blogService.getCacheTBlog(2);
         return "successfully";
     }
+
+    @RequestMapping("tags")
+    public List<TagEntity> getTags() {
+        List<TagEntity> tags = tagService.getTags();
+        return tags;
+    }
+
+    @RequestMapping("categories")
+    public List<CategoryEntity> getCategories() {
+        List<CategoryEntity> categories = categoryService.getCategories();
+        return categories;
+    }
+
 }

@@ -50,7 +50,8 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
                 .formLogin()
                 .and()
                 .authorizeRequests()
-                .antMatchers("/api/articles", "/api/article/**", "/api/saveArticle", "/api/find").permitAll()
+                .antMatchers("/api/articles", "/api/article/**",
+                        "/api/saveArticle", "/api/find", "/api/tags", "/api/categories").permitAll()
                 .anyRequest().authenticated();
     }
 
