@@ -80,7 +80,9 @@ public class IndexController {
 
     @CrossOrigin
     @RequestMapping("/saveArticle")
-    public ResponseEntity<Map<String,Object>> saveArticle(@RequestBody ArticleTags articleTags) {
+    public ResponseEntity<Map<String,Object>> saveArticle(Authentication user, @RequestBody ArticleTags articleTags) {
+        OAuth2AuthenticationDetails details = (OAuth2AuthenticationDetails)user.getDetails();
+        System.out.println("saveArticle: hello");
         ArticleEntity articleEntity = articleConvert.covertToArticle(articleTags);
         List<Integer> tags = articleTags.getTags();
         ResponseEntity<Map<String,Object>> responseEntity  = blogService.saveArticle(articleEntity, tags);
