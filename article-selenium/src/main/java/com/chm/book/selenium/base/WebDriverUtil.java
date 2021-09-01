@@ -19,6 +19,11 @@ import java.util.logging.Level;
 public class WebDriverUtil
 {
 
+    public static void startWebDriver() throws Exception
+    {
+        startWebDriver("phantomjs", false, null);
+    }
+
     public static void startWebDriver(String browserType) throws Exception
     {
         startWebDriver(browserType, false, null);
