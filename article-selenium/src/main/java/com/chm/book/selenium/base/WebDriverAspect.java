@@ -22,7 +22,7 @@ public class WebDriverAspect {
     @Before("pointcut()")
     public void start(JoinPoint joinPoint) throws Exception {
         BlogPage blogPage = (BlogPage) joinPoint.getTarget();
-        WebDriverUtil.startWebDriver("phantomjs");
+        WebDriverUtil.startWebDriver("chrome");
     }
 
     @After("pointcut()")

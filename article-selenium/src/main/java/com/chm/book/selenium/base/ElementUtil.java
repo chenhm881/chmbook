@@ -44,4 +44,24 @@ public class ElementUtil {
         element.click();
     }
 
+    public static String sendTextToElement(WebElement element, String text, boolean haltOnFailure)
+    {
+        String logMessage = String.format("Sending text [%s] to element [%s]... ", text, element.toString());
+        try
+        {
+            element.clear();
+            element.sendKeys(text);
+        }
+        catch(Exception e)
+        {
+            if(haltOnFailure)
+            {
+
+            }
+
+            return null;
+        }
+        return text;
+    }
+
 }

@@ -9,13 +9,14 @@ import org.openqa.selenium.WebElement;
 import org.springframework.stereotype.Service;
 
 @Service
-public class BlogPage {
+public class BlogPage implements BasePage {
 
     public void getContent() {
         WebDriver webDriver = (WebDriver)Context.get("webDriver");
         PageUtil.navigateTo("http://www.baidu.com");
-        By by = By.id("s-hotsearch-wrapper");
+        By by = By.id("hotsearch-content-wrapper");
         WebElement webElement = ElementUtil.waitWebElement(webDriver, by, 80);
+        webElement.sendKeys();
         String text = webElement.getText();
         System.out.println(text);
     }
