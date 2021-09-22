@@ -1,6 +1,18 @@
 package com.chm.book.files.domain;
 
+import lombok.Getter;
+import lombok.Setter;
+
 public class FileRaw {
+
+    @Setter
+    @Getter
+    private String corpus;
+
+    @Setter
+    @Getter
+    private String compareKey;
+
     private Integer id;
 
     private Integer categoryId;

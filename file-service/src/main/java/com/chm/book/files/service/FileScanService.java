@@ -21,7 +21,7 @@ public class FileScanService {
     public List<FileScanResponse> addFolderScanning(Integer projectId, List<String> locations, String action) {
         final List<FileScanResponse> fileScanResponses = new ArrayList<>();
 
-        FilesHystrixObservableCommand filesHystrixObservableCommand = new FilesHystrixObservableCommand(fileScanExecute, projectId, locations);
+        FilesHystrixObservableCommand filesHystrixObservableCommand = new FilesHystrixObservableCommand(fileScanExecute, projectId, locations, action);
         filesHystrixObservableCommand.observe().subscribe(new Observer<FileScanResponse>() {
             @Override
             public void onCompleted() {

@@ -3,6 +3,7 @@ package com.chm.book.files.service;
 import com.chm.book.files.inteface.IScan;
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +27,9 @@ public class ExecuteScan {
     @Setter
     @Getter
     private String triggeredBy;
+
+    @Autowired
+    private ScanDispatch scanDispatch;
 
     public void onDemandExecute(Integer projectId, String fixedLocation, String action)  {
 
@@ -53,9 +57,16 @@ public class ExecuteScan {
         }
     }
 
-    private void scanningAction(Integer projectId, Map<Integer, String> dirs,
+    private void scanningAction(Integer projectId,  Map<Integer, String> dirs,
                                 String fileLocation,  String action) {
         IScan scan= scanFactory.getScan(projectId);
-        scan.action(projectId, dirs, fileLocation, action);
+        switch (action) {
+            case "add":
+                scan.action(projectId, dirs, fileLocation, action);
+            break;
+            case "addAsync":
+                scan.run(scanDispatch, projectId, dirs.values().stream().collect(Collectors.toList()), fileLocation);
+        }
+
     }
 }

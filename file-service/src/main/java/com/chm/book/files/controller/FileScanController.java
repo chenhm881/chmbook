@@ -24,4 +24,13 @@ public class FileScanController {
         initializedMap.put("status", HttpStatus.OK);
         return new ResponseEntity<>(initializedMap, HttpStatus.OK);
     }
+
+    @CrossOrigin
+    @RequestMapping("addFilesAsync")
+    public ResponseEntity<Map<String,Object>> scanOnDemandAsync(List<String> locations, Integer projectId) {
+        Map<String,Object> initializedMap = new HashMap<>();
+        initializedMap.put("data", fileScanService.addFolderScanning(projectId, locations, "addAsync"));
+        initializedMap.put("status", HttpStatus.OK);
+        return new ResponseEntity<>(initializedMap, HttpStatus.OK);
+    }
 }

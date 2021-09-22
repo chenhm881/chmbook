@@ -19,7 +19,9 @@ public class FilesHystrixObservableCommand extends HystrixObservableCommand<File
 
     private FileScanExecute fileScanExecute;
 
-    public FilesHystrixObservableCommand(FileScanExecute fileScanExecute, Integer projectId, List<String> locations) {
+    private String action;
+
+    public FilesHystrixObservableCommand(FileScanExecute fileScanExecute, Integer projectId, List<String> locations, String action) {
         super(HystrixObservableCommand.Setter.withGroupKey(HystrixCommandGroupKey.Factory.asKey("fileScanService"))
                 .andCommandKey(HystrixCommandKey.Factory.asKey("addFiles"))
                 .andCommandPropertiesDefaults(HystrixCommandProperties.Setter().withCircuitBreakerRequestVolumeThreshold(10)
@@ -31,6 +33,7 @@ public class FilesHystrixObservableCommand extends HystrixObservableCommand<File
         this.fileScanExecute = fileScanExecute;
         this.projectId = projectId;
         this.locations = locations;
+        this.action = action;
     }
 
     @Override
@@ -42,7 +45,7 @@ public class FilesHystrixObservableCommand extends HystrixObservableCommand<File
                         try {
                             locations.stream().forEach(
                                     location -> {
-                                        FileScanResponse fileScanResponse = fileScanExecute.execute(projectId, location, "add");
+                                        FileScanResponse fileScanResponse = fileScanExecute.execute(projectId, location, action);
                                         observer.onNext(fileScanResponse);
                                     }
                             );
