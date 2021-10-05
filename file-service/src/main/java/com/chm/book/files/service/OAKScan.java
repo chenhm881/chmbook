@@ -89,6 +89,7 @@ public class OAKScan implements IScan {
                     }
                 });
                 poolExecutor.shutdown();
+
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (ClassNotFoundException e) {

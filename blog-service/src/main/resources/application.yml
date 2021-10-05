@@ -66,15 +66,17 @@ security:
       accessTokenUri: http://localhost:8771/oauth/token
       userAuthorizationUri: http://localhost:8771/oauth/authorize
       #pre-established-redirect-uri: http://localhost:8181/hello
-      scope:
+      authorized-grant-types: authorization_code,refresh_token
+      client-authentication-scheme: header
+      use-current-uri: true
     resource:
       tokenInfoUri: http://localhost:8771/oauth/check_token
+      userInfoUri: http://localhost:8771/user
 #        jwk:
 #          key-set-uri: http://localhost:8771/oauth/token_key
-      userInfoUri: http://localhost:8771/user
-        #        preferTokenInfo: false
+      prefer-token-info: false
     sso:
-      login-path: /
+      login-path: /login
 
 mybatis:
   config-location:  classpath:mybatis-config.xml

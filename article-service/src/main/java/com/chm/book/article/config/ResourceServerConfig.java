@@ -33,6 +33,8 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
     @Autowired
     private RsaKeyProperties prop;
 
+    @Autowired
+    private UserLogoutSuccessHandler logoutSuccessHandler;
 
     @Override
     public void configure(ResourceServerSecurityConfigurer resources) {

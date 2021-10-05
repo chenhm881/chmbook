@@ -1,6 +1,7 @@
 package com.chm.book.blog;
 
 import com.chm.book.blog.datasource.DynamicDataSourceRegister;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.security.oauth2.client.EnableOAuth2Sso;
@@ -36,7 +37,7 @@ public class BlogApplication {
 	}
 
 	@Bean
-	public OAuth2RestTemplate oauth2RestTemplate(OAuth2ClientContext oauth2ClientContext, OAuth2ProtectedResourceDetails details) {
+	public OAuth2RestTemplate oauth2RestTemplate(@Qualifier("oauth2ClientContext") OAuth2ClientContext oauth2ClientContext, OAuth2ProtectedResourceDetails details) {
 		return new OAuth2RestTemplate(details, oauth2ClientContext);
 	}
 
