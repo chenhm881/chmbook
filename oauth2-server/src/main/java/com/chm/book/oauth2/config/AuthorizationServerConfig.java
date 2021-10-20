@@ -1,7 +1,7 @@
 package com.chm.book.oauth2.config;
 
 import com.chm.book.oauth2.service.JwtClientDetailsService;
-import com.chm.book.oauth2.service.UserService;
+import com.chm.book.oauth2.service.JwtUserDetailsService;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +15,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.jwt.crypto.sign.RsaSigner;
@@ -28,16 +27,13 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
-import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 
 import javax.sql.DataSource;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 
@@ -52,7 +48,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     private RsaKeyProperties prop;
 
     @Autowired
-    private UserService userService;
+    private JwtUserDetailsService jwtUserDetailsService;
 
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -90,7 +86,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                 Authentication userAuthentication = authentication.getUserAuthentication();
                 User user;
                 if (userAuthentication == null) {
-                    user = (User)userService.loadUserByClientId(String.valueOf(authentication.getPrincipal()));
+                    user = (User)jwtUserDetailsService.loadUserByClientId(String.valueOf(authentication.getPrincipal()));
                 } else {
                     user = (User) authentication.getUserAuthentication().getPrincipal();
                 }
@@ -123,16 +119,17 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     @Bean
     public AuthenticationProvider daoAuthenticationProvider() {
         DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
-        daoAuthenticationProvider.setUserDetailsService(userService);
+        daoAuthenticationProvider.setUserDetailsService(jwtUserDetailsService);
         daoAuthenticationProvider.setHideUserNotFoundExceptions(false);
         daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
         return daoAuthenticationProvider;
     }
 
-    @Bean
+    @Bean("jwtClientDetailsService")
     public JwtClientDetailsService jwtClientDetailsService() {
        return new JwtClientDetailsService();
     }
+
 
     @Bean
     public SqlSessionFactory sqlSessionFactory(@Qualifier("dataSource") DataSource dataSource) throws Exception {

@@ -20,12 +20,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf()
                 .disable()
                 .authorizeRequests()
-                .antMatchers("/user**","/oauth/**").permitAll()
+                .antMatchers("/user", "/check_user","/oauth/**").permitAll()
                 .and()
                 .logout()
                 .and()
                 .formLogin().loginProcessingUrl("/login").and().authorizeRequests()
                 .anyRequest().authenticated();
+        http.sessionManagement().invalidSessionUrl("/login");
+        http.sessionManagement().maximumSessions(1).maxSessionsPreventsLogin(false);
     }
 
 }

@@ -1,9 +1,13 @@
 package com.chm.book.oauth2.controller;
 
+import com.chm.book.oauth2.domain.SysUser;
+import com.chm.book.oauth2.mapper.SysUserMapper;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -19,6 +23,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.lang.reflect.Array;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -37,6 +43,12 @@ public class UserController {
     @Lazy
     private TokenStore tokenStore;
 
+    @Autowired
+    private SysUserMapper sysUserMapper;
+
+    @Autowired
+    SecurityProperties securityProperties;
+
     @CrossOrigin
     @ResponseBody
     @RequestMapping({"/user"})
@@ -46,7 +58,8 @@ public class UserController {
         Map<String, Object> map = new HashMap<>();
         OAuth2Authentication authen = null;
         try {
-            authen = tokenStore.readAuthentication(authorization.split(" ")[1]);
+            String[] arr = authorization.split(" ");
+            authen = tokenStore.readAuthentication(arr[arr.length - 1]);
             if(authen == null)
             {
                 map.put("error", "invalid token!");
@@ -57,9 +70,31 @@ public class UserController {
         }
         map.put("user", authen.getPrincipal());
         map.put("authorities", authen.getAuthorities());
+        SecurityContext securityContext = SecurityContextHolder.getContext();
+        Authentication authentication = securityContext.getAuthentication();
         return map;
     }
 
+
+    @CrossOrigin
+    @ResponseBody
+    @RequestMapping({"/check_user"})
+    public Map<String, Object> checkUser(@RequestParam String clientId, @RequestParam String userName) {
+        SecurityContext securityContext = SecurityContextHolder.getContext();
+        Authentication authentication = securityContext.getAuthentication();
+        Map<String, Object> map = new HashMap<>();
+        try {
+            SysUser sysUser = sysUserMapper.selectSysUserByClientId(clientId);
+            if(!sysUser.getUsername().equals(userName))
+            {
+                map.put("error", "invalid userName!");
+                return map;
+            }
+        } catch (Exception ex) {
+            map.put("error", ex);
+        }
+        return map;
+    }
 
     //登出操作
     @CrossOrigin
@@ -72,7 +107,11 @@ public class UserController {
         new SecurityContextLogoutHandler().logout(request, response, authentication);
         try {
             System.out.println("referer" + request.getHeader("referer"));
-            response.sendRedirect(url);
+            if (!StringUtils.isEmpty(url)) {
+                response.sendRedirect(url);
+            } else {
+                throw new BadCredentialsException("Bad credentials");
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
