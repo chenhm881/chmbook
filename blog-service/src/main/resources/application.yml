@@ -1,0 +1,90 @@
+spring:
+  application:
+    name: blog-service
+  datasource:
+    type: com.alibaba.druid.pool.xa.DruidXADataSource
+    master:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      url: jdbc:mysql://47.98.163.117:32306/ming_blog?useSSL=false&allowMultiQueries=true&autoReconnect=true
+      username: root
+      password: mysql
+    cluster:
+    - key: database2
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      url: jdbc:mysql://47.98.163.117:32306/ming_blog?useSSL=false&allowMultiQueries=true&autoReconnect=true
+      username: root
+      password: mysql
+  jta:
+    log-dir: classpath:tx-logs
+
+  kafka:
+    bootstrap-servers: 47.98.163.117:32092
+    producer:
+      transaction-id-prefix: kafka_tx
+      acks: 1
+      retries: 3
+    consumer:
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+server:
+  port: 8181
+  servlet:
+    session:
+      cookie:
+        name: OAUTH2SESSION
+#    context-path: /blog-service
+
+feign:
+  circuitbreaker:
+    enabled: true
+
+hystrix:
+  shareSecurityContext: true
+  command:
+    default:
+      execution:
+        timeout:
+          enabled: false
+
+
+
+eureka:
+  instance:
+    prefer-ip-address: true
+    instance-id: ${spring.cloud.client.ipaddress}:${spring.application.name}:${server.port}:@project.version@
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://eureka-server:8762/eureka
+
+security:
+  oauth2:
+    client:
+      clientId: blog
+      clientSecret: 123
+      accessTokenUri: http://oauth2-server:8771/oauth/token
+      userAuthorizationUri: http://oauth2-server:8771/oauth/authorize
+      pre-established-redirect-uri: http://localhost:8181/authorize/login
+      authorized-grant-types: code,refresh_token
+      client-authentication-scheme: header
+      use-current-uri: true
+    resource:
+      tokenInfoUri: http://oauth2-server:8771/oauth/check_token
+      userInfoUri: http://oauth2-server:8771/user
+#        jwk:
+#          key-set-uri: http://localhost:8771/oauth/token_key
+      prefer-token-info: true
+    sso:
+      login-path: /login
+
+mybatis:
+  config-location:  classpath:mybatis-config.xml
+  type-aliases-package: com.chm.book.blog.domain
+  configuration:
+    map-underscore-to-camel-case: true
+
+oauth2:
+  key:
+    publicKey: oauth2/rsa_public_key.pem
+
