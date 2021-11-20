@@ -62,6 +62,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     public void configure(AuthorizationServerSecurityConfigurer security) {
         security.checkTokenAccess("permitAll()")
                 .allowFormAuthenticationForClients();
+        security.tokenKeyAccess("isAuthenticated()");
     }
 
     @Autowired
@@ -105,6 +106,14 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
         converter.setSigner(signer);
         return converter;
     }
+
+
+//    @Bean
+//    public JwtAccessTokenConverter accessTokenConverter() {
+//        JwtAccessTokenConverter jwtAccessTokenConverter = new JwtAccessTokenConverter();
+//        jwtAccessTokenConverter.setSigningKey("cjssjc");   //  Sets the JWT signing key
+//        return jwtAccessTokenConverter;
+//    }
 
     @Bean
     public JwtTokenStore jwtTokenStore() {

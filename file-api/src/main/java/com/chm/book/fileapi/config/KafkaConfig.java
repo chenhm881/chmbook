@@ -28,7 +28,7 @@ import java.util.Map;
 @EnableKafka
 public class KafkaConfig {
 
-    @Value("${spring.kafka.bootstrap-servers:47.98.163.117:32092}")
+    @Value("${spring.kafka.bootstrap-servers:101.34.6.152:32092}")
     private String bootstrapServers;
 
     @Value("${spring.kafka.producer.retries:1}")

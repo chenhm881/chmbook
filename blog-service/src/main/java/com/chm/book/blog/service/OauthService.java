@@ -17,12 +17,12 @@ public class OauthService {
     @Autowired
     private RestTemplate restTemplate;
 
-    @Autowired
-    private OAuth2RestTemplate oauth2RestTemplate;
+//    @Autowired
+//    private OAuth2RestTemplate oauth2RestTemplate;
 
     public String exit(String name) {
-        Object object = oauth2RestTemplate.getResource();
-        System.out.println(object);
+//        Object object = oauth2RestTemplate.getResource();
+//        System.out.println(object);
         String url="http://localhost:8771/oauth/exit";
         HttpHeaders header = new HttpHeaders();
         header.add("Authorization", "Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsib2F1dGgyLXJlc291cmNlIiwiYXJ0aWNsZS1zZXJ2aWNlIiwiYmxvZy1zZXJ2aWNlIiwiZmlsZS1zZXJ2aWNlIl0sInVzZXJfbmFtZSI6ImFkbWluIiwic2NvcGUiOlsiYWxsIl0sImV4cCI6MTYzMzE1MTY4OCwidXNlciI6eyJwYXNzd29yZCI6bnVsbCwidXNlcm5hbWUiOiJhZG1pbiIsImF1dGhvcml0aWVzIjpbeyJhdXRob3JpdHkiOiJST0xFX1VTRVIifV0sImFjY291bnROb25FeHBpcmVkIjp0cnVlLCJhY2NvdW50Tm9uTG9ja2VkIjp0cnVlLCJjcmVkZW50aWFsc05vbkV4cGlyZWQiOnRydWUsImVuYWJsZWQiOnRydWV9LCJhdXRob3JpdGllcyI6WyJST0xFX1VTRVIiXSwianRpIjoiNzc2YTJlOTgtNGNiZi00ZjBjLWEyNjMtYTYwZjU0MjUxZjJmIiwiY2xpZW50X2lkIjoiYXJ0aWNsZSJ9.MNpthMXstN-B0fCUBw8oMyZ7p7z6p1igYv0OtIVC5290cO1ZyoDEKkFvME3zJxoSuTFi6q2rwFjqKZjaBFMKTT47POnFJQBDAgGUhAq_1TZItOHLfrlaGO2cKlw4NW7l-bZqAX6g-9rPD6_XWCNa6syaiEc-biqTj__HDc1QtvtERLm4ykTxXfxdU-mAsKwmnhuQ4oXsS3v-bSoRWADEKqq6uJ0Sra5qCjE_rF1lrmh0XybTlGxLQ_qCLSJQYy5okJoiob20D7OPxikYhIcwRvUyjxrsVuIwEqeYRjIacTYtMtMPMFu1pO5UhfOKGKrztV8g63J77UPFD7ZSPJOSbQ");

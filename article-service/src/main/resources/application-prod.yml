@@ -5,17 +5,17 @@ spring:
     type: com.alibaba.druid.pool.xa.DruidXADataSource
     master:
       driver-class-name: com.mysql.cj.jdbc.Driver
-      url: jdbc:mysql://47.98.163.117:3306/ming_blog?useSSL=false&allowMultiQueries=true&autoReconnect=true
+      url: jdbc:mysql://101.34.6.152:3306/ming_blog?useSSL=false&allowMultiQueries=true&autoReconnect=true
       username: root
       password: 123456
     cluster:
       - key: database2
         driver-class-name: com.mysql.cj.jdbc.Driver
-        url: jdbc:mysql://47.98.163.117:3306/ming_blog?useSSL=false&allowMultiQueries=true&autoReconnect=true
+        url: jdbc:mysql://101.34.6.152:3306/ming_blog?useSSL=false&allowMultiQueries=true&autoReconnect=true
         username: root
         password: 123456
   redis:
-    host: 47.98.163.117
+    host: 101.34.6.152
 
 server:
   port: 8182

@@ -16,13 +16,17 @@ import org.apache.catalina.UserDatabase;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.ResourceServerProperties;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.http.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.client.token.grant.code.AuthorizationCodeResourceDetails;
+import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.security.oauth2.provider.authentication.OAuth2AuthenticationDetails;
+import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SimpleSessionStatus;
@@ -68,11 +72,15 @@ public class IndexController {
     @Autowired
     private Oauth2UserClient oauth2UserClient;
 
+    @Autowired
+    @Lazy
+    private TokenStore tokenStore;
+
     @RequestMapping("/hello")
     public String helloWorld() {
         //ticketService.findTicket("hello");
         //OAuth2AuthenticationDetails details = (OAuth2AuthenticationDetails)user.getDetails();
-        String getValue = articleService.find();
+        String getValue = blogService.find();
         return getValue;
     }
 
@@ -174,6 +182,9 @@ public class IndexController {
         String base64Creds = new String(base64CredsBytes);
         httpHeaders.add("Authorization", "Basic " + base64Creds);
         httpHeaders.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+        //tokenStore.getAccessToken((OAuth2Authentication) request.getUserPrincipal()).getValue();
+
+
 
 
 
@@ -181,46 +192,65 @@ public class IndexController {
         valueMap.add("username", "blog");
         valueMap.add("password", "123");
         HttpEntity<LinkedMultiValueMap<String, ? extends Object>> loginEntity = new HttpEntity(valueMap, httpHeaders);
-        String url = "http://oauth2-server:8771/login";
-        ResponseEntity<Object> loginResponse = restTemplate.exchange(url, HttpMethod.POST, loginEntity, Object.class);
-        HttpHeaders headers = loginResponse.getHeaders();
-        for (Map.Entry<String, List<String>> entry : headers.entrySet()) {
-            entry.getValue().stream().forEach(value -> response.addHeader(entry.getKey(), value));
-        }
-        System.out.println(loginResponse);
+        String url = "http://localhost:8771/login";
 
-        for (Map.Entry<String, List<String>> entry : headers.entrySet()) {
-            entry.getValue().stream().forEach(value -> httpHeaders.add(entry.getKey(), value));
-        }
+        //restTemplate.getForObject("http://oauth2-server:8771/getToken?clientId=blog", Map.class);
 
-        //oauth2UserClient.Login("blog", "123" );
+//        ResponseEntity<Object> loginResponse = restTemplate.exchange(url, HttpMethod.POST, loginEntity, Object.class);
+//        HttpHeaders headers = loginResponse.getHeaders();
+//        for (Map.Entry<String, List<String>> entry : headers.entrySet()) {
+//            entry.getValue().stream().forEach(value -> response.addHeader(entry.getKey(), value));
+//        }
+//        System.out.println(loginResponse);
+//
+//        for (Map.Entry<String, List<String>> entry : headers.entrySet()) {
+//            entry.getValue().stream().forEach(value -> httpHeaders.add(entry.getKey(), value));
+//        }
 
         //oauth2UserClient.Authorize();
 
+        LinkedMultiValueMap<String, Object> valueMap1 = new LinkedMultiValueMap<>();
+        valueMap1.add("clientId", "blog");
+        HttpEntity<LinkedMultiValueMap<String, ? extends Object>> loginEntity1 = new HttpEntity(valueMap1, httpHeaders);
+
+        //ResponseEntity<Object> userResponse = restTemplate.exchange("http://localhost:8771/getToken?clientId=blog", HttpMethod.GET, null, Object.class);
+
         LinkedMultiValueMap<String, Object> params = new LinkedMultiValueMap<>();
-        params.add("client_id", authorizationCodeResourceDetails.getClientId());
-        params.add("client_secret", authorizationCodeResourceDetails.getClientSecret());
-        params.add("grant_type", authorizationCodeResourceDetails.getGrantType());
-        params.add("redirect_uri", authorizationCodeResourceDetails.getPreEstablishedRedirectUri());
-        params.add("response_type", "code");
+        params.add("clientId", authorizationCodeResourceDetails.getClientId());
+        params.add("authentication", request.getUserPrincipal());
+        //params.add("client_secret", authorizationCodeResourceDetails.getClientSecret());
+        //params.add("grant_type", "client_credentials");
+        //params.add("redirect_uri", authorizationCodeResourceDetails.getPreEstablishedRedirectUri());
+        //params.add("response_type", "code");
         HttpEntity<LinkedMultiValueMap<String, ? extends Object>> httpEntity = new HttpEntity(params, httpHeaders);
         System.out.println(authorizationCodeResourceDetails.getUserAuthorizationUri());
+        //Map<String, Object> map = HttpUtils.doFrom(authorizationCodeResourceDetails.getAccessTokenUri(), valueMap, Map.class);
 
+        HttpHeaders requestHeaders = new HttpHeaders();
+        requestHeaders.add("authorization", "");
 
-        //Map map = HttpUtils.doGet("http://oauth2-server:8771/oauth/authorize?response_type=code&client_id=blog&client_secret=123&redirect_uri=http://localhost:8181/authorize/login&scope=all", Map.class);
+        HttpEntity<LinkedMultiValueMap<String, ? extends Object>> requestEntity = new HttpEntity(params, requestHeaders);
+        //Map principal = restTemplate.postForObject("http://localhost:8771/getToken", requestEntity, Map.class);
+
+        http://localhost:8771/oauth/token?grant_type=client_credentials&scope=all&client_id=client_2&client_secret=123
+
+        //Map map = HttpUtils.doGet("http://localhost:8771/getToken?clientId=blog", Map.class);
         //System.out.println(map);
+        //restTemplate.getForObject("http://localhost:8771/getToken?clientId=blog", Map.class);
 
-
-        ResponseEntity<Object> exchange = restTemplate.exchange(authorizationCodeResourceDetails.getUserAuthorizationUri(),
-                HttpMethod.POST, httpEntity, Object.class);
+        //Map map = restTemplate.getForObject("http://localhost:8771/getToken?clientId={1}", Map.class, "blog");
+        //oauth2UserClient.Authorize();
 
         for (Map.Entry<String, List<String>> entry : httpHeaders.entrySet()) {
             entry.getValue().stream().forEach(value -> response.addHeader(entry.getKey(), value));
         }
-        System.out.println(exchange);
+        System.out.println(authorizationCodeResourceDetails.getPreEstablishedRedirectUri());
 
-        //response.sendRedirect();
-        //response.sendRedirect("http://localhost:8771/oauth/authorize?response_type=code&client_id=blog&client_secret=123&redirect_uri=http://localhost:8181/authorize/login&scope=all");
+        String token = ((OAuth2AuthenticationDetails)((OAuth2Authentication) request.getUserPrincipal()).getDetails()).getTokenValue();
+        String userName = request.getUserPrincipal().getName();
+        response.sendRedirect("http://localhost:3000/about"
+                + "?access_token=" +  token + "&username=" + userName);
+
     }
 
 
@@ -241,21 +271,21 @@ public class IndexController {
             //获取用户信息，说明这里主要目的就是通过资源服务器去获取用户信息
             // Map principal = HttpUtils.doGet(resourceServerProperties.getUserInfoUri() + "?access_token=" + map.get("access_token"), Map.class);
             // Map principal = HttpUtils.doPost(resourceServerProperties.getUserInfoUri(), map, Map.class);
-           HttpHeaders requestHeaders = new HttpHeaders();
-           requestHeaders.add("authorization", map.get("access_token").toString());
-           HttpEntity<String> requestEntity = new HttpEntity<String>(null, requestHeaders);
-           Map principal = restTemplate.postForObject(resourceServerProperties.getUserInfoUri(), requestEntity, Map.class);
+//           HttpHeaders requestHeaders = new HttpHeaders();
+//           requestHeaders.add("authorization", map.get("access_token").toString());
+//           HttpEntity<String> requestEntity = new HttpEntity<String>(null, requestHeaders);
+//           Map principal = restTemplate.postForObject(resourceServerProperties.getUserInfoUri(), requestEntity, Map.class);
+//
+//           String checkUserUrl = resourceServerProperties.getUserInfoUri().substring(0, resourceServerProperties.getUserInfoUri().length() - 4) + "check_user";
+//           checkUserUrl = checkUserUrl + "?clientId={1}&userName={2}";
+//           System.out.println(checkUserUrl);
+//           Map checkUser = restTemplate.getForObject(checkUserUrl, Map.class, authorizationCodeResourceDetails.getClientId(),
+//                   principal.get("user").toString());
+//           System.out.println(checkUser);
+//
+//           System.out.println(principal);
 
-           String checkUserUrl = resourceServerProperties.getUserInfoUri().substring(0, resourceServerProperties.getUserInfoUri().length() - 4) + "check_user";
-           checkUserUrl = checkUserUrl + "?clientId={1}&userName={2}";
-           System.out.println(checkUserUrl);
-           Map checkUser = restTemplate.getForObject(checkUserUrl, Map.class, authorizationCodeResourceDetails.getClientId(),
-                   principal.get("user").toString());
-           System.out.println(checkUser);
 
-           System.out.println(principal);
-
-            restTemplate.postForObject("http://oauth2-server:8771/oauth/exit", null, Object.class);
             //这里通过本地登录单点登录
             //String username = principal.get("name").toString();
             //如果用户存在则不添加，这里如果生产应用中，可以更具规则修改
@@ -279,8 +309,9 @@ public class IndexController {
             //这个状态是根据security的返回数据设定的
             //response.sendRedirect(authorizationCodeResourceDetails.getPreEstablishedRedirectUri());
             //response.sendRedirect("http://localhost:8771/oauth/authorize?response_type=code&client_id=blog&client_secret=123&redirect_uri=http://localhost:8181/authorize/login&scope=all");
-            response.sendRedirect(authorizationCodeResourceDetails.getPreEstablishedRedirectUri()
-                   + "?access_token=" +  map.get("access_token") + "&username=" + ((Map)(map.get("user"))).get("username"));
+            response.sendRedirect("http://localhost:3000/about"
+                   + "?access_token=" +  map.get("access_token") );
         }
     }
+
 }

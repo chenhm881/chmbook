@@ -17,11 +17,11 @@ public class TicketService {
     @Autowired
     private RestTemplate restTemplate;
 
-    @Autowired
-    private OAuth2RestTemplate oauth2RestTemplate;
+//    @Autowired
+//    private OAuth2RestTemplate oauth2RestTemplate;
 
     public String findTicket(String name) {
-        Object object = oauth2RestTemplate.getResource();
+        //Object object = oauth2RestTemplate.getResource();
 
         String url="http://ZUUL-GATEWAY/article-service/api/hello";
         MultiValueMap<String, String> map = new LinkedMultiValueMap<>();

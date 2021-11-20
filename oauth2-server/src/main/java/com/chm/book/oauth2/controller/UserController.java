@@ -1,7 +1,10 @@
 package com.chm.book.oauth2.controller;
 
+import com.chm.book.oauth2.domain.OauthClientDetails;
 import com.chm.book.oauth2.domain.SysUser;
 import com.chm.book.oauth2.mapper.SysUserMapper;
+import com.chm.book.oauth2.service.JwtClientDetailsService;
+import com.chm.book.oauth2.service.JwtUserDetailsService;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -19,11 +22,14 @@ import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.support.SessionStatus;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.lang.reflect.Array;
+import java.security.Principal;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -48,6 +54,9 @@ public class UserController {
 
     @Autowired
     SecurityProperties securityProperties;
+
+    @Autowired
+    JwtClientDetailsService jwtClientDetailsService;
 
     @CrossOrigin
     @ResponseBody
@@ -76,18 +85,33 @@ public class UserController {
     }
 
 
+    @RequestMapping({"/getToken1"})
+    public Map<String, Object> authorize(@RequestParam Map<String, String> parameters) {
+        System.out.println(parameters);
+        return null;
+    }
+
+//    @RequestMapping({"/"})
+//    public void index(HttpServletRequest request, HttpServletResponse response) throws IOException {
+//        OauthClientDetails oauthClientDetails = jwtClientDetailsService.selectClientDetailsByUsername(request.getUserPrincipal().getName());
+//        String clientId = oauthClientDetails.getClientId();
+//        String clientSecret = oauthClientDetails.getClientSecret();
+//        String redirectUrl = oauthClientDetails.getRegisteredRedirectUris();
+//        response.sendRedirect(String.format("oauth/authorize?response_type=code&client_id=%s&client_secret=%s&redirect_uri=%s&scope=all",
+//        clientId, clientSecret, redirectUrl));
+//    }
+
     @CrossOrigin
-    @ResponseBody
-    @RequestMapping({"/check_user"})
-    public Map<String, Object> checkUser(@RequestParam String clientId, @RequestParam String userName) {
+    @RequestMapping({"/getToken"})
+    public Map<String, Object> checkUser(Authentication user, @RequestParam Map<String, Object> parameters) {
         SecurityContext securityContext = SecurityContextHolder.getContext();
         Authentication authentication = securityContext.getAuthentication();
         Map<String, Object> map = new HashMap<>();
         try {
-            SysUser sysUser = sysUserMapper.selectSysUserByClientId(clientId);
-            if(!sysUser.getUsername().equals(userName))
+            Collection<OAuth2AccessToken> oAuth2AccessTokens = tokenStore.findTokensByClientId("blog");
+            if(oAuth2AccessTokens.size() > 0)
             {
-                map.put("error", "invalid userName!");
+                map.put("access_token", oAuth2AccessTokens.stream().findFirst().get().getValue());
                 return map;
             }
         } catch (Exception ex) {
@@ -138,24 +162,24 @@ public class UserController {
      * @Date 2019/7/25 17:47
      * @Version  1.0
      */
-    @PostMapping(value = "logout")
-    public Boolean logOut(@RequestParam String access_token){
-        try {
-            if(StringUtils.isNotBlank(access_token)){
-                OAuth2AccessToken oAuth2AccessToken = tokenStore.readAccessToken(access_token);
-                if(oAuth2AccessToken != null){
-                    System.out.println("----access_token是："+oAuth2AccessToken.getValue());
-                    tokenStore.removeAccessToken(oAuth2AccessToken);
-                    OAuth2RefreshToken oAuth2RefreshToken = oAuth2AccessToken.getRefreshToken();
-                    if(oAuth2RefreshToken != null) {
-                        tokenStore.removeRefreshToken(oAuth2RefreshToken);
-                        tokenStore.removeAccessTokenUsingRefreshToken(oAuth2RefreshToken);
-                    }
-                }
-            }
-            return true;
-        } catch (Exception e){
-            return false;
-        }
-    }
+//    @PostMapping(value = "logout")
+//    public Boolean logOut(@RequestParam String access_token){
+//        try {
+//            if(StringUtils.isNotBlank(access_token)){
+//                OAuth2AccessToken oAuth2AccessToken = tokenStore.readAccessToken(access_token);
+//                if(oAuth2AccessToken != null){
+//                    System.out.println("----access_token是："+oAuth2AccessToken.getValue());
+//                    tokenStore.removeAccessToken(oAuth2AccessToken);
+//                    OAuth2RefreshToken oAuth2RefreshToken = oAuth2AccessToken.getRefreshToken();
+//                    if(oAuth2RefreshToken != null) {
+//                        tokenStore.removeRefreshToken(oAuth2RefreshToken);
+//                        tokenStore.removeAccessTokenUsingRefreshToken(oAuth2RefreshToken);
+//                    }
+//                }
+//            }
+//            return true;
+//        } catch (Exception e){
+//            return false;
+//        }
+//    }
 }

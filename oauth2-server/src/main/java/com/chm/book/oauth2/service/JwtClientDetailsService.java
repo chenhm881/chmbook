@@ -40,6 +40,11 @@ public class JwtClientDetailsService implements ClientDetailsService, ClientRegi
         return details;
     }
 
+    public OauthClientDetails selectClientDetailsByUsername(String username) throws ClientRegistrationException {
+        OauthClientDetails oauthClientDetails = clientDetailsMapper.selectClientDetails(username);
+        return oauthClientDetails;
+    }
+
     @Override
     public void addClientDetails(ClientDetails clientDetails) throws ClientAlreadyExistsException {
 

@@ -21,7 +21,6 @@ import org.springframework.web.client.RestTemplate;
 
 @SpringBootApplication
 @Import({DynamicDataSourceRegister.class})
-@EnableOAuth2Sso
 @EnableDiscoveryClient
 @EnableFeignClients
 public class BlogApplication {
@@ -31,7 +30,7 @@ public class BlogApplication {
 	}
 
 	@Bean
-	@LoadBalanced
+	//@LoadBalanced
 	public RestTemplate restTemplate() {
 		return new RestTemplate();
 	}

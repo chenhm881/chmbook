@@ -5,17 +5,17 @@ spring:
     type: com.alibaba.druid.pool.xa.DruidXADataSource
     master:
       driver-class-name: com.mysql.cj.jdbc.Driver
-      url: jdbc:mysql://47.98.163.117:32306/article_storage?useSSL=false&allowMultiQueries=true&autoReconnect=true
+      url: jdbc:mysql://101.34.6.152:32306/article_storage?useSSL=false&allowMultiQueries=true&autoReconnect=true
       username: root
       password: mysql
     cluster:
       - key: database2
         driver-class-name: com.mysql.cj.jdbc.Driver
-        url: jdbc:mysql://47.98.163.117:32306/article_storage?useSSL=false&allowMultiQueries=true&autoReconnect=true
+        url: jdbc:mysql://101.34.6.152:32306/article_storage?useSSL=false&allowMultiQueries=true&autoReconnect=true
         username: root
         password: mysql
   redis:
-    host: 47.98.163.117
+    host: 101.34.6.152
     port: 32379
     timeout: 5000
     password: redis
@@ -31,7 +31,7 @@ eureka:
     register-with-eureka: true
     fetch-registry: true
     service-url:
-      defaultZone: http://eureka-server:8762/eureka
+      defaultZone: http://localhost:8762/eureka
 
 server:
   port: 8182

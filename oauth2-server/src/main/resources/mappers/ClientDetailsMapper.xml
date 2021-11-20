@@ -19,4 +19,10 @@
       select client_id, client_secret, resource_ids, scope, authorized_grant_types, web_server_redirect_uri, authorities, access_token_validity, refresh_token_validity, additional_information, autoapprove from oauth_client_details
       where client_id = #{clientId}
     </select>
+
+    <select id="selectClientDetailsByUsername" resultMap="resultMap">
+        select client_details.*
+        from oauth_client_details client_details
+        INNER join oauth_client_user client_user on client_details.client_id = client_user.client_id where client_user.username = #{username}
+    </select>
 </mapper>
