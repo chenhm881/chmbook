@@ -36,7 +36,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     .logout().logoutSuccessUrl("http://localhost:8771/logout")
                     .and()
                     .authorizeRequests()
-                    .antMatchers("/articles", "/article/**", "/tags", "/categories","/authorize/login").permitAll()
+                    .antMatchers("/articles", "/article/**", "/tags", "/categories").permitAll()
                     .anyRequest().authenticated();
 
 

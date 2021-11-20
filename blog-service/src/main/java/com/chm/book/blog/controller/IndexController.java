@@ -174,7 +174,7 @@ public class IndexController {
 
     @CrossOrigin
     @RequestMapping("/authorize/login2")
-    public void login(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public void login2(HttpServletRequest request, HttpServletResponse response) throws IOException {
         HttpHeaders httpHeaders = new HttpHeaders();
         String plainCreds = "admin:123";
         byte[] plainCredsBytes = plainCreds.getBytes();
@@ -183,10 +183,6 @@ public class IndexController {
         httpHeaders.add("Authorization", "Basic " + base64Creds);
         httpHeaders.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
         //tokenStore.getAccessToken((OAuth2Authentication) request.getUserPrincipal()).getValue();
-
-
-
-
 
         LinkedMultiValueMap<String, Object> valueMap = new LinkedMultiValueMap<>();
         valueMap.add("username", "blog");
@@ -255,9 +251,9 @@ public class IndexController {
 
 
     @CrossOrigin
-    @RequestMapping("/authorize/login")
+    @RequestMapping("/authorize/login1")
     public void authorize(String code, HttpServletRequest request, HttpServletResponse response) throws Exception {
-       if (!StringUtils.isEmpty(code)) {
+        if (!StringUtils.isEmpty(code)) {
             LinkedMultiValueMap<String, Object> valueMap = new LinkedMultiValueMap<>();
             valueMap.add("client_id", authorizationCodeResourceDetails.getClientId());
             valueMap.add("client_secret", authorizationCodeResourceDetails.getClientSecret());
@@ -310,8 +306,17 @@ public class IndexController {
             //response.sendRedirect(authorizationCodeResourceDetails.getPreEstablishedRedirectUri());
             //response.sendRedirect("http://localhost:8771/oauth/authorize?response_type=code&client_id=blog&client_secret=123&redirect_uri=http://localhost:8181/authorize/login&scope=all");
             response.sendRedirect("http://localhost:3000/about"
-                   + "?access_token=" +  map.get("access_token") );
+                    + "?access_token=" + map.get("access_token"));
         }
+    }
+        @CrossOrigin
+        @RequestMapping("/authorize/login")
+        public void login(HttpServletRequest request, HttpServletResponse response) throws IOException {
+            String token = ((OAuth2AuthenticationDetails)((OAuth2Authentication) request.getUserPrincipal()).getDetails()).getTokenValue();
+            String userName = request.getUserPrincipal().getName();
+            response.sendRedirect("http://localhost:3000/about"
+                    + "?access_token=" +  token + "&username=" + userName);
+
     }
 
 }
