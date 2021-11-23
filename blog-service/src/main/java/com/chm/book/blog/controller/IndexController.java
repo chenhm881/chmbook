@@ -306,9 +306,6 @@ public class IndexController {
             //for (Map.Entry<String, List<String>> entry : headers.entrySet()) {
             //    entry.getValue().stream().forEach(value -> response.addHeader(entry.getKey(), value));
             //}
-            //这个状态是根据security的返回数据设定的
-            //response.sendRedirect(authorizationCodeResourceDetails.getPreEstablishedRedirectUri());
-            //response.sendRedirect("http://localhost:8771/oauth/authorize?response_type=code&client_id=blog&client_secret=123&redirect_uri=http://localhost:8181/authorize/login&scope=all");
             response.sendRedirect("http://localhost:3000/about"
                     + "?access_token=" + map.get("access_token"));
         }
