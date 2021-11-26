@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-@FeignClient(name="ZUUL-GATEWAY")
+@FeignClient(name="ZUUL-GATEWAY", fallbackFactory = BlogServiceImp.class)
 public interface BlogService {
 
     @PostMapping(value = "/article-service/api/find")
@@ -27,7 +27,7 @@ public interface BlogService {
     public Article getArticle(@PathVariable(value = "id") Integer id);
 
     @PostMapping(value = "/article-service/api/saveArticle")
-    public ResponseEntity<Map<String,Object>> saveArticle(@RequestBody ArticleEntity articleEntity, @RequestParam List<Integer> tags);
+    public ResponseEntity<Map<String,Object>> saveArticle(@RequestHeader String authorization, @RequestBody ArticleEntity articleEntity, @RequestParam List<Integer> tags);
 
 /*    @PostMapping(value = "/oauth2-service/exit")
     public ResponseEntity<Map<String,Object>> logout();*/
