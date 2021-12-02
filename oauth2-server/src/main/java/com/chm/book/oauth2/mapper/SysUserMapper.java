@@ -10,4 +10,5 @@ public interface SysUserMapper {
 
     SysUser selectSysUser(String username);
     SysUser selectSysUserByClientId(String clientId);
+    int insert(SysUser sysUser);
 }

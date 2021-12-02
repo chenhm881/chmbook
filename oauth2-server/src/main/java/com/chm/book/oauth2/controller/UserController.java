@@ -5,6 +5,7 @@ import com.chm.book.oauth2.domain.SysUser;
 import com.chm.book.oauth2.mapper.SysUserMapper;
 import com.chm.book.oauth2.service.JwtClientDetailsService;
 import com.chm.book.oauth2.service.JwtUserDetailsService;
+import com.chm.book.oauth2.service.SysUserService;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -50,7 +51,7 @@ public class UserController {
     private TokenStore tokenStore;
 
     @Autowired
-    private SysUserMapper sysUserMapper;
+    private SysUserService sysUserService;
 
     @Autowired
     SecurityProperties securityProperties;
@@ -85,10 +86,9 @@ public class UserController {
     }
 
 
-    @RequestMapping({"/getToken1"})
-    public Map<String, Object> authorize(@RequestParam Map<String, String> parameters) {
-        System.out.println(parameters);
-        return null;
+    @RequestMapping({"/register"})
+    public int register(@RequestBody SysUser user) {
+        return sysUserService.insert(user);
     }
 
 //    @RequestMapping({"/"})

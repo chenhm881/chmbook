@@ -18,6 +18,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private JwtUserDetailsService userDetailsService;
 
+
+    @Autowired
+    private UserLogoutSuccessHandler userLogoutSuccessHandler;
+
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService);
@@ -31,9 +35,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf()
                 .disable()
                 .authorizeRequests()
-                .antMatchers("/user", "/check_user","/oauth/**", "/getToken").permitAll()
+                .antMatchers("/user", "/check_user","/oauth/**", "/getToken", "/register").permitAll()
                 .and()
-                .logout()
+                .logout().logoutSuccessHandler(userLogoutSuccessHandler)
                 .and()
                 .formLogin().loginProcessingUrl("/login").and().authorizeRequests()
                 .anyRequest().authenticated();

@@ -1,12 +1,8 @@
 package com.chm.book.blog.service;
 
-import com.chm.book.blog.domain.Article;
-import com.chm.book.blog.domain.ArticleEntity;
-import com.chm.book.blog.domain.CategoryEntity;
-import com.chm.book.blog.domain.TagEntity;
+import com.chm.book.blog.domain.*;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,6 +28,8 @@ public interface BlogService {
 /*    @PostMapping(value = "/oauth2-service/exit")
     public ResponseEntity<Map<String,Object>> logout();*/
 
+    @RequestMapping(value = "/uaa/register")
+    public int register(SysUser sysUser);
 
     @RequestMapping(value = "/article-service/api/tags")
     public List<TagEntity> getTags();

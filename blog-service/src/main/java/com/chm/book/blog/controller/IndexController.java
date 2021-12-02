@@ -8,15 +8,9 @@ import com.chm.book.blog.service.BlogService;
 import com.chm.book.blog.service.OauthService;
 import com.chm.book.blog.service.TicketService;
 import com.chm.book.blog.utils.HttpUtils;
-import feign.Feign;
-import org.apache.catalina.Group;
-import org.apache.catalina.Role;
-import org.apache.catalina.User;
-import org.apache.catalina.UserDatabase;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.ResourceServerProperties;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.http.*;
@@ -29,15 +23,12 @@ import org.springframework.security.oauth2.provider.authentication.OAuth2Authent
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.bind.support.SimpleSessionStatus;
 import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.security.Principal;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -96,6 +87,19 @@ public class IndexController {
         return user;
     }
 
+
+    @CrossOrigin
+    @RequestMapping("/register")
+    public ResponseEntity<Map<String,Object>> register(HttpServletRequest request, @RequestBody SysUser sysUser) {
+        int response  = blogService.register(sysUser);
+        Map<String, Object> responseMap = new HashMap<>();
+        responseMap.put("status", response > 0 ? HttpStatus.OK : HttpStatus.EXPECTATION_FAILED);
+        responseMap.put("data", sysUser);
+        responseMap.put("message", "");
+        ResponseEntity<Map<String,Object>> responseEntity = new ResponseEntity<>(responseMap, HttpStatus.OK);
+        return responseEntity;
+    }
+
     @CrossOrigin
     @RequestMapping("/articles")
     public ResponseEntity<Map<String,Object>> getArticles( @RequestBody Map<String, Object> params) {
@@ -133,7 +137,7 @@ public class IndexController {
         List<Integer> tags = articleTags.getTags();
         System.out.println("articleEntity: " + articleEntity.getContent());
         System.out.println("tags: " + articleTags.getTags());
-        String authorization =  request.getHeader("authorization") + "1";
+        String authorization =  request.getHeader("authorization");
         ResponseEntity<Map<String,Object>> responseEntity  = blogService.saveArticle(authorization, articleEntity, tags);
         return responseEntity;
     }

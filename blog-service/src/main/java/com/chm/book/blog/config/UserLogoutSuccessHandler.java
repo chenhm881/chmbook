@@ -14,18 +14,21 @@ import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 
 @Component
 public class UserLogoutSuccessHandler implements LogoutSuccessHandler {
 
     @Override
-    public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
+    public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         System.out.println(auth);
         if (auth != null) {//清除认证
             new SecurityContextLogoutHandler().logout(request, response, auth);
         }
+
+        response.sendRedirect("http://localhost:8771/logout?loginurl=http://localhost:3000/about");
 
     }
 }

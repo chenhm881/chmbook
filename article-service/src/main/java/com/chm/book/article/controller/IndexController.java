@@ -71,11 +71,20 @@ public class IndexController {
     public ResponseEntity<Map<String,Object>> saveArticle(@RequestBody ArticleEntity articleEntity, @RequestParam List<Integer> tags) {
 
         Integer returnInt = articleService.save(articleEntity);
+        Article article = new Article();
+        CategoryEntity categoryEntity = new CategoryEntity();
+        categoryEntity.setCategoryId(articleEntity.getCategoryId());
+        article.setCategory(categoryEntity);
+        article.setContent(articleEntity.getContent());
+        article.setContentHtml(articleEntity.getContentHtml());
+        article.setSummary(articleEntity.getSummary());
+        article.setTitle(articleEntity.getTitle());
+        article.setId(articleEntity.getId());
         Map<String, Object> responseMap = new HashMap<>();
         ResponseEntity<Map<String,Object>> responseEntity;
         if(returnInt > 0) {
             responseMap.put("status", HttpStatus.OK.value());
-            responseMap.put("data", articleEntity);
+            responseMap.put("data", article);
             responseMap.put("message", "message1");
             responseEntity = new ResponseEntity<>(responseMap, HttpStatus.OK);
         } else {
