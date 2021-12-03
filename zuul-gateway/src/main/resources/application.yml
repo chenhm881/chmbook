@@ -23,17 +23,17 @@ zuul:
 #  ignored-services: "*"
   routes:
     auth:
-      path: /uaa/**
+      path: /oauth2/**
       service-id: oauth2-server
       strip-prefix: true
       custom-sensitive-headers: true
     myticket:
       service-id: article-service
-      path: /article-service/**
+      path: /article/**
       stripPrefix: true
     fileService:
       service-id: file-service
-      path: /file-service/**
+      path: /file/**
       stripPrefix: true
 
 ribbon:

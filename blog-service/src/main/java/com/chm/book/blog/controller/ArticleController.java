@@ -3,8 +3,8 @@ package com.chm.book.blog.controller;
 import com.chm.book.blog.client.Oauth2UserClient;
 import com.chm.book.blog.domain.*;
 import com.chm.book.blog.entityconvert.ArticleConvert;
+import com.chm.book.blog.service.FileService;
 import com.chm.book.blog.service.ArticleService;
-import com.chm.book.blog.service.BlogService;
 import com.chm.book.blog.service.OauthService;
 import com.chm.book.blog.service.TicketService;
 import com.chm.book.blog.utils.HttpUtils;
@@ -34,7 +34,7 @@ import java.util.Map;
 
 @RestController
 @CrossOrigin
-public class IndexController {
+public class ArticleController {
 
     @Autowired
     private AuthorizationCodeResourceDetails authorizationCodeResourceDetails;
@@ -49,10 +49,10 @@ public class IndexController {
     private TicketService ticketService;
 
     @Autowired
-    private ArticleService articleService;
+    private FileService fileService;
 
     @Autowired
-    private BlogService blogService;
+    private ArticleService articleService;
 
     @Autowired
     private ArticleConvert articleConvert;
@@ -67,19 +67,12 @@ public class IndexController {
     @Lazy
     private TokenStore tokenStore;
 
-    @RequestMapping("/hello")
-    public String helloWorld() {
-        //ticketService.findTicket("hello");
-        //OAuth2AuthenticationDetails details = (OAuth2AuthenticationDetails)user.getDetails();
-        String getValue = blogService.find();
-        return getValue;
-    }
 
     @RequestMapping("/hi")
     public String hi(Authentication user) {
         //ticketService.findTicket("hello");
         OAuth2AuthenticationDetails details = (OAuth2AuthenticationDetails)user.getDetails();
-        String getValue = articleService.addFiles();
+        String getValue = fileService.addFiles();
         return getValue;
     }
     @RequestMapping("/user")
@@ -89,21 +82,9 @@ public class IndexController {
 
 
     @CrossOrigin
-    @RequestMapping("/register")
-    public ResponseEntity<Map<String,Object>> register(HttpServletRequest request, @RequestBody SysUser sysUser) {
-        int response  = blogService.register(sysUser);
-        Map<String, Object> responseMap = new HashMap<>();
-        responseMap.put("status", response > 0 ? HttpStatus.OK : HttpStatus.EXPECTATION_FAILED);
-        responseMap.put("data", sysUser);
-        responseMap.put("message", "");
-        ResponseEntity<Map<String,Object>> responseEntity = new ResponseEntity<>(responseMap, HttpStatus.OK);
-        return responseEntity;
-    }
-
-    @CrossOrigin
     @RequestMapping("/articles")
     public ResponseEntity<Map<String,Object>> getArticles( @RequestBody Map<String, Object> params) {
-        List<ArticleEntity> articles = blogService.getArticles();
+        List<ArticleEntity> articles = articleService.getArticles();
         Map<String, Object> responseMap = new HashMap<>();
         responseMap.put("status", HttpStatus.OK.value());
         responseMap.put("data", articles);
@@ -115,7 +96,7 @@ public class IndexController {
     @CrossOrigin
     @RequestMapping("/article/{id}")
     public ResponseEntity<Map<String,Object>> getArticle( @PathVariable Integer id) {
-        Article article = blogService.getArticle(id);
+        Article article = articleService.getArticle(id);
         Map<String, Object> responseMap = new HashMap<>();
         responseMap.put("status", HttpStatus.OK.value());
         responseMap.put("data", article);
@@ -127,8 +108,8 @@ public class IndexController {
     }
 
     @CrossOrigin
-    @RequestMapping("/saveArticle")
-    public ResponseEntity<Map<String,Object>> saveArticle(Authentication user, HttpServletRequest request, @RequestBody ArticleTags articleTags) {
+    @RequestMapping("/save")
+    public ResponseEntity<Map<String,Object>> save(Authentication user, HttpServletRequest request, @RequestBody ArticleTags articleTags) {
         //OAuth2AuthenticationDetails details = (OAuth2AuthenticationDetails)user.getDetails();
         //System.out.println("saveArticle: token " + details.getTokenValue());
         //System.out.println("saveArticle: user " + user.getPrincipal());
@@ -138,29 +119,14 @@ public class IndexController {
         System.out.println("articleEntity: " + articleEntity.getContent());
         System.out.println("tags: " + articleTags.getTags());
         String authorization =  request.getHeader("authorization");
-        ResponseEntity<Map<String,Object>> responseEntity  = blogService.saveArticle(authorization, articleEntity, tags);
+        ResponseEntity<Map<String,Object>> responseEntity  = articleService.save(authorization, articleEntity, tags);
         return responseEntity;
     }
 
-
-    @CrossOrigin
-    @RequestMapping("dologout")
-    public ResponseEntity<Map<String,Object>> logout(Authentication user) {
-        OAuth2AuthenticationDetails details = (OAuth2AuthenticationDetails)user.getDetails();
-        System.out.println(details.getTokenValue());
-//        SecurityContext context = SecurityContextHolder.getContext();
-//        context.setAuthentication((Authentication)null);
-//
-//        SecurityContextHolder.clearContext();
-        oauthService.exit(details.getTokenValue());
-        System.out.println("logout: hello");
-        ResponseEntity<Map<String,Object>> responseEntity  = new ResponseEntity<>(new HashMap<>(), HttpStatus.OK);
-        return responseEntity;
-    }
 
     @RequestMapping("tags")
     public ResponseEntity<Map<String,Object>> getTags() {
-        List<TagEntity> tags = blogService.getTags();
+        List<TagEntity> tags = articleService.getTags();
         Map<String, Object> responseMap = new HashMap<>();
         responseMap.put("status", HttpStatus.OK.value());
         responseMap.put("data", tags);
@@ -171,7 +137,7 @@ public class IndexController {
 
     @RequestMapping("categories")
     public ResponseEntity<Map<String,Object>> getCategories() {
-        List<CategoryEntity> categories = blogService.getCategories();
+        List<CategoryEntity> categories = articleService.getCategories();
         Map<String, Object> responseMap = new HashMap<>();
         responseMap.put("status", HttpStatus.OK.value());
         responseMap.put("data", categories);
@@ -198,20 +164,6 @@ public class IndexController {
         HttpEntity<LinkedMultiValueMap<String, ? extends Object>> loginEntity = new HttpEntity(valueMap, httpHeaders);
         String url = "http://localhost:8771/login";
 
-        //restTemplate.getForObject("http://oauth2-server:8771/getToken?clientId=blog", Map.class);
-
-//        ResponseEntity<Object> loginResponse = restTemplate.exchange(url, HttpMethod.POST, loginEntity, Object.class);
-//        HttpHeaders headers = loginResponse.getHeaders();
-//        for (Map.Entry<String, List<String>> entry : headers.entrySet()) {
-//            entry.getValue().stream().forEach(value -> response.addHeader(entry.getKey(), value));
-//        }
-//        System.out.println(loginResponse);
-//
-//        for (Map.Entry<String, List<String>> entry : headers.entrySet()) {
-//            entry.getValue().stream().forEach(value -> httpHeaders.add(entry.getKey(), value));
-//        }
-
-        //oauth2UserClient.Authorize();
 
         LinkedMultiValueMap<String, Object> valueMap1 = new LinkedMultiValueMap<>();
         valueMap1.add("clientId", "blog");
@@ -271,45 +223,7 @@ public class IndexController {
             Map<String, Object> map = HttpUtils.doFrom(authorizationCodeResourceDetails.getAccessTokenUri(), valueMap, Map.class);
             System.out.println(map);
             System.out.println(request.getHeader("referer"));
-            //map.put("authorization", map.get("access_token"));
-            //获取用户信息，说明这里主要目的就是通过资源服务器去获取用户信息
-            // Map principal = HttpUtils.doGet(resourceServerProperties.getUserInfoUri() + "?access_token=" + map.get("access_token"), Map.class);
-            // Map principal = HttpUtils.doPost(resourceServerProperties.getUserInfoUri(), map, Map.class);
-//           HttpHeaders requestHeaders = new HttpHeaders();
-//           requestHeaders.add("authorization", map.get("access_token").toString());
-//           HttpEntity<String> requestEntity = new HttpEntity<String>(null, requestHeaders);
-//           Map principal = restTemplate.postForObject(resourceServerProperties.getUserInfoUri(), requestEntity, Map.class);
-//
-//           String checkUserUrl = resourceServerProperties.getUserInfoUri().substring(0, resourceServerProperties.getUserInfoUri().length() - 4) + "check_user";
-//           checkUserUrl = checkUserUrl + "?clientId={1}&userName={2}";
-//           System.out.println(checkUserUrl);
-//           Map checkUser = restTemplate.getForObject(checkUserUrl, Map.class, authorizationCodeResourceDetails.getClientId(),
-//                   principal.get("user").toString());
-//           System.out.println(checkUser);
-//
-//           System.out.println(principal);
 
-
-            //这里通过本地登录单点登录
-            //String username = principal.get("name").toString();
-            //如果用户存在则不添加，这里如果生产应用中，可以更具规则修改
-            SecurityContext securityContext = SecurityContextHolder.getContext();
-            Authentication authentication = securityContext.getAuthentication();
-            System.out.println(authentication);
-            //这里通过本地登录的方式来获取会话
-//            HttpHeaders httpHeaders = new HttpHeaders();
-//            httpHeaders.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-//            LinkedMultiValueMap<String, Object> params = new LinkedMultiValueMap<>();
-//            params.add("username", "admin");
-//            params.add("password", "123");
-//            HttpEntity<LinkedMultiValueMap<String, ? extends Object>> httpEntity = new HttpEntity(params, httpHeaders);
-            //String url = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + "/login";
-            //ResponseEntity<Object> exchange = restTemplate.exchange(url, HttpMethod.POST, httpEntity, Object.class);
-            //将登录后的header原本的给浏览器，这就是当前浏览器的会话
-            //HttpHeaders headers = exchange.getHeaders();
-            //for (Map.Entry<String, List<String>> entry : headers.entrySet()) {
-            //    entry.getValue().stream().forEach(value -> response.addHeader(entry.getKey(), value));
-            //}
             response.sendRedirect("http://localhost:3000/about"
                     + "?access_token=" + map.get("access_token"));
         }
