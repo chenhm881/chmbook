@@ -6,7 +6,6 @@
     <result column="tag_name" jdbcType="VARCHAR" property="tagName" />
     <result column="tag_description" jdbcType="VARCHAR" property="tagDescription" />
   </resultMap>
-
   <select id="find" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select * from tag where tag_id = #{tagId,jdbcType=INTEGER}
   </select>

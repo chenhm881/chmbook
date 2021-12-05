@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chm.book.article.mapper.TagMapper">
+  <resultMap id="BaseResultMap" type="com.chm.book.article.domain.ArticleTag">
+    <id property="articleId" column="article_id"/>
+    <id property="tagId" column="tag_id" />
+    <id property="status" column="status"/>
+  </resultMap>
+
+  <select id="findAll" parameterType="java.lang.Integer" resultMap="BaseResultMap" >
+    select * from article_tag where article_id = #{article_id,jdbcType=INTEGER}
+  </select>
+
+  <select id="find" parameterType="java.lang.Integer" resultMap="BaseResultMap" >
+    select * from article_tag where status = 1 and article_id = #{article_id,jdbcType=INTEGER}
+  </select>
+
+  <insert id="insert" keyProperty="articleId, tagId" keyColumn="article_id, tag_id" parameterMap="BaseResultMap">
+    insert into article_tag (article_id, tag_id, status)
+    values (#{articleId,jdbcType=INTEGER}, #{tagId,jdbcType=INTEGER}, #{status,jdbcType=BIT})
+    ON DUPLICATE KEY UPDATE
+    <choose>
+      <when test="status == 1">
+        status = 0
+      </when>
+      <otherwise>
+        status = 1
+      </otherwise>
+    </choose>
+  </insert>
+</mapper>
