@@ -2,10 +2,7 @@ package com.chm.book.article.controller;
 
 import com.chm.book.article.command.BlogHystrixObservableCommand;
 import com.chm.book.article.domain.*;
-import com.chm.book.article.service.ArticleService;
-import com.chm.book.article.service.BlogService;
-import com.chm.book.article.service.CategoryService;
-import com.chm.book.article.service.TagService;
+import com.chm.book.article.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,6 +27,9 @@ public class IndexController {
 
     @Autowired
     private CategoryService categoryService;
+
+    @Autowired
+    private ArticleTagService articleTagService;
 
     @CrossOrigin
     @RequestMapping("hello")
@@ -71,8 +71,7 @@ public class IndexController {
     public ResponseEntity<Map<String,Object>> save(@RequestBody ArticleEntity articleEntity, @RequestParam List<Integer> tags) {
 
         Integer returnInt = articleService.save(articleEntity);
-
-
+        Integer insertInt = articleTagService.insert(articleEntity.getId(), tags);
 
         Article article = new Article();
         CategoryEntity categoryEntity = new CategoryEntity();

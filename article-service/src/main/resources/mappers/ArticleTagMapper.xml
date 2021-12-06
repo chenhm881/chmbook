@@ -19,13 +19,5 @@
     insert into article_tag (article_id, tag_id, status)
     values (#{articleId,jdbcType=INTEGER}, #{tagId,jdbcType=INTEGER}, #{status,jdbcType=BIT})
     ON DUPLICATE KEY UPDATE
-    <choose>
-      <when test="status == 1">
-        status = 0
-      </when>
-      <otherwise>
-        status = 1
-      </otherwise>
-    </choose>
   </insert>
 </mapper>

@@ -8,5 +8,4 @@ import java.util.List;
 @Component
 public interface TagMapper {
     List<TagEntity> findAll();
-
 }
