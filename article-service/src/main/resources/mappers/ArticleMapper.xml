@@ -49,7 +49,7 @@
 
   <sql id="Select_Article" >
     select * from (select article.*, category.category_name from article_storage.article article left join article_storage.category category on article.category_id = category.category_id) with_category
-    left join (SELECT article_tag.article_id, tag.tag_id, tag.tag_name FROM article_storage.article_tag  article_tag inner join article_storage.tag tag on article_tag.tag_id = tag.tag_id) with_tag
+    left join (SELECT article_tag.article_id, tag.tag_id, tag.tag_name FROM article_storage.article_tag article_tag inner join article_storage.tag tag on article_tag.tag_id = tag.tag_id where article_tag.status = 1) with_tag
         on with_category.id = with_tag.article_id
   </sql>
 
