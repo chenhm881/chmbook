@@ -67,10 +67,13 @@ public class IndexController {
     }
 
     @CrossOrigin
-    @RequestMapping("saveArticle")
-    public ResponseEntity<Map<String,Object>> saveArticle(@RequestBody ArticleEntity articleEntity, @RequestParam List<Integer> tags) {
+    @RequestMapping("save")
+    public ResponseEntity<Map<String,Object>> save(@RequestBody ArticleEntity articleEntity, @RequestParam List<Integer> tags) {
 
         Integer returnInt = articleService.save(articleEntity);
+
+
+
         Article article = new Article();
         CategoryEntity categoryEntity = new CategoryEntity();
         categoryEntity.setCategoryId(articleEntity.getCategoryId());
@@ -80,16 +83,23 @@ public class IndexController {
         article.setSummary(articleEntity.getSummary());
         article.setTitle(articleEntity.getTitle());
         article.setId(articleEntity.getId());
+        List<TagEntity> tagEntities = new ArrayList<>();
+        tags.stream().forEach(tag -> {
+            TagEntity tagEntity = new TagEntity();
+            tagEntity.setTagId(tag);
+        });
+        article.setTags(tagEntities);
+
         Map<String, Object> responseMap = new HashMap<>();
         ResponseEntity<Map<String,Object>> responseEntity;
-        if(returnInt > 0) {
+        if( returnInt > 0) {
             responseMap.put("status", HttpStatus.OK.value());
             responseMap.put("data", article);
-            responseMap.put("message", "message1");
+            responseMap.put("message", "save successfully");
             responseEntity = new ResponseEntity<>(responseMap, HttpStatus.OK);
         } else {
             responseMap.put("status", HttpStatus.SERVICE_UNAVAILABLE.value());
-            responseMap.put("message", "Save failed");
+            responseMap.put("message", "save failed");
             responseEntity = new ResponseEntity<>(responseMap, HttpStatus.SERVICE_UNAVAILABLE);
         }
         return responseEntity;
@@ -103,7 +113,6 @@ public class IndexController {
         observableCommand.setId(62);
         Observable<List<TBlog>> observe = observableCommand.observe();
         observe.subscribe(new Observer<>() {
-
                               @Override
                               public void onCompleted() {
                                   System.out.println("聚合完了所有的查询请求!");

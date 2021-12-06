@@ -20,4 +20,12 @@
     ON DUPLICATE KEY UPDATE
         tag_name = values(tag_name), tag_description = values(tag_description)
   </insert>
+
+  <insert id="updateArticleTag" parameterType="com.chm.book.article.domain.TagEntity" keyColumn="tag_id"  keyProperty="tagId" >
+    insert into tag (tag_id, tag_name, tag_description)
+    values (#{tagId,jdbcType=INTEGER}, #{tagName,jdbcType=VARCHAR}, #{tagDescription,jdbcType=VARCHAR})
+      ON DUPLICATE KEY UPDATE
+                         tag_name = values(tag_name), tag_description = values(tag_description)
+  </insert>
+
 </mapper>
