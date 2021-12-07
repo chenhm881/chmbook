@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ArticleTagService {
@@ -29,23 +30,21 @@ public class ArticleTagService {
         List<ArticleTag> updateArticleTagList = new ArrayList<>();
 
         for(Integer tagId : tags) {
-            Boolean isFind = false;
-            for(ArticleTag articleTag : articleTagList) {
-                if (articleTag.getTagId().equals(tagId)) {
-                    if (!articleTag.getStatus()) {
-                        articleTag.setStatus(true);
+            ArticleTag findArticleTag = articleTagList.stream().filter(item -> item.getTagId().equals(tagId)).findFirst().orElse(null);
+            if (findArticleTag != null) {
+                for (ArticleTag articleTag : articleTagList) {
+                    if (findArticleTag.getTagId().equals(articleTag.getTagId())) {
+                        if (!articleTag.isStatus()) {
+                            articleTag.setStatus(true);
+                            updateArticleTagList.add(articleTag);
+                        }
+                    } else if (articleTag.isStatus()) {
+                        articleTag.setStatus(false);
                         updateArticleTagList.add(articleTag);
                     }
-                    isFind = true;
-                    break;
                 }
-                if (articleTag.getStatus()) {
-                    articleTag.setStatus(false);
-                    updateArticleTagList.add(articleTag);
-                }
-            }
 
-            if (!isFind) {
+            } else {
                 ArticleTag articleTag = new ArticleTag();
                 articleTag.setArticleId(articleId);
                 articleTag.setTagId(tagId);
@@ -54,8 +53,12 @@ public class ArticleTagService {
             }
         }
 
-        articleTagMapper.insertList(insertArticleTagList);
-        articleTagMapper.updateList(updateArticleTagList);
+       if(insertArticleTagList.size() > 0) {
+           articleTagMapper.insertList(insertArticleTagList);
+       }
+       if(updateArticleTagList.size() > 0) {
+           articleTagMapper.updateList(updateArticleTagList, articleId);
+       }
         return 1;
     }
 

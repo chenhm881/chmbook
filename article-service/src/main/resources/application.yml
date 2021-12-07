@@ -49,3 +49,6 @@ mybatis:
   type-aliases-package: com.chm.book.article.domain
   configuration:
     map-underscore-to-camel-case: true
+
+logging.level.com.chm.book.article.mapper: debug
+

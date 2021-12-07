@@ -6,5 +6,5 @@ import lombok.Data;
 public class ArticleTag {
     private Integer articleId;
     private Integer tagId;
-    private Boolean status;
+    private boolean status;
 }

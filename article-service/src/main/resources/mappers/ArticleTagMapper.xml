@@ -4,7 +4,7 @@
   <resultMap id="BaseResultMap" type="com.chm.book.article.domain.ArticleTag">
     <id property="articleId" column="article_id"/>
     <id property="tagId" column="tag_id" />
-    <id property="status" column="status" jdbcType="BIT"/>
+    <id property="status" column="status" jdbcType="BIT" javaType="boolean"/>
   </resultMap>
 
   <select id="findAll" parameterType="java.lang.Integer" resultMap="BaseResultMap" >
@@ -19,21 +19,21 @@
     insert into article_tag (article_id, tag_id, status)
     VALUES
     <foreach collection="list" item="c" separator=",">
-      (#{articleId}, #{tagId}, #{c.status}
+      (#{c.articleId}, #{c.tagId}, #{c.status}
       )
     </foreach>
   </insert>
 
-  <update id="updateList" parameterType="java.util.List">
+  <update id="updateList">
     update article_tag
     <trim prefix="set" suffixOverrides=",">
       <trim prefix="status =case" suffix="end,">
-        <foreach collection="list" item="item" index="index">
-          when tag_id=#{item.tagId} then #{item.status}
+        <foreach collection="articleTagList" item="item" index="index">
+          when tag_id=#{item.tagId} then #{item.status, jdbcType=BIT}
         </foreach>
       </trim>
     </trim>
-    where article_id=#{item.articleId}
+    where article_id=#{articleId}
   </update>
 
 </mapper>

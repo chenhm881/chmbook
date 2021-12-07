@@ -86,6 +86,7 @@ public class IndexController {
         tags.stream().forEach(tag -> {
             TagEntity tagEntity = new TagEntity();
             tagEntity.setTagId(tag);
+            tagEntities.add(tagEntity);
         });
         article.setTags(tagEntities);
 
