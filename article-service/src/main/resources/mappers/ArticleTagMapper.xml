@@ -33,7 +33,10 @@
         </foreach>
       </trim>
     </trim>
-    where article_id=#{articleId}
+    where article_id=#{articleId} and tag_id in
+    <foreach collection="articleTagList" index="index" item="item" separator="," open="(" close=")">
+      #{item.tagId}
+    </foreach>
   </update>
 
 </mapper>
