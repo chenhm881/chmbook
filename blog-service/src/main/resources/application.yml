@@ -55,7 +55,7 @@ eureka:
     register-with-eureka: true
     fetch-registry: true
     service-url:
-      defaultZone: http://localhost:8762/eureka
+      defaultZone: http://101.34.6.152:31071/eureka
 
 #security:
 #  oauth2:
@@ -83,10 +83,10 @@ security:
     client:
       client-id: blog
       client-secret: 123
-      access-token-uri: http://localhost:8771/oauth/token
-      user-authorization-uri: http://localhost:8771/oauth/authorize
+      access-token-uri: http://101.34.6.152:31073/oauth/token
+      user-authorization-uri: http://101.34.6.152:31073/oauth/authorize
     resource:
-      tokenInfoUri: http://localhost:8771/oauth/check_token
+      tokenInfoUri: http://101.34.6.152:31073/oauth/check_token
 #      jwt:
 #        key-uri: http://localhost:8771/oauth/token_key
 

@@ -28,7 +28,7 @@ public class UserLogoutSuccessHandler implements LogoutSuccessHandler {
             new SecurityContextLogoutHandler().logout(request, response, auth);
         }
 
-        response.sendRedirect("http://localhost:8771/logout?loginurl=http://localhost:3000/about");
+        response.sendRedirect("http://101.34.6.152:31073/logout?loginurl=http://101.34.6.152:31080/about");
 
     }
 }

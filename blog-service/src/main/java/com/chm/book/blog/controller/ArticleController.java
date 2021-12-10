@@ -15,8 +15,6 @@ import org.springframework.boot.autoconfigure.security.oauth2.resource.ResourceS
 import org.springframework.context.annotation.Lazy;
 import org.springframework.http.*;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.client.token.grant.code.AuthorizationCodeResourceDetails;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.security.oauth2.provider.authentication.OAuth2AuthenticationDetails;
@@ -233,7 +231,7 @@ public class ArticleController {
         public void login(HttpServletRequest request, HttpServletResponse response) throws IOException {
             String token = ((OAuth2AuthenticationDetails)((OAuth2Authentication) request.getUserPrincipal()).getDetails()).getTokenValue();
             String userName = request.getUserPrincipal().getName();
-            response.sendRedirect("http://localhost:3000/about"
+            response.sendRedirect("http://101.34.6.152:31080/about"
                     + "?access_token=" +  token + "&username=" + userName);
 
     }
