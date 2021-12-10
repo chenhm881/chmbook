@@ -33,7 +33,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     .and()
                     .csrf()
                     .disable()
-                    .logout().logoutSuccessUrl("http://localhost:8771/logout").logoutSuccessHandler(new UserLogoutSuccessHandler())
+                    .logout().logoutSuccessUrl("http://101.34.6.152:31073/logout").logoutSuccessHandler(new UserLogoutSuccessHandler())
                     .and()
                     .authorizeRequests()
                     .antMatchers("/articles", "/article/**", "/tags", "/categories", "/save", "/register").permitAll()

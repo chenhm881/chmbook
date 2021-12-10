@@ -10,22 +10,22 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-@FeignClient(name="ZUUL-GATEWAY-ARTICLE", url="http://ZUUL-GATEWAY", fallbackFactory = ArticleServiceImp.class)
+@FeignClient(name="ZUUL-GATEWAY-ARTICLE", url="http://101.34.6.152:31072", fallbackFactory = ArticleServiceImp.class)
 public interface ArticleService {
 
-    @RequestMapping(value = "/article/api/articles")
+    @RequestMapping(value = "/api/articles")
     public List<ArticleEntity> getArticles();
 
-    @PostMapping(value = "/article/api/article/{id}")
+    @PostMapping(value = "/api/article/{id}")
     public Article getArticle(@PathVariable(value = "id") Integer id);
 
-    @PostMapping(value = "/article/api/save")
+    @PostMapping(value = "/api/save")
     public ResponseEntity<Map<String,Object>> save(@RequestHeader String authorization, @RequestBody ArticleEntity articleEntity, @RequestParam List<Integer> tags);
 
-    @RequestMapping(value = "/article/api/tags")
+    @RequestMapping(value = "/api/tags")
     public List<TagEntity> getTags();
 
-    @RequestMapping(value = "/article/api/categories")
+    @RequestMapping(value = "/api/categories")
     public List<CategoryEntity> getCategories();
 
 }
