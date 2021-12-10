@@ -5,20 +5,40 @@ spring:
     type: com.alibaba.druid.pool.xa.DruidXADataSource
     master:
       driver-class-name: com.mysql.cj.jdbc.Driver
-      url: jdbc:mysql://101.34.6.152:3306/ming_blog?useSSL=false&allowMultiQueries=true&autoReconnect=true
+      url: jdbc:mysql://101.34.6.152:32306/article_storage?useSSL=false&allowMultiQueries=true&autoReconnect=true
       username: root
-      password: 123456
+      password: mysql
     cluster:
       - key: database2
         driver-class-name: com.mysql.cj.jdbc.Driver
-        url: jdbc:mysql://101.34.6.152:3306/ming_blog?useSSL=false&allowMultiQueries=true&autoReconnect=true
+        url: jdbc:mysql://101.34.6.152:32306/article_storage?useSSL=false&allowMultiQueries=true&autoReconnect=true
         username: root
-        password: 123456
+        password: mysql
   redis:
     host: 101.34.6.152
+    port: 32379
+    timeout: 5000
+    password: redis
+
+ribbon:
+  eureka:
+    enabled: true
+eureka:
+  instance:
+    prefer-ip-address: true
+    instance-id: ${spring.cloud.client.ipaddress}:${spring.application.name}:${server.port}:@project.version@
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://101.34.6.152:31071/eureka
 
 server:
   port: 8182
+  servlet:
+    session:
+      cookie:
+        name: ARTICLESESSION
 
 rsa:
   key:
@@ -30,12 +50,4 @@ mybatis:
   configuration:
     map-underscore-to-camel-case: true
 
-eureka:
-  instance:
-    prefer-ip-address: true
-    instance-id: ${spring.cloud.client.ipaddress}:${spring.application.name}:${server.port}:@project.version@
-  client:
-    register-with-eureka: true
-    fetch-registry: true
-    service-url:
-      defaultZone: http://101.34.6.152:31071/eureka
+logging.level.com.chm.book.article.mapper: debug
