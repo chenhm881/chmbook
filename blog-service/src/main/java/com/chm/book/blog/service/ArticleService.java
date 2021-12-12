@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-@FeignClient(name="ZUUL-GATEWAY-ARTICLE", url="http://101.34.6.152:31074", fallbackFactory = ArticleServiceImp.class)
+@FeignClient(name="ZUUL-GATEWAY-ARTICLE", url="http://ZUUL-GATEWAY", fallbackFactory = ArticleServiceImp.class)
 public interface ArticleService {
 
     @RequestMapping(value = "/article/api/articles")

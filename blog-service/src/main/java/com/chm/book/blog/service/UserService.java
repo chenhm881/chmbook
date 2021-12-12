@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 @Service
-@FeignClient(name="ZUUL-GATEWAY-USER", url="http://101.34.6.152:31074")
+@FeignClient(name="ZUUL-GATEWAY-USER", url="http://ZUUL-GATEWAY")
 public interface UserService {
 
     @RequestMapping(value = "/oauth2/register")
