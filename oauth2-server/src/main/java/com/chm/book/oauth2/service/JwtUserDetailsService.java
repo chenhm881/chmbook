@@ -22,6 +22,7 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtAut
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -38,7 +39,9 @@ public class JwtUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         SysUser sysUser = sysUserMapper.selectSysUser(username);
         List<SimpleGrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
+        Arrays.stream(sysUser.getAuthorities().split(",")).forEach(authority -> {
+            authorities.add(new SimpleGrantedAuthority(authority));
+        });
         User user = new User(sysUser.getUsername(), bCryptPasswordEncoder.encode(sysUser.getPassword()), authorities);
         if (user != null) {
             return user;
@@ -51,7 +54,9 @@ public class JwtUserDetailsService implements UserDetailsService {
         SysUser sysUser = sysUserMapper.selectSysUserByClientId(clientId);
         sysUser.setPassword("password");
         List<SimpleGrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
+        Arrays.stream(sysUser.getAuthorities().split(",")).forEach(authority -> {
+            authorities.add(new SimpleGrantedAuthority(authority));
+        });
         User user = new User(sysUser.getUsername(), bCryptPasswordEncoder.encode(sysUser.getPassword()), authorities);
         if (user != null) {
             return user;

@@ -21,5 +21,7 @@ public class SysUser {
     private String nickname;
 
     private String email;
+
+    private String authorities;
 }
 

@@ -16,5 +16,6 @@ public class SysUser {
     private String email;
 
     private List<String> roles;
+
 }
 

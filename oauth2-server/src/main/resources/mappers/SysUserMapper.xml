@@ -5,20 +5,23 @@
       <result column="id" property="id" jdbcType="INTEGER"/>
       <result column="username" property="username" jdbcType="VARCHAR"/>
       <result column="password" property="password" jdbcType="VARCHAR"/>
+      <result column="authorities" property="authorities" jdbcType="VARCHAR"/>
     </resultMap>
 
     <resultMap id="resultMap" type="com.chm.book.oauth2.domain.SysUser">
         <result column="id" property="id" jdbcType="INTEGER"/>
         <result column="groupname" property="username" jdbcType="VARCHAR"/>
+        <result column="authorities" property="authorities" jdbcType="VARCHAR"/>
     </resultMap>
 
     <select id="selectSysUser" resultMap="resultMap">
-      select * from sys_user
-      where username = #{username}
+      select usergroup.*, ogroup.authorities from (select suser.*, ugroup.group_id from sys_user suser
+         inner join user_group ugroup on suser.id = ugroup.user_id where suser.username = #{username})
+      usergroup inner join oauth_group ogroup on usergroup.group_id = ogroup.id
     </select>
 
     <select id="selectSysUserByClientId" resultMap="resultMap">
-        select `group`.* from oauth_group `group` inner join oauth_client_group_pending client_group on `group`.id = client_group.group_id
+        select `group`.* from oauth_group `group` inner join oauth_client_group client_group on `group`.id = client_group.group_id
         where client_group.client_id = #{clientId} limit 1
     </select>
 
