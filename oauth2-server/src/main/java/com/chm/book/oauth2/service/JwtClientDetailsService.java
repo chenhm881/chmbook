@@ -40,9 +40,9 @@ public class JwtClientDetailsService implements ClientDetailsService, ClientRegi
         return details;
     }
 
-    public OauthClientDetails selectClientDetailsByUsername(String username) throws ClientRegistrationException {
-        OauthClientDetails oauthClientDetails = clientDetailsMapper.selectClientDetails(username);
-        return oauthClientDetails;
+    public List<OauthClientDetails> selectClientDetailsByUsername(String username) throws ClientRegistrationException {
+        List<OauthClientDetails> oauthClientDetailslist = clientDetailsMapper.selectClientDetailsByUsername(username);
+        return oauthClientDetailslist;
     }
 
     @Override

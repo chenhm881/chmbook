@@ -12,5 +12,5 @@ import java.util.List;
 public interface ClientDetailsMapper {
 
     OauthClientDetails selectClientDetails(String clientId);
-    OauthClientDetails selectClientDetailsByUsername(String username);
+    List<OauthClientDetails> selectClientDetailsByUsername(String username);
 }

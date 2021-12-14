@@ -49,6 +49,7 @@ public class JwtUserDetailsService implements UserDetailsService {
 
     public UserDetails loadUserByClientId(String clientId) throws UsernameNotFoundException {
         SysUser sysUser = sysUserMapper.selectSysUserByClientId(clientId);
+        sysUser.setPassword("password");
         List<SimpleGrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
         User user = new User(sysUser.getUsername(), bCryptPasswordEncoder.encode(sysUser.getPassword()), authorities);
