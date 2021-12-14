@@ -23,6 +23,6 @@
     <select id="selectClientDetailsByUsername" resultMap="resultMap">
         select client_details.*
         from oauth_client_details client_details
-        INNER join oauth_client_user client_user on client_details.client_id = client_user.client_id where client_user.username = #{username}
+        INNER join oauth_client_group client_group on client_details.client_id = client_group.client_id where client_group.username = #{username}
     </select>
 </mapper>
