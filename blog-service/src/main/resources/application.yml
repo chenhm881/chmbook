@@ -100,15 +100,7 @@ oauth2:
   key:
     publicKey: oauth2/rsa_public_key.pem
 
-
-#security:
-#  oauth2:
-#    client:
-#      client-id: UserManagement
-#      client-secret: user123
-#      access-token-uri: http://localhost:8080/oauth/token
-#      user-authorization-uri: http://localhost:8080/oauth/authorize
-#    resource:
-#      jwt:
-#        key-uri: http://localhost:8080/oauth/token_key
+custom:
+  dispatch:
+    redirectUri: http://localhost:3000/about
 

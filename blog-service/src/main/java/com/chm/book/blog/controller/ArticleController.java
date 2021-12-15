@@ -1,6 +1,7 @@
 package com.chm.book.blog.controller;
 
 import com.chm.book.blog.client.Oauth2UserClient;
+import com.chm.book.blog.config.CustomDispatchProperties;
 import com.chm.book.blog.domain.*;
 import com.chm.book.blog.entityconvert.ArticleConvert;
 import com.chm.book.blog.service.FileService;
@@ -65,6 +66,8 @@ public class ArticleController {
     @Lazy
     private TokenStore tokenStore;
 
+    @Autowired
+    private CustomDispatchProperties customDispatchProperties;
 
     @RequestMapping("/hi")
     public String hi(Authentication user) {
@@ -221,19 +224,16 @@ public class ArticleController {
             Map<String, Object> map = HttpUtils.doFrom(authorizationCodeResourceDetails.getAccessTokenUri(), valueMap, Map.class);
             System.out.println(map);
             System.out.println(request.getHeader("referer"));
-
             response.sendRedirect("http://localhost:3000/about"
                     + "?access_token=" + map.get("access_token"));
         }
     }
-        @CrossOrigin
-        @RequestMapping("/authorize/login")
-        public void login(HttpServletRequest request, HttpServletResponse response) throws IOException {
-            String token = ((OAuth2AuthenticationDetails)((OAuth2Authentication) request.getUserPrincipal()).getDetails()).getTokenValue();
-            String userName = request.getUserPrincipal().getName();
-            response.sendRedirect("http://101.34.6.152:31080/about"
-                    + "?access_token=" +  token + "&username=" + userName);
-
+    @CrossOrigin
+    @RequestMapping("/authorize/login")
+    public void login(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String token = ((OAuth2AuthenticationDetails)((OAuth2Authentication) request.getUserPrincipal()).getDetails()).getTokenValue();
+        String userName = request.getUserPrincipal().getName();
+        response.sendRedirect(customDispatchProperties.getRedirectUri() + "?access_token=" +  token + "&username=" + userName);
     }
 
 }
