@@ -28,6 +28,8 @@ public interface ArticleService {
     @RequestMapping(value = "/article/api/categories")
     public List<CategoryEntity> getCategories();
 
+    @RequestMapping(value = "/article/api/articles")
+    List<ArticleEntity> getArticles(Integer id);
 }
 
 

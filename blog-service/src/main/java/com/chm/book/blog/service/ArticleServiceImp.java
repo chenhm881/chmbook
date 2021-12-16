@@ -60,6 +60,11 @@ public class ArticleServiceImp implements FallbackFactory<ArticleService> {
             public List<CategoryEntity> getCategories() {
                 return null;
             }
+
+            @Override
+            public List<ArticleEntity> getArticles(Integer id) {
+                return null;
+            }
         };
     }
 

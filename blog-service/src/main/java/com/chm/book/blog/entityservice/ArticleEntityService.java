@@ -4,10 +4,14 @@ import com.chm.book.blog.domain.ArticleEntity;
 import com.chm.book.blog.domain.ArticleTags;
 import com.chm.book.blog.domain.SysUser;
 import com.chm.book.blog.mapper.UserMapper;
+import com.chm.book.blog.service.ArticleService;
 import com.chm.book.blog.service.UserService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -17,6 +21,10 @@ public class ArticleEntityService {
 
     @Autowired
     private UserMapper userMapper;
+
+    @Autowired
+    private ArticleService articleService;
+
 
     public ArticleEntity createEntity(String authorization, ArticleTags articleTags) {
         SysUser sysUser = findAuthenticationUser(authorization);
@@ -38,6 +46,18 @@ public class ArticleEntityService {
         entity.setAuthorId(sysUser.getId().longValue());
         return entity;
     };
+
+    public List<ArticleEntity> getArticles(String authorization) {
+        List<ArticleEntity> articles = new ArrayList<>();
+        if (StringUtils.isNotEmpty(authorization)){
+            SysUser sysUser = findAuthenticationUser(authorization);
+            articles = articleService.getArticles(sysUser.getId());
+        } else {
+            articles = articleService.getArticles();
+        }
+        return articles;
+
+    }
 
 
     public SysUser findAuthenticationUser(String authorization) {

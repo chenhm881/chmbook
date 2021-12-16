@@ -27,6 +27,7 @@ import org.springframework.web.client.RestTemplate;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -84,7 +85,23 @@ public class ArticleController {
 
     @CrossOrigin
     @RequestMapping("/articles")
-    public ResponseEntity<Map<String,Object>> getArticles( @RequestBody Map<String, Object> params) {
+    public ResponseEntity<Map<String,Object>> getArticles(HttpServletRequest request) {
+        String authorization =  request.getHeader("authorization");
+        List<ArticleEntity> articles = articleEntityService.getArticles(authorization);
+        Map<String, Object> responseMap = new HashMap<>();
+        responseMap.put("status", HttpStatus.OK.value());
+        responseMap.put("data", articles);
+        responseMap.put("message", "message1");
+        ResponseEntity<Map<String,Object>> responseEntity = new ResponseEntity<>(responseMap, HttpStatus.OK);
+        return responseEntity;
+    }
+
+
+
+    @CrossOrigin
+    @RequestMapping("/selectArticles")
+    public ResponseEntity<Map<String,Object>> getSelectArticles(HttpServletRequest request, @RequestBody Map<String, Object> params) {
+        String authorization =  request.getHeader("authorization");
         List<ArticleEntity> articles = articleService.getArticles();
         Map<String, Object> responseMap = new HashMap<>();
         responseMap.put("status", HttpStatus.OK.value());
