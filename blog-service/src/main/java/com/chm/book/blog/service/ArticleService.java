@@ -13,8 +13,7 @@ import java.util.Map;
 @FeignClient(name="ZUUL-GATEWAY-ARTICLE", url="ZUUL-GATEWAY", fallbackFactory = ArticleServiceImp.class)
 public interface ArticleService {
 
-    @RequestMapping(value = "/article/api/articles")
-    public List<ArticleEntity> getArticles();
+
 
     @PostMapping(value = "/article/api/article/{id}")
     public Article getArticle(@PathVariable(value = "id") Integer id);
@@ -28,6 +27,17 @@ public interface ArticleService {
     @RequestMapping(value = "/article/api/categories")
     public List<CategoryEntity> getCategories();
 
+    @RequestMapping(value = "/article/api/articles")
+    public List<ArticleEntity> getArticles();
+
+    @RequestMapping(value = "/article/api/articlesByUser")
+    List<ArticleEntity> getUserArticles(@RequestHeader String authorization, Integer id);
+
+    @RequestMapping(value = "/article/api/selectArticles")
+    List<ArticleEntity> selectArticles(ArticleRequest articleRequest);
+
+    @RequestMapping(value = "/article/api/user/selectArticles")
+    List<ArticleEntity> selectUserArticles(@RequestHeader String authorization, ArticleRequest articleRequest);
 }
 
 

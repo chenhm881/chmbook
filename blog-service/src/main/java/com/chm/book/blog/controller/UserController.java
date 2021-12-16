@@ -1,6 +1,7 @@
 package com.chm.book.blog.controller;
 
 import com.chm.book.blog.domain.SysUser;
+import com.chm.book.blog.entityservice.UserEntityService;
 import com.chm.book.blog.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,6 +24,9 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private UserEntityService userEntityService;
+
     @CrossOrigin
     @RequestMapping("/register")
     public ResponseEntity<Map<String,Object>> register(HttpServletRequest request, @RequestBody SysUser sysUser) {
@@ -37,7 +41,7 @@ public class UserController {
     @RequestMapping("/user")
     public ResponseEntity<Map<String,Object>> getUser(HttpServletRequest request) {
         String authorization =  request.getHeader("authorization");
-        SysUser sysUser  = userService.getUser(authorization);
+        SysUser sysUser = userEntityService.findAuthenticationUser(authorization);
         Map<String, Object> responseMap = new HashMap<>();
         responseMap.put("status", Optional.ofNullable(sysUser).isPresent() ? HttpStatus.OK : HttpStatus.EXPECTATION_FAILED);
         responseMap.put("data", sysUser);

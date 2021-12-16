@@ -63,10 +63,21 @@ public class IndexController {
         return entities;
     }
 
-
     @RequestMapping("/user/articles")
     public List<ArticleEntity> getArticlesByUser(Integer authorId) {
         List<ArticleEntity> entities = articleService.getArticlesByUser(authorId);
+        return entities;
+    }
+
+    @RequestMapping("selectArticles")
+    public List<ArticleEntity> selectArticles(ArticleRequest articleRequest) {
+        List<ArticleEntity> entities = articleService.selectArticles(articleRequest);
+        return entities;
+    }
+
+    @RequestMapping("user/selectArticles")
+    public List<ArticleEntity> selectArticlesByUser(ArticleRequest articleRequest) {
+        List<ArticleEntity> entities = articleService.selectArticlesByUser(articleRequest);
         return entities;
     }
 
@@ -142,6 +153,7 @@ public class IndexController {
         //blogService.getCacheTBlog(2);
         return "successfully";
     }
+
 
     @RequestMapping("tags")
     public List<TagEntity> getTags() {

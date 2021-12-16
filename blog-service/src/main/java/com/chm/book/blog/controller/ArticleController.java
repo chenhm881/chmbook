@@ -3,7 +3,7 @@ package com.chm.book.blog.controller;
 import com.chm.book.blog.client.Oauth2UserClient;
 import com.chm.book.blog.config.CustomDispatchProperties;
 import com.chm.book.blog.domain.*;
-import com.chm.book.blog.entityconvert.ArticleConvert;
+import com.chm.book.blog.entityservice.ArticleEntityService;
 import com.chm.book.blog.service.FileService;
 import com.chm.book.blog.service.ArticleService;
 import com.chm.book.blog.service.OauthService;
@@ -27,6 +27,7 @@ import org.springframework.web.client.RestTemplate;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -54,7 +55,7 @@ public class ArticleController {
     private ArticleService articleService;
 
     @Autowired
-    private ArticleConvert articleConvert;
+    private ArticleEntityService articleEntityService;
 
     @Autowired
     private OauthService oauthService;
@@ -76,8 +77,24 @@ public class ArticleController {
 
     @CrossOrigin
     @RequestMapping("/articles")
-    public ResponseEntity<Map<String,Object>> getArticles( @RequestBody Map<String, Object> params) {
-        List<ArticleEntity> articles = articleService.getArticles();
+    public ResponseEntity<Map<String,Object>> getArticles(HttpServletRequest request) {
+        String authorization =  request.getHeader("authorization");
+        List<ArticleEntity> articles = articleEntityService.getArticles(authorization);
+        Map<String, Object> responseMap = new HashMap<>();
+        responseMap.put("status", HttpStatus.OK.value());
+        responseMap.put("data", articles);
+        responseMap.put("message", "message1");
+        ResponseEntity<Map<String,Object>> responseEntity = new ResponseEntity<>(responseMap, HttpStatus.OK);
+        return responseEntity;
+    }
+
+
+
+    @CrossOrigin
+    @RequestMapping("/selectArticles")
+    public ResponseEntity<Map<String,Object>> selectArticles(HttpServletRequest request, ArticleRequest articleRequest) {
+        String authorization =  request.getHeader("authorization");
+        List<ArticleEntity> articles = articleEntityService.selectArticles(authorization, articleRequest);
         Map<String, Object> responseMap = new HashMap<>();
         responseMap.put("status", HttpStatus.OK.value());
         responseMap.put("data", articles);
@@ -102,17 +119,13 @@ public class ArticleController {
 
     @CrossOrigin
     @RequestMapping("/article/save")
-    public ResponseEntity<Map<String,Object>> save(Authentication user, HttpServletRequest request, @RequestBody ArticleTags articleTags) {
-        //OAuth2AuthenticationDetails details = (OAuth2AuthenticationDetails)user.getDetails();
-        ArticleEntity articleEntity = articleConvert.covertToArticle(articleTags);
-        List<Integer> tags = articleTags.getTags();
-        System.out.println("articleEntity: " + articleEntity.getContent());
-        System.out.println("tags: " + articleTags.getTags());
+    public ResponseEntity<Map<String,Object>> save(HttpServletRequest request, @RequestBody ArticleTags articleTags) {
         String authorization =  request.getHeader("authorization");
+        ArticleEntity articleEntity = articleEntityService.createEntity(authorization, articleTags);
+        List<Integer> tags = articleTags.getTags();
         ResponseEntity<Map<String,Object>> responseEntity  = articleService.save(authorization, articleEntity, tags);
         return responseEntity;
     }
-
 
     @RequestMapping("tags")
     public ResponseEntity<Map<String,Object>> getTags() {

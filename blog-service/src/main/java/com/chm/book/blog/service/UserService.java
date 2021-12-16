@@ -5,6 +5,8 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 
 @Service
 @FeignClient(name="ZUUL-GATEWAY-USER", url="http://ZUUL-GATEWAY")
@@ -14,7 +16,8 @@ public interface UserService {
     public int register(SysUser sysUser);
 
     @RequestMapping(value = "/oauth2/user")
-    public SysUser getUser(@RequestHeader String authorization);
+    Map<String, Object> findUser(@RequestHeader String authorization);
+
 }
 
 

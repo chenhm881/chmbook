@@ -53,7 +53,6 @@
         on with_category.id = with_tag.article_id
   </sql>
 
-
   <select id="find" parameterType="java.lang.Integer" resultMap="ArticleMap">
     <include refid="Select_Article" />
     where id = #{id,jdbcType=INTEGER}
