@@ -64,7 +64,6 @@ public class UserController {
     @RequestMapping({"/user"})
     public Map<String, Object> user(@RequestHeader String authorization) {
 
-
         Map<String, Object> map = new HashMap<>();
         OAuth2Authentication authen = null;
         try {
@@ -80,8 +79,6 @@ public class UserController {
         }
         map.put("user", authen.getPrincipal());
         map.put("authorities", authen.getAuthorities());
-        SecurityContext securityContext = SecurityContextHolder.getContext();
-        Authentication authentication = securityContext.getAuthentication();
         return map;
     }
 

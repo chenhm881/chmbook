@@ -3,7 +3,7 @@ package com.chm.book.blog.controller;
 import com.chm.book.blog.client.Oauth2UserClient;
 import com.chm.book.blog.config.CustomDispatchProperties;
 import com.chm.book.blog.domain.*;
-import com.chm.book.blog.entityconvert.ArticleConvert;
+import com.chm.book.blog.entityservice.ArticleEntityService;
 import com.chm.book.blog.service.FileService;
 import com.chm.book.blog.service.ArticleService;
 import com.chm.book.blog.service.OauthService;
@@ -54,7 +54,7 @@ public class ArticleController {
     private ArticleService articleService;
 
     @Autowired
-    private ArticleConvert articleConvert;
+    private ArticleEntityService articleEntityService;
 
     @Autowired
     private OauthService oauthService;
@@ -110,16 +110,10 @@ public class ArticleController {
 
     @CrossOrigin
     @RequestMapping("/save")
-    public ResponseEntity<Map<String,Object>> save(Authentication user, HttpServletRequest request, @RequestBody ArticleTags articleTags) {
-        //OAuth2AuthenticationDetails details = (OAuth2AuthenticationDetails)user.getDetails();
-        //System.out.println("saveArticle: token " + details.getTokenValue());
-        //System.out.println("saveArticle: user " + user.getPrincipal());
-        System.out.println("user: " + request.getHeader("authorization"));
-        ArticleEntity articleEntity = articleConvert.covertToArticle(articleTags);
-        List<Integer> tags = articleTags.getTags();
-        System.out.println("articleEntity: " + articleEntity.getContent());
-        System.out.println("tags: " + articleTags.getTags());
+    public ResponseEntity<Map<String,Object>> save(HttpServletRequest request, @RequestBody ArticleTags articleTags) {
         String authorization =  request.getHeader("authorization");
+        ArticleEntity articleEntity = articleEntityService.createEntity(authorization, articleTags);
+        List<Integer> tags = articleTags.getTags();
         ResponseEntity<Map<String,Object>> responseEntity  = articleService.save(authorization, articleEntity, tags);
         return responseEntity;
     }
