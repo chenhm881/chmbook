@@ -3,9 +3,13 @@ package com.chm.book.article.controller;
 import com.chm.book.article.command.BlogHystrixObservableCommand;
 import com.chm.book.article.domain.*;
 import com.chm.book.article.service.*;
+import org.apache.tomcat.util.http.parser.Authorization;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.oauth2.provider.authentication.OAuth2AuthenticationDetails;
 import org.springframework.web.bind.annotation.*;
 import rx.Observable;
 import rx.Observer;
@@ -56,6 +60,13 @@ public class IndexController {
     @RequestMapping("articles")
     public List<ArticleEntity> getArticles() {
         List<ArticleEntity> entities = articleService.getArticles();
+        return entities;
+    }
+
+
+    @RequestMapping("/user/articles")
+    public List<ArticleEntity> getArticlesByUser(Integer authorId) {
+        List<ArticleEntity> entities = articleService.getArticlesByUser(authorId);
         return entities;
     }
 

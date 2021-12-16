@@ -12,6 +12,9 @@ public interface UserService {
 
     @RequestMapping(value = "/oauth2/register")
     public int register(SysUser sysUser);
+
+    @RequestMapping(value = "/oauth2/user")
+    public SysUser getUser(@RequestHeader String authorization);
 }
 
 

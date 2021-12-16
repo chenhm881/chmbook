@@ -18,6 +18,10 @@ public class ArticleService {
         return articleMapper.findAll();
     }
 
+    public List<ArticleEntity> getArticlesByUser(Integer authorId) {
+        return articleMapper.findByAuthorId(authorId);
+    }
+
     public Article getArticle(Integer id) {
         return articleMapper.find(id);
     }

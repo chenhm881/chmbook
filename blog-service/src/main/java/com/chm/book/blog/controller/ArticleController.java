@@ -63,23 +63,15 @@ public class ArticleController {
     private Oauth2UserClient oauth2UserClient;
 
     @Autowired
-    @Lazy
-    private TokenStore tokenStore;
-
-    @Autowired
     private CustomDispatchProperties customDispatchProperties;
 
     @RequestMapping("/hi")
     public String hi(Authentication user) {
-        //ticketService.findTicket("hello");
         OAuth2AuthenticationDetails details = (OAuth2AuthenticationDetails)user.getDetails();
         String getValue = fileService.addFiles();
         return getValue;
     }
-    @RequestMapping("/user")
-    public Authentication getUser(Authentication user) {
-        return user;
-    }
+
 
 
     @CrossOrigin
@@ -109,12 +101,9 @@ public class ArticleController {
     }
 
     @CrossOrigin
-    @RequestMapping("/save")
+    @RequestMapping("/article/save")
     public ResponseEntity<Map<String,Object>> save(Authentication user, HttpServletRequest request, @RequestBody ArticleTags articleTags) {
         //OAuth2AuthenticationDetails details = (OAuth2AuthenticationDetails)user.getDetails();
-        //System.out.println("saveArticle: token " + details.getTokenValue());
-        //System.out.println("saveArticle: user " + user.getPrincipal());
-        System.out.println("user: " + request.getHeader("authorization"));
         ArticleEntity articleEntity = articleConvert.covertToArticle(articleTags);
         List<Integer> tags = articleTags.getTags();
         System.out.println("articleEntity: " + articleEntity.getContent());

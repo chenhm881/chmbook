@@ -87,6 +87,7 @@ security:
       user-authorization-uri: http://localhost:8771/oauth/authorize
     resource:
       tokenInfoUri: http://localhost:8771/oauth/check_token
+      #user-info-uri: http://localhost:8771/oauth/user
 #      jwt:
 #        key-uri: http://localhost:8771/oauth/token_key
 

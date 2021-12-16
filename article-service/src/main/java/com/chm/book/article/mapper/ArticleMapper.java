@@ -13,6 +13,8 @@ public interface ArticleMapper {
 
     List<ArticleEntity> findAll();
 
+    List<ArticleEntity> findByAuthorId(Integer authorId);
+
     Article find(Integer id);
 
 }

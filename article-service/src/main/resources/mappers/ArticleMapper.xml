@@ -65,6 +65,12 @@
     from article
   </select>
 
+  <select id="findByAuthorId" resultMap="BaseResultMap">
+    select
+    <include refid="Column_List" />
+    from article where author_id = ${authorId}
+  </select>
+
   <insert id="insertOrUpdate" parameterType="com.chm.book.article.domain.ArticleEntity" keyColumn="id" keyProperty="id" useGeneratedKeys="true">
     insert into article (id, comment_counts, create_date,
       summary, title, view_counts,

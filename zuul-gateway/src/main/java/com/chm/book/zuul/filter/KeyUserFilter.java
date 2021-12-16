@@ -17,19 +17,14 @@ public class KeyUserFilter extends ZuulFilter {
         RequestContext requestContext = RequestContext.getCurrentContext();
         HttpServletRequest req = (HttpServletRequest)RequestContext.getCurrentContext().getRequest();
         String authorization = req.getHeader("authorization");
-
         requestContext.addZuulRequestHeader("authorization",authorization);
-        //requestContext.addZuulRequestHeader("test",header);
-        //这里有个贼有意思的地方，在配置文件中像上文一样配置，单独把Authorization放开，不管你把什么参数作为key加入header,就像这里放test，依旧会当做放的是Authorization
-        //在转发后的服务接收到的依旧是Authorization与它的值，test的值为空，感兴趣的可以试下
-
         return null;
     }
 
     @Override
     public boolean shouldFilter() {
         // TODO Auto-generated method stub
-        return true; //表示是否需要执行该filter，true表示执行，false表示不执行
+        return true;
     }
     @Override
     public int filterOrder() {
@@ -39,6 +34,6 @@ public class KeyUserFilter extends ZuulFilter {
     @Override
     public String filterType() {
         // TODO Auto-generated method stub
-        return "pre"; //定义filter的类型，有pre、route、post、error四种
+        return "pre"; //pre、route、post、error
     }
 }
