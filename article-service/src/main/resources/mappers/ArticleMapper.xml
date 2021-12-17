@@ -36,7 +36,8 @@
        <result column="category_name" property="categoryName"></result>
     </association>
 
-    <collection property="tags" ofType="com.chm.book.article.domain.TagEntity">
+    <collection property="tags" ofType="com.chm.book.article.domain.TagEntity"
+                select="com.chm.book.article.mapper.ArticleTagMapper.find" column="{article_id = id}">
        <id column="tag_id" property="tagId" />
        <result column="tag_name" jdbcType="VARCHAR" property="tagName" />
     </collection>
@@ -48,9 +49,7 @@
   </sql>
 
   <sql id="Select_Article" >
-    select * from (select article.*, category.category_name from article_storage.article article left join article_storage.category category on article.category_id = category.category_id) with_category
-    left join (SELECT article_tag.article_id, tag.tag_id, tag.tag_name FROM article_storage.article_tag article_tag inner join article_storage.tag tag on article_tag.tag_id = tag.tag_id where article_tag.status = 1) with_tag
-        on with_category.id = with_tag.article_id
+   select article.*, category.category_name from article_storage.article article left join article_storage.category category on article.category_id = category.category_id
   </sql>
 
   <select id="find" parameterType="java.lang.Integer" resultMap="ArticleMap">
@@ -58,16 +57,23 @@
     where id = #{id,jdbcType=INTEGER}
   </select>
 
-  <select id="findAll" resultMap="BaseResultMap">
+  <select id="findAll" resultMap="BaseResultMap" parameterType="com.chm.book.article.domain.ArticleRequest">
     select
     <include refid="Column_List" />
     from article
-  </select>
-
-  <select id="findByAuthorId" resultMap="BaseResultMap">
-    select
-    <include refid="Column_List" />
-    from article where author_id = ${authorId}
+    <where>
+      <choose>
+       <when test="authorId != null">
+         author_id = ${authorId}
+       </when>
+        <when test="tagId != null">
+          id in (select article_id from article_tag where tag_id = ${tagId} )
+        </when>
+        <when test="categoryId != null">
+          category_id = ${categoryId}
+        </when>
+      </choose>
+    </where>
   </select>
 
   <insert id="insertOrUpdate" parameterType="com.chm.book.article.domain.ArticleEntity" keyColumn="id" keyProperty="id" useGeneratedKeys="true">
@@ -85,4 +91,5 @@
       summary = values(summary), title = values(title), category_id = values(category_id),
       content = values(content), content_html = values(content_html)
   </insert>
+
 </mapper>

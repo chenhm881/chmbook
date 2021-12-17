@@ -27,7 +27,7 @@ public class ArticleRequest {
 
     private Long authorId;
 
-    private CategoryEntity category;
+    private Integer categoryId;
 
     private Integer tagId;
 

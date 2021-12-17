@@ -92,7 +92,7 @@ public class ArticleController {
 
     @CrossOrigin
     @RequestMapping("/selectArticles")
-    public ResponseEntity<Map<String,Object>> selectArticles(HttpServletRequest request, ArticleRequest articleRequest) {
+    public ResponseEntity<Map<String,Object>> selectArticles(HttpServletRequest request, @RequestBody ArticleRequest articleRequest) {
         String authorization =  request.getHeader("authorization");
         List<ArticleEntity> articles = articleEntityService.selectArticles(authorization, articleRequest);
         Map<String, Object> responseMap = new HashMap<>();

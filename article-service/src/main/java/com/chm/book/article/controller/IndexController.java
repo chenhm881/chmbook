@@ -64,19 +64,19 @@ public class IndexController {
     }
 
     @RequestMapping("/user/articles")
-    public List<ArticleEntity> getArticlesByUser(Integer authorId) {
+    public List<ArticleEntity> getArticlesByUser(@RequestParam Integer authorId) {
         List<ArticleEntity> entities = articleService.getArticlesByUser(authorId);
         return entities;
     }
 
     @RequestMapping("selectArticles")
-    public List<ArticleEntity> selectArticles(ArticleRequest articleRequest) {
+    public List<ArticleEntity> selectArticles(@RequestBody ArticleRequest articleRequest) {
         List<ArticleEntity> entities = articleService.selectArticles(articleRequest);
         return entities;
     }
 
     @RequestMapping("user/selectArticles")
-    public List<ArticleEntity> selectArticlesByUser(ArticleRequest articleRequest) {
+    public List<ArticleEntity> selectArticlesByUser(@RequestBody ArticleRequest articleRequest) {
         List<ArticleEntity> entities = articleService.selectArticlesByUser(articleRequest);
         return entities;
     }

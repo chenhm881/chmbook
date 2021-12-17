@@ -36,7 +36,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     .logout().logoutSuccessUrl("http://101.34.6.152:31073/logout").logoutSuccessHandler(new UserLogoutSuccessHandler())
                     .and()
                     .authorizeRequests()
-                    .antMatchers("/articles", "/article/**", "/tags", "/categories", "/save", "/register").permitAll()
+                    .antMatchers("/articles", "/article/**", "/tags", "/categories", "/save", "/register", "/selectArticles").permitAll()
                     .anyRequest().authenticated();
 
 
