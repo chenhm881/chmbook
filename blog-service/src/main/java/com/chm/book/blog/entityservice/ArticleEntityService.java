@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 public class ArticleEntityService {
@@ -46,28 +47,27 @@ public class ArticleEntityService {
         return entity;
     };
 
-    public List<ArticleEntity> getArticles(String authorization) {
+    public List<ArticleEntity> getArticles(ArticleRequest articleRequest) {
         List<ArticleEntity> articles = new ArrayList<>();
-        if (StringUtils.isNotEmpty(authorization)){
-            SysUser sysUser = userEntityService.findAuthenticationUser(authorization);
-            articles = articleService.getUserArticles(authorization, sysUser.getId());
+        if (Optional.ofNullable(articleRequest).isPresent()) {
+            articles = articleService.getArticles(articleRequest);
         } else {
             articles = articleService.getArticles();
         }
         return articles;
-
     }
 
-    public List<ArticleEntity> selectArticles(String authorization, ArticleRequest articleRequest) {
+    public List<ArticleEntity> getUserArticles(String authorization, ArticleRequest articleRequest) {
         List<ArticleEntity> articles = new ArrayList<>();
-        if (StringUtils.isNotEmpty(authorization)){
-            SysUser sysUser = userEntityService.findAuthenticationUser(authorization);
+        SysUser sysUser = userEntityService.findAuthenticationUser(authorization);
+        if (Optional.ofNullable(articleRequest).isPresent()) {
             articleRequest.setAuthorId(sysUser.getId().longValue());
-            articles = articleService.selectUserArticles(authorization, articleRequest);
+            articles = articleService.getUserArticles(authorization, articleRequest);
         } else {
-            articles = articleService.selectArticles(articleRequest);
+            articles = articleService.getUserArticles(authorization, sysUser.getId());
         }
         return articles;
 
     }
+
 }

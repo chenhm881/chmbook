@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class TagEntity {
-    private Integer tagId;
+    private Integer id;
     private String tagName;
     private String tagDescription;
 }

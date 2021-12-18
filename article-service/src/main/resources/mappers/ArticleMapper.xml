@@ -32,12 +32,13 @@
     <result column="content_html" jdbcType="LONGVARCHAR" property="contentHtml" />
 
     <association property="category" column="category_id" javaType="com.chm.book.article.domain.CategoryEntity">
-       <id column="category_id" property="categoryId"></id>
+       <result column="category_id" property="categoryId"></result>
        <result column="category_name" property="categoryName"></result>
     </association>
 
-    <collection property="tags" javaType="ArrayList" ofType="com.chm.book.article.domain.TagEntity"
+    <collection property="tags" ofType="com.chm.book.article.domain.TagEntity" javaType="ArrayList"
                 select="com.chm.book.article.mapper.TagMapper.findByArticleId" column="id" />
+
   </resultMap>
 
   <sql id="Column_List">
@@ -46,7 +47,7 @@
   </sql>
 
   <sql id="Select_Article" >
-   select article.*, category.category_name from article_storage.article article left join article_storage.category category on article.category_id = category.category_id
+   select article.*, category.category_id, category.category_name from article_storage.article article left join article_storage.category category on article.category_id = category.category_id
   </sql>
 
   <select id="find" parameterType="java.lang.Integer" resultMap="ArticleMap">

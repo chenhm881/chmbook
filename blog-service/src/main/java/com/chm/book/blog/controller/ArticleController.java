@@ -13,13 +13,11 @@ import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.ResourceServerProperties;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.http.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.client.token.grant.code.AuthorizationCodeResourceDetails;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.security.oauth2.provider.authentication.OAuth2AuthenticationDetails;
-import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
@@ -27,7 +25,6 @@ import org.springframework.web.client.RestTemplate;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -73,32 +70,27 @@ public class ArticleController {
         return getValue;
     }
 
-
-
-    @CrossOrigin
     @RequestMapping("/articles")
-    public ResponseEntity<Map<String,Object>> getArticles(HttpServletRequest request) {
-        String authorization =  request.getHeader("authorization");
-        List<ArticleEntity> articles = articleEntityService.getArticles(authorization);
+    public ResponseEntity<Map<String,Object>> getArticles(ArticleRequest articleRequest)
+    {
+        List<ArticleEntity> articles = articleEntityService.getArticles(articleRequest);
         Map<String, Object> responseMap = new HashMap<>();
         responseMap.put("status", HttpStatus.OK.value());
         responseMap.put("data", articles);
-        responseMap.put("message", "message1");
+        responseMap.put("message", "successfully");
         ResponseEntity<Map<String,Object>> responseEntity = new ResponseEntity<>(responseMap, HttpStatus.OK);
         return responseEntity;
     }
 
-
-
     @CrossOrigin
-    @RequestMapping("/selectArticles")
-    public ResponseEntity<Map<String,Object>> selectArticles(HttpServletRequest request, @RequestBody ArticleRequest articleRequest) {
+    @RequestMapping("/user/articles")
+    public ResponseEntity<Map<String,Object>> getUserArticles(HttpServletRequest request, @RequestBody ArticleRequest articleRequest) {
         String authorization =  request.getHeader("authorization");
-        List<ArticleEntity> articles = articleEntityService.selectArticles(authorization, articleRequest);
+        List<ArticleEntity> articles = articleEntityService.getUserArticles(authorization, articleRequest);
         Map<String, Object> responseMap = new HashMap<>();
         responseMap.put("status", HttpStatus.OK.value());
         responseMap.put("data", articles);
-        responseMap.put("message", "message1");
+        responseMap.put("message", "successfully");
         ResponseEntity<Map<String,Object>> responseEntity = new ResponseEntity<>(responseMap, HttpStatus.OK);
         return responseEntity;
     }
@@ -110,9 +102,7 @@ public class ArticleController {
         Map<String, Object> responseMap = new HashMap<>();
         responseMap.put("status", HttpStatus.OK.value());
         responseMap.put("data", article);
-        responseMap.put("message", "message1");
-        responseMap.put("category", 1);
-        responseMap.put("tags", new Integer[] {1, 2});
+        responseMap.put("message", "successfully");
         ResponseEntity<Map<String,Object>> responseEntity = new ResponseEntity<>(responseMap, HttpStatus.OK);
         return responseEntity;
     }
@@ -133,7 +123,7 @@ public class ArticleController {
         Map<String, Object> responseMap = new HashMap<>();
         responseMap.put("status", HttpStatus.OK.value());
         responseMap.put("data", tags);
-        responseMap.put("message", "message1");
+        responseMap.put("message", "successfully");
         ResponseEntity<Map<String,Object>> responseEntity = new ResponseEntity<>(responseMap, HttpStatus.OK);
         return responseEntity;
     }
@@ -144,7 +134,7 @@ public class ArticleController {
         Map<String, Object> responseMap = new HashMap<>();
         responseMap.put("status", HttpStatus.OK.value());
         responseMap.put("data", categories);
-        responseMap.put("message", "message1");
+        responseMap.put("message", "successfully");
         ResponseEntity<Map<String,Object>> responseEntity = new ResponseEntity<>(responseMap, HttpStatus.OK);
         return responseEntity;
     }
@@ -230,6 +220,8 @@ public class ArticleController {
                     + "?access_token=" + map.get("access_token"));
         }
     }
+
+
     @CrossOrigin
     @RequestMapping("/authorize/login")
     public void login(HttpServletRequest request, HttpServletResponse response) throws IOException {
