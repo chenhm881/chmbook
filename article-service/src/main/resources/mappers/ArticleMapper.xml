@@ -36,11 +36,8 @@
        <result column="category_name" property="categoryName"></result>
     </association>
 
-    <collection property="tags" ofType="com.chm.book.article.domain.TagEntity"
-                select="com.chm.book.article.mapper.ArticleTagMapper.find" column="{article_id = id}">
-       <id column="tag_id" property="tagId" />
-       <result column="tag_name" jdbcType="VARCHAR" property="tagName" />
-    </collection>
+    <collection property="tags" ofType="com.chm.book.article.domain.TagEntity" javaType="ArrayList"
+                select="com.chm.book.article.mapper.TagMapper.findByArticleId" column="{article_id = id}" />
   </resultMap>
 
   <sql id="Column_List">

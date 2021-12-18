@@ -2,30 +2,28 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.chm.book.article.mapper.TagMapper">
   <resultMap id="BaseResultMap" type="com.chm.book.article.domain.TagEntity">
-    <id column="tag_id" jdbcType="INTEGER" property="tagId" />
+    <id column="id" jdbcType="INTEGER" property="id" />
     <result column="tag_name" jdbcType="VARCHAR" property="tagName" />
     <result column="tag_description" jdbcType="VARCHAR" property="tagDescription" />
   </resultMap>
+
   <select id="find" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    select * from tag where tag_id = #{tagId,jdbcType=INTEGER}
+    select * from tag where id = #{id,jdbcType=INTEGER}
   </select>
 
-  <select id="findAll" resultMap="BaseResultMap">
+  <select id="findAll" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select * from tag
   </select>
 
-  <insert id="insertOrUpdate" parameterType="com.chm.book.article.domain.TagEntity" keyColumn="tag_id" keyProperty="tagId" useGeneratedKeys="true">
-    insert into tag (tag_id, tag_name, tag_description)
-    values (#{tagId,jdbcType=INTEGER}, #{tagName,jdbcType=VARCHAR}, #{tagDescription,jdbcType=VARCHAR})
+  <select id="findByArticleId" resultMap="BaseResultMap" parameterType="Integer">
+    select * from tag where id in (select tag_id from article_tag where article_id = ${article_id, jdbcType=INTEGER})
+  </select>
+
+  <insert id="insertOrUpdate" parameterType="com.chm.book.article.domain.TagEntity" keyColumn="id" keyProperty="id" useGeneratedKeys="true">
+    insert into tag (id, tag_name, tag_description)
+    values (#{id,jdbcType=INTEGER}, #{tagName,jdbcType=VARCHAR}, #{tagDescription,jdbcType=VARCHAR})
     ON DUPLICATE KEY UPDATE
         tag_name = values(tag_name), tag_description = values(tag_description)
-  </insert>
-
-  <insert id="updateArticleTag" parameterType="com.chm.book.article.domain.TagEntity" keyColumn="tag_id"  keyProperty="tagId" >
-    insert into tag (tag_id, tag_name, tag_description)
-    values (#{tagId,jdbcType=INTEGER}, #{tagName,jdbcType=VARCHAR}, #{tagDescription,jdbcType=VARCHAR})
-      ON DUPLICATE KEY UPDATE
-                         tag_name = values(tag_name), tag_description = values(tag_description)
   </insert>
 
 </mapper>

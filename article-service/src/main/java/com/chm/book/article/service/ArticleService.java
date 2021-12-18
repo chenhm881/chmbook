@@ -6,7 +6,6 @@ import com.chm.book.article.domain.ArticleRequest;
 import com.chm.book.article.mapper.ArticleMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
@@ -21,17 +20,17 @@ public class ArticleService {
         return articleMapper.findAll(articleRequest);
     }
 
+    public List<ArticleEntity> getArticles(ArticleRequest articleRequest) {
+        return articleMapper.findAll(articleRequest);
+    }
+
     public List<ArticleEntity> getArticlesByUser(Integer authorId) {
         ArticleRequest articleRequest = new ArticleRequest();
         articleRequest.setAuthorId(authorId.longValue());
         return articleMapper.findAll(articleRequest);
     }
 
-    public List<ArticleEntity> selectArticles(ArticleRequest articleRequest) {
-        return articleMapper.findAll(articleRequest);
-    }
-
-    public List<ArticleEntity> selectArticlesByUser(ArticleRequest articleRequest) {
+    public List<ArticleEntity> getArticlesByUser(ArticleRequest articleRequest) {
         return articleMapper.findAll(articleRequest);
     }
 

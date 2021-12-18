@@ -63,21 +63,21 @@ public class IndexController {
         return entities;
     }
 
+    @RequestMapping("articles/query")
+    public List<ArticleEntity> getArticles(@RequestBody ArticleRequest articleRequest) {
+        List<ArticleEntity> entities = articleService.getArticles(articleRequest);
+        return entities;
+    }
+
     @RequestMapping("/user/articles")
     public List<ArticleEntity> getArticlesByUser(@RequestParam Integer authorId) {
         List<ArticleEntity> entities = articleService.getArticlesByUser(authorId);
         return entities;
     }
 
-    @RequestMapping("selectArticles")
-    public List<ArticleEntity> selectArticles(@RequestBody ArticleRequest articleRequest) {
-        List<ArticleEntity> entities = articleService.selectArticles(articleRequest);
-        return entities;
-    }
-
-    @RequestMapping("user/selectArticles")
-    public List<ArticleEntity> selectArticlesByUser(@RequestBody ArticleRequest articleRequest) {
-        List<ArticleEntity> entities = articleService.selectArticlesByUser(articleRequest);
+    @RequestMapping("/user/articles/query")
+    public List<ArticleEntity> getArticlesByUser(@RequestBody ArticleRequest articleRequest) {
+        List<ArticleEntity> entities = articleService.getArticlesByUser(articleRequest);
         return entities;
     }
 
@@ -105,9 +105,9 @@ public class IndexController {
         article.setTitle(articleEntity.getTitle());
         article.setId(articleEntity.getId());
         List<TagEntity> tagEntities = new ArrayList<>();
-        tags.stream().forEach(tag -> {
+        tags.stream().forEach(tagId -> {
             TagEntity tagEntity = new TagEntity();
-            tagEntity.setTagId(tag);
+            tagEntity.setId(tagId);
             tagEntities.add(tagEntity);
         });
         article.setTags(tagEntities);

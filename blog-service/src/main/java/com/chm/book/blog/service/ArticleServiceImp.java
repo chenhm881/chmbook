@@ -34,17 +34,17 @@ public class ArticleServiceImp implements FallbackFactory<ArticleService> {
             }
 
             @Override
+            public List<ArticleEntity> getArticles(ArticleRequest articleRequest) {
+                return null;
+            }
+
+            @Override
             public List<ArticleEntity> getUserArticles(String authorization, Integer id) {
                 return null;
             }
 
             @Override
-            public List<ArticleEntity> selectArticles(ArticleRequest articleRequest) {
-                return null;
-            }
-
-            @Override
-            public List<ArticleEntity> selectUserArticles(String authorization, ArticleRequest articleRequest) {
+            public List<ArticleEntity> getUserArticles(String authorization, ArticleRequest articleRequest) {
                 return null;
             }
 
