@@ -28,4 +28,10 @@
                          tag_name = values(tag_name), tag_description = values(tag_description)
   </insert>
 
+  <select id="findByArticleId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select * from tag where tag_id in
+        ( select tag_id from article_tag where article_id = #{article_id,jdbcType=INTEGER} )
+
+  </select>
+
 </mapper>
