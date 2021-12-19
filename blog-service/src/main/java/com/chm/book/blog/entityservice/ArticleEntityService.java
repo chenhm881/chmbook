@@ -1,13 +1,11 @@
 package com.chm.book.blog.entityservice;
 
-import com.chm.book.blog.domain.ArticleEntity;
-import com.chm.book.blog.domain.ArticleRequest;
-import com.chm.book.blog.domain.ArticleTags;
-import com.chm.book.blog.domain.SysUser;
+import com.chm.book.blog.domain.*;
 import com.chm.book.blog.mapper.UserMapper;
 import com.chm.book.blog.service.ArticleService;
 import com.chm.book.blog.service.UserService;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -59,6 +57,7 @@ public class ArticleEntityService {
 
     public List<ArticleEntity> getUserArticles(String authorization, ArticleRequest articleRequest) {
         List<ArticleEntity> articles = new ArrayList<>();
+        if (authorization.isEmpty()) return articles;
         SysUser sysUser = userEntityService.findAuthenticationUser(authorization);
         if (Optional.ofNullable(articleRequest).isPresent()) {
             articleRequest.setAuthorId(sysUser.getId().longValue());
@@ -68,6 +67,15 @@ public class ArticleEntityService {
         }
         return articles;
 
+    }
+
+    public ArticleResponse getArticle(Integer id) {
+        Article article = articleService.getArticle(id);
+        ArticleResponse articleResponse = new ArticleResponse();
+        BeanUtils.copyProperties(article, articleResponse);
+        SysUser user = userEntityService.findById(article.getAuthorId().intValue());
+        articleResponse.setUser(user);
+        return articleResponse;
     }
 
 }

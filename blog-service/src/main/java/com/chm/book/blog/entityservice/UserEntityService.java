@@ -26,7 +26,12 @@ public class UserEntityService {
     public SysUser findAuthenticationUser(String authorization) {
         Map<String, Object> resultMap = userService.findUser(authorization);
         String username = resultMap.get("user").toString();
-        SysUser sysUser = userMapper.findUserByUsername(username);
+        SysUser sysUser = userMapper.findByUsername(username);
+        return sysUser;
+    }
+
+    public SysUser findById(Integer id) {
+        SysUser sysUser = userMapper.findById(id);
         return sysUser;
     }
 

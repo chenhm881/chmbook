@@ -9,8 +9,12 @@
         <result column="authorities" property="authorities" jdbcType="VARCHAR"/>
     </resultMap>
 
-    <select id="findUserByUsername" resultMap="resultMap">
+    <select id="findByUsername" resultMap="resultMap">
         SELECT * FROM ming_blog.user bloguser where bloguser.username = #{username}
+    </select>
+
+    <select id="findById" resultMap="resultMap">
+        SELECT * FROM ming_blog.user bloguser where bloguser.id = ${id}
     </select>
 
 </mapper>

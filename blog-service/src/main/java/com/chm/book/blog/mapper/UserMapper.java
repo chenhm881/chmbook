@@ -6,5 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface UserMapper {
-    SysUser findUserByUsername(String username);
+    SysUser findByUsername(String username);
+    SysUser findById(Integer id);
 }

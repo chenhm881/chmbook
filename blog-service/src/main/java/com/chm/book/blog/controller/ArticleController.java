@@ -4,6 +4,7 @@ import com.chm.book.blog.client.Oauth2UserClient;
 import com.chm.book.blog.config.CustomDispatchProperties;
 import com.chm.book.blog.domain.*;
 import com.chm.book.blog.entityservice.ArticleEntityService;
+import com.chm.book.blog.entityservice.UserEntityService;
 import com.chm.book.blog.service.FileService;
 import com.chm.book.blog.service.ArticleService;
 import com.chm.book.blog.service.OauthService;
@@ -71,9 +72,11 @@ public class ArticleController {
     }
 
     @RequestMapping("/articles")
-    public ResponseEntity<Map<String,Object>> getArticles(ArticleRequest articleRequest)
+    public ResponseEntity<Map<String,Object>> getArticles(@RequestBody ArticleRequest articleRequest)
     {
         List<ArticleEntity> articles = articleEntityService.getArticles(articleRequest);
+        System.out.println(articleRequest);
+        System.out.println(articleRequest.getId());
         Map<String, Object> responseMap = new HashMap<>();
         responseMap.put("status", HttpStatus.OK.value());
         responseMap.put("data", articles);
@@ -97,11 +100,11 @@ public class ArticleController {
 
     @CrossOrigin
     @RequestMapping("/article/{id}")
-    public ResponseEntity<Map<String,Object>> getArticle( @PathVariable Integer id) {
-        Article article = articleService.getArticle(id);
+    public ResponseEntity<Map<String,Object>> getArticle( @PathVariable Integer id ) {
+        ArticleResponse articleResponse = articleEntityService.getArticle(id);
         Map<String, Object> responseMap = new HashMap<>();
         responseMap.put("status", HttpStatus.OK.value());
-        responseMap.put("data", article);
+        responseMap.put("data", articleResponse);
         responseMap.put("message", "successfully");
         ResponseEntity<Map<String,Object>> responseEntity = new ResponseEntity<>(responseMap, HttpStatus.OK);
         return responseEntity;
