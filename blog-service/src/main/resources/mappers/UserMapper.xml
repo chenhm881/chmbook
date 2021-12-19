@@ -17,4 +17,11 @@
         SELECT * FROM ming_blog.user bloguser where bloguser.id = ${id}
     </select>
 
+    <insert id="insert" parameterType="com.chm.book.blog.domain.SysUser" keyColumn="id" keyProperty="id" useGeneratedKeys="true">
+        insert into sys_user (username, password, email)
+        values (#{username}, #{password}, #{email})
+        ON DUPLICATE KEY UPDATE
+        username = values(username), password = values(password), email = values(email)
+    </insert>
+
 </mapper>

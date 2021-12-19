@@ -8,4 +8,5 @@ import org.springframework.stereotype.Repository;
 public interface UserMapper {
     SysUser findByUsername(String username);
     SysUser findById(Integer id);
+    int insertOrUpdate(SysUser sysUser);
 }

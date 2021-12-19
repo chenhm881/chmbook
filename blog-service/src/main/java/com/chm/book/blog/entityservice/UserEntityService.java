@@ -34,5 +34,9 @@ public class UserEntityService {
         SysUser sysUser = userMapper.findById(id);
         return sysUser;
     }
-
+    public int register(SysUser sysUser) {
+        int created = userMapper.insertOrUpdate(sysUser);
+        int response  = userService.register(sysUser);
+        return (created + response - 1);
+    }
 }
