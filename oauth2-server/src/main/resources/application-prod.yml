@@ -23,7 +23,7 @@ eureka:
 
 mybatis:
   config-location:  classpath:mybatis-config.xml
-  type-aliases-package: com.chm.book.o::auth2.domain
+  type-aliases-package: com.chm.book.oauth2.domain
   configuration:
     map-underscore-to-camel-case: true
 
