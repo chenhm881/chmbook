@@ -46,6 +46,13 @@
     status, author_id, category_id, content, content_html
   </sql>
 
+  <sql id="Column_Count_List">
+    select articles.id, articles.create_date, articles.summary, articles.title, articles.view_counts, articles.weight,
+    articles.status, articles.author_id, articles.category_id, articles.content, articles.content_html, comments.comment_counts, likestate.like_counts from article articles
+    left join (select count(id) as comment_counts, article_id from comment group by article_id) comments on comments.article_id = articles.id
+    left join (select count(id) as like_counts, article_id from like_state where like_state.like = 1 group by article_id) likestate on likestate.article_id = articles.id
+  </sql>
+
   <sql id="Select_Article" >
    select article.*, category.category_id, category.category_name from article_storage.article article left join article_storage.category category on article.category_id = category.category_id
   </sql>
@@ -56,19 +63,17 @@
   </select>
 
   <select id="findAll" resultMap="BaseResultMap" parameterType="com.chm.book.article.domain.ArticleRequest">
-    select
-    <include refid="Column_List" />
-    from article
+    select * from (<include refid="Column_Count_List" />) articlecounts
     <where>
       <choose>
        <when test="authorId != null">
-         author_id = ${authorId}
+         articlecounts.author_id = ${authorId}
        </when>
         <when test="tagId != null">
-          id in (select article_id from article_tag where tag_id = ${tagId} )
+          articlecounts.id in (select article_id from article_tag where tag_id = ${tagId} )
         </when>
         <when test="categoryId != null">
-          category_id = ${categoryId}
+          articlecounts.category_id = ${categoryId}
         </when>
       </choose>
     </where>

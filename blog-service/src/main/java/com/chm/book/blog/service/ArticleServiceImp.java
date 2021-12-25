@@ -49,6 +49,27 @@ public class ArticleServiceImp implements FallbackFactory<ArticleService> {
             }
 
             @Override
+            public List<Comment> getArticleComments(Integer articleId) {
+                return null;
+            }
+
+            @Override
+            public ResponseEntity<Map<String, Object>> saveComment(String authorization, Comment comment) {
+                return null;
+            }
+
+            @Override
+            public LikeState getOneLike(String authorization, Integer articleId, Integer authorId) {
+                return null;
+            }
+
+            @Override
+            public ResponseEntity<Map<String, Object>> saveLike(String authorization, LikeState likeState) {
+                return null;
+            }
+
+
+            @Override
             public Article getArticle(Integer id) {
                 return null;
             }

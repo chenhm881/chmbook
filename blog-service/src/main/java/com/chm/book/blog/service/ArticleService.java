@@ -16,7 +16,7 @@ public interface ArticleService {
     @PostMapping(value = "/article/api/article/{id}")
     public Article getArticle(@PathVariable(value = "id") Integer id);
 
-    @PostMapping(value = "/article/api/save")
+    @PostMapping(value = "/article/api/article/save")
     public ResponseEntity<Map<String,Object>> save(@RequestHeader String authorization, @RequestBody ArticleEntity articleEntity, @RequestParam List<Integer> tags);
 
     @RequestMapping(value = "/article/api/tags")
@@ -36,6 +36,20 @@ public interface ArticleService {
 
     @RequestMapping(value = "/article/api/user/articles/query")
     List<ArticleEntity> getUserArticles(@RequestHeader String authorization, @RequestBody ArticleRequest articleRequest);
+
+    @RequestMapping(value = "/article/api/comments/article")
+    List<Comment> getArticleComments(@RequestParam Integer articleId);
+
+    @RequestMapping(value = "/article/api/comment/save")
+    ResponseEntity<Map<String,Object>> saveComment(@RequestHeader String authorization, Comment comment);
+
+    @RequestMapping(value = "/article/api/like/query")
+    LikeState getOneLike(@RequestHeader String authorization, @RequestParam Integer articleId, @RequestParam Integer authorId);
+
+    @RequestMapping(value = "/article/api/like/save")
+    ResponseEntity<Map<String,Object>> saveLike(@RequestHeader String authorization, @RequestBody LikeState likeState);
+
+
 
 }
 

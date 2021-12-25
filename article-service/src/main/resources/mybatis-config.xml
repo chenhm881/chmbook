@@ -8,6 +8,7 @@
     <typeAliases>
         <typeAlias alias="Integer" type="java.lang.Integer" />
         <typeAlias alias="Long" type="java.lang.Long" />
+        <typeAlias alias="String" type="java.lang.String" />
         <typeAlias alias="Double" type="java.lang.Double" />
         <typeAlias alias="HashMap" type="java.util.HashMap" />
         <typeAlias alias="LinkedHashMap" type="java.util.LinkedHashMap" />
@@ -20,5 +21,7 @@
         <mapper resource="mappers/TagMapper.xml" />
         <mapper resource="mappers/CategoryMapper.xml" />
         <mapper resource="mappers/ArticleTagMapper.xml" />
+        <mapper resource="mappers/CommentMapper.xml" />
+        <mapper resource="mappers/LikeStateMapper.xml" />
     </mappers>
 </configuration>

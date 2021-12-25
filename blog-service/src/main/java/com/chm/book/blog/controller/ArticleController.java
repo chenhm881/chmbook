@@ -4,7 +4,6 @@ import com.chm.book.blog.client.Oauth2UserClient;
 import com.chm.book.blog.config.CustomDispatchProperties;
 import com.chm.book.blog.domain.*;
 import com.chm.book.blog.entityservice.ArticleEntityService;
-import com.chm.book.blog.entityservice.UserEntityService;
 import com.chm.book.blog.service.FileService;
 import com.chm.book.blog.service.ArticleService;
 import com.chm.book.blog.service.OauthService;
@@ -142,6 +141,43 @@ public class ArticleController {
         return responseEntity;
     }
 
+    @RequestMapping("comments")
+    public ResponseEntity<Map<String,Object>> getComments(@RequestParam Integer articleId) {
+        List<Comment> comments = articleService.getArticleComments(articleId);
+        Map<String, Object> responseMap = new HashMap<>();
+        responseMap.put("status", HttpStatus.OK.value());
+        responseMap.put("data", comments);
+        responseMap.put("message", "successfully");
+        ResponseEntity<Map<String,Object>> responseEntity = new ResponseEntity<>(responseMap, HttpStatus.OK);
+        return responseEntity;
+    }
+
+    @RequestMapping("comment/save")
+    public ResponseEntity<Map<String,Object>> saveComment(HttpServletRequest request, @RequestBody Comment comment) {
+        String authorization =  request.getHeader("authorization");
+        ResponseEntity<Map<String,Object>> responseEntity = articleService.saveComment(authorization, comment);
+        return responseEntity;
+    }
+
+    @RequestMapping("like")
+    public ResponseEntity<Map<String,Object>> getLike(HttpServletRequest request, @RequestParam Integer articleId, @RequestParam Integer authorId) {
+        String authorization =  request.getHeader("authorization");
+        LikeState likeState = articleService.getOneLike(authorization, articleId, authorId);
+        Map<String, Object> responseMap = new HashMap<>();
+        responseMap.put("status", HttpStatus.OK.value());
+        responseMap.put("data", likeState);
+        responseMap.put("message", "successfully");
+        ResponseEntity<Map<String,Object>> responseEntity = new ResponseEntity<>(responseMap, HttpStatus.OK);
+        return responseEntity;
+    }
+
+    @RequestMapping("like/save")
+    public ResponseEntity<Map<String,Object>> saveLike(HttpServletRequest request, @RequestBody LikeState likeState) {
+        String authorization =  request.getHeader("authorization");
+        ResponseEntity<Map<String,Object>> responseEntity = articleService.saveLike(authorization, likeState);
+        return responseEntity;
+    }
+
     @CrossOrigin
     @RequestMapping("/authorize/login2")
     public void login2(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -223,7 +259,6 @@ public class ArticleController {
                     + "?access_token=" + map.get("access_token"));
         }
     }
-
 
     @CrossOrigin
     @RequestMapping("/authorize/login")
