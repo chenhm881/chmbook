@@ -142,7 +142,7 @@ public class ArticleController {
     }
 
     @RequestMapping("comments")
-    public ResponseEntity<Map<String,Object>> getComments(@RequestParam Integer articleId) {
+    public ResponseEntity<Map<String,Object>> getComments(@RequestParam(value = "articleId") Integer articleId) {
         List<Comment> comments = articleService.getArticleComments(articleId);
         Map<String, Object> responseMap = new HashMap<>();
         responseMap.put("status", HttpStatus.OK.value());

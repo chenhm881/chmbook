@@ -81,7 +81,7 @@ eureka:
 security:
   oauth2:
     client:
-      client-id: blog
+      client-id: article
       client-secret: 123
       access-token-uri: http://localhost:8771/oauth/token
       user-authorization-uri: http://localhost:8771/oauth/authorize

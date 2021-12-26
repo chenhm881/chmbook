@@ -30,16 +30,6 @@ public class UserLogoutSuccessHandler implements LogoutSuccessHandler {
         RSAPublicKey publicKey = (RSAPublicKey) prop.getPublicKey();
         final RsaVerifier verifier = new RsaVerifier(publicKey);
         jwtAccessTokenConverter.setVerifier(verifier);
-//        String[] arr = authorization.split(" ");
-//
-//
-//
-        OAuth2AccessToken authen = new JwtTokenStore(jwtAccessTokenConverter).readAccessToken("eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiJhZG1pbiIsInNjb3BlIjpbImFsbCJdLCJleHAiOjE2MzgwNzM2MjAsInVzZXIiOnsicGFzc3dvcmQiOm51bGwsInVzZXJuYW1lIjoiYWRtaW4iLCJhdXRob3JpdGllcyI6W3siYXV0aG9yaXR5IjoiUk9MRV9VU0VSIn1dLCJhY2NvdW50Tm9uRXhwaXJlZCI6dHJ1ZSwiYWNjb3VudE5vbkxvY2tlZCI6dHJ1ZSwiY3JlZGVudGlhbHNOb25FeHBpcmVkIjp0cnVlLCJlbmFibGVkIjp0cnVlfSwiYXV0aG9yaXRpZXMiOlsiUk9MRV9VU0VSIl0sImp0aSI6ImZjNWVjNjE4LTMyZTktNGUxOC1hNTk2LWQxMWIyODI5OGEyNCIsImNsaWVudF9pZCI6ImJsb2cifQ.a_26_OIDAsZb3s9Z2YcIwl8OtN0ihC0psdNjxKziHdDfy4BcS1OjyLw8-CAUHjW5HpFl8PcRtgG-UO2EAKIkbXR67tuGhnFdZt_muPUL3L87hCT7S54vkgsHY_2urMACgwx8R60kktwGAXW2Mf9mh6i0KMaRPEeBwCrld_o__yszB8R1p7PNYrTpbT4Nft7wlbM9giZldSsi5MQJT7ATeE4ea8U-tOqjQRkurakxagv96_Xn7XAWoosFRd_VVXmCHIiWQaEPWDq-Uk6ea6I8MOnFvGrNu332hOmYseDwfviaUV4e65fsLNs5sGc6DbxxVAy0WnglnMi8IeHWuWNMqw");
-//        if(authen == null)
-//        {
-//        }
-//        authen.getAdditionalInformation();
-
         response.sendRedirect(loginUrl);
     }
 }
