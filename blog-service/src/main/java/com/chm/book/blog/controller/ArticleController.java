@@ -115,7 +115,14 @@ public class ArticleController {
         String authorization =  request.getHeader("authorization");
         ArticleEntity articleEntity = articleEntityService.createEntity(authorization, articleTags);
         List<Integer> tags = articleTags.getTags();
-        ResponseEntity<Map<String,Object>> responseEntity  = articleService.save(authorization, articleEntity, tags);
+        Integer retInt = articleService.save(authorization, articleEntity, tags);
+
+        Article article = articleEntityService.createResponseArticle(articleEntity, tags);
+        Map<String, Object> responseMap = new HashMap<>();
+        responseMap.put("status", retInt > 0 ? HttpStatus.OK : HttpStatus.EXPECTATION_FAILED);
+        responseMap.put("data", article);
+        responseMap.put("message", "successfully");
+        ResponseEntity<Map<String,Object>> responseEntity = new ResponseEntity<>(responseMap, HttpStatus.OK);
         return responseEntity;
     }
 
@@ -155,7 +162,12 @@ public class ArticleController {
     @RequestMapping("comment/save")
     public ResponseEntity<Map<String,Object>> saveComment(HttpServletRequest request, @RequestBody Comment comment) {
         String authorization =  request.getHeader("authorization");
-        ResponseEntity<Map<String,Object>> responseEntity = articleService.saveComment(authorization, comment);
+        Integer retInt = articleService.saveComment(authorization, comment);
+        Map<String, Object> responseMap = new HashMap<>();
+        responseMap.put("status", retInt > 0 ? HttpStatus.OK : HttpStatus.EXPECTATION_FAILED);
+        responseMap.put("data", comment);
+        responseMap.put("message", "successfully");
+        ResponseEntity<Map<String,Object>> responseEntity = new ResponseEntity<>(responseMap, HttpStatus.OK);
         return responseEntity;
     }
 

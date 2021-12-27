@@ -54,9 +54,10 @@ public class ArticleServiceImp implements FallbackFactory<ArticleService> {
             }
 
             @Override
-            public ResponseEntity<Map<String, Object>> saveComment(String authorization, Comment comment) {
+            public Integer saveComment(String authorization, Comment comment) {
                 return null;
             }
+
 
             @Override
             public LikeState getOneLike(String authorization, Integer articleId, Integer authorId) {
@@ -75,7 +76,7 @@ public class ArticleServiceImp implements FallbackFactory<ArticleService> {
             }
 
             @Override
-            public ResponseEntity<Map<String, Object>> save(String authorization, ArticleEntity articleEntity, List<Integer> tags) {
+            public Integer save(String authorization, ArticleEntity articleEntity, List<Integer> tags) {
                 if (FeignException.Unauthorized.class == throwable.getClass()) {
                     FeignException.Unauthorized feignException=  (FeignException.Unauthorized) throwable;
                     feignException.status();
@@ -84,7 +85,7 @@ public class ArticleServiceImp implements FallbackFactory<ArticleService> {
                 responseMap.put("status", HttpStatus.UNAUTHORIZED.value());
                 responseMap.put("data", throwable.getMessage());
                 ResponseEntity<Map<String,Object>> responseEntity = new ResponseEntity<>(responseMap, HttpStatus.UNAUTHORIZED);
-                return responseEntity;
+                return 0;
             }
 
             @Override

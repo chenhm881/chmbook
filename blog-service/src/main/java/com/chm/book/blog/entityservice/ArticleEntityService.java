@@ -7,12 +7,11 @@ import com.chm.book.blog.service.UserService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class ArticleEntityService {
@@ -77,5 +76,26 @@ public class ArticleEntityService {
         articleResponse.setUser(user);
         return articleResponse;
     }
+
+    public Article createResponseArticle(ArticleEntity articleEntity, List<Integer> tags) {
+        Article article = new Article();
+        CategoryEntity categoryEntity = new CategoryEntity();
+        categoryEntity.setCategoryId(articleEntity.getCategoryId());
+        article.setCategory(categoryEntity);
+        article.setContent(articleEntity.getContent());
+        article.setContentHtml(articleEntity.getContentHtml());
+        article.setSummary(articleEntity.getSummary());
+        article.setTitle(articleEntity.getTitle());
+        article.setId(articleEntity.getId());
+        List<TagEntity> tagEntities = new ArrayList<>();
+        tags.stream().forEach(tagId -> {
+            TagEntity tagEntity = new TagEntity();
+            tagEntity.setId(tagId);
+            tagEntities.add(tagEntity);
+        });
+        article.setTags(tagEntities);
+        return article;
+    }
+
 
 }

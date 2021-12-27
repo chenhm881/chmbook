@@ -67,41 +67,11 @@ public class MainController {
 
     @CrossOrigin
     @RequestMapping("article/save")
-    public ResponseEntity<Map<String,Object>> save(@RequestBody ArticleEntity articleEntity, @RequestParam List<Integer> tags) {
+    public Integer save(@RequestBody ArticleEntity articleEntity, @RequestParam List<Integer> tags) {
 
-        Integer returnInt = articleService.save(articleEntity);
+        Integer saveInt = articleService.save(articleEntity);
         Integer insertInt = articleTagService.insert(articleEntity.getId(), tags);
-
-        Article article = new Article();
-        CategoryEntity categoryEntity = new CategoryEntity();
-        categoryEntity.setCategoryId(articleEntity.getCategoryId());
-        article.setCategory(categoryEntity);
-        article.setContent(articleEntity.getContent());
-        article.setContentHtml(articleEntity.getContentHtml());
-        article.setSummary(articleEntity.getSummary());
-        article.setTitle(articleEntity.getTitle());
-        article.setId(articleEntity.getId());
-        List<TagEntity> tagEntities = new ArrayList<>();
-        tags.stream().forEach(tagId -> {
-            TagEntity tagEntity = new TagEntity();
-            tagEntity.setId(tagId);
-            tagEntities.add(tagEntity);
-        });
-        article.setTags(tagEntities);
-
-        Map<String, Object> responseMap = new HashMap<>();
-        ResponseEntity<Map<String,Object>> responseEntity;
-        if( returnInt > 0) {
-            responseMap.put("status", HttpStatus.OK.value());
-            responseMap.put("data", article);
-            responseMap.put("message", "save successfully");
-            responseEntity = new ResponseEntity<>(responseMap, HttpStatus.OK);
-        } else {
-            responseMap.put("status", HttpStatus.SERVICE_UNAVAILABLE.value());
-            responseMap.put("message", "save failed");
-            responseEntity = new ResponseEntity<>(responseMap, HttpStatus.SERVICE_UNAVAILABLE);
-        }
-        return responseEntity;
+        return insertInt;
     }
 
     @RequestMapping("select")

@@ -30,9 +30,9 @@ public class UserController {
     @CrossOrigin
     @RequestMapping("/register")
     public ResponseEntity<Map<String,Object>> register(HttpServletRequest request, @RequestBody SysUser sysUser) {
-        int response  = userEntityService.register(sysUser);
+        int retInt  = userEntityService.register(sysUser);
         Map<String, Object> responseMap = new HashMap<>();
-        responseMap.put("status", response > 0 ? HttpStatus.OK : HttpStatus.EXPECTATION_FAILED);
+        responseMap.put("status", retInt > 0 ? HttpStatus.OK : HttpStatus.EXPECTATION_FAILED);
         responseMap.put("data", sysUser);
         responseMap.put("message", "");
         ResponseEntity<Map<String,Object>> responseEntity = new ResponseEntity<>(responseMap, HttpStatus.OK);
