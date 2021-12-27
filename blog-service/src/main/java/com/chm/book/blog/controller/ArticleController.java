@@ -172,7 +172,7 @@ public class ArticleController {
     }
 
     @RequestMapping("like")
-    public ResponseEntity<Map<String,Object>> getLike(HttpServletRequest request, @RequestParam Integer articleId, @RequestParam Integer authorId) {
+    public ResponseEntity<Map<String,Object>> getLike(HttpServletRequest request, @RequestParam(value = "articleId") Integer articleId, @RequestParam(value = "articleId") Integer authorId) {
         String authorization =  request.getHeader("authorization");
         LikeState likeState = articleService.getOneLike(authorization, articleId, authorId);
         Map<String, Object> responseMap = new HashMap<>();
