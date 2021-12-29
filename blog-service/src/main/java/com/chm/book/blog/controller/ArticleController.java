@@ -119,7 +119,7 @@ public class ArticleController {
 
         Article article = articleEntityService.createResponseArticle(articleEntity, tags);
         Map<String, Object> responseMap = new HashMap<>();
-        responseMap.put("status", retInt > 0 ? HttpStatus.OK : HttpStatus.EXPECTATION_FAILED);
+        responseMap.put("status", retInt > 0 ? HttpStatus.OK.value() : HttpStatus.EXPECTATION_FAILED.value());
         responseMap.put("data", article);
         responseMap.put("message", "successfully");
         ResponseEntity<Map<String,Object>> responseEntity = new ResponseEntity<>(responseMap, HttpStatus.OK);
@@ -164,7 +164,7 @@ public class ArticleController {
         String authorization =  request.getHeader("authorization");
         Integer retInt = articleService.saveComment(authorization, comment);
         Map<String, Object> responseMap = new HashMap<>();
-        responseMap.put("status", retInt > 0 ? HttpStatus.OK : HttpStatus.EXPECTATION_FAILED);
+        responseMap.put("status", retInt > 0 ? HttpStatus.OK.value() : HttpStatus.EXPECTATION_FAILED.value());
         responseMap.put("data", comment);
         responseMap.put("message", "successfully");
         ResponseEntity<Map<String,Object>> responseEntity = new ResponseEntity<>(responseMap, HttpStatus.OK);
@@ -186,7 +186,12 @@ public class ArticleController {
     @RequestMapping("like/save")
     public ResponseEntity<Map<String,Object>> saveLike(HttpServletRequest request, @RequestBody LikeState likeState) {
         String authorization =  request.getHeader("authorization");
-        ResponseEntity<Map<String,Object>> responseEntity = articleService.saveLike(authorization, likeState);
+        Integer retInt = articleService.saveLike(authorization, likeState);
+        Map<String, Object> responseMap = new HashMap<>();
+        responseMap.put("status", retInt > 0 ? HttpStatus.OK.value() : HttpStatus.EXPECTATION_FAILED.value());
+        responseMap.put("data", likeState);
+        responseMap.put("message", "successfully");
+        ResponseEntity<Map<String,Object>> responseEntity = new ResponseEntity<>(responseMap, HttpStatus.OK);
         return responseEntity;
     }
 

@@ -47,9 +47,7 @@ public interface ArticleService {
     LikeState getOneLike(@RequestHeader String authorization, @RequestParam Integer articleId, @RequestParam Integer authorId);
 
     @RequestMapping(value = "/article/api/like/save")
-    ResponseEntity<Map<String,Object>> saveLike(@RequestHeader String authorization, @RequestBody LikeState likeState);
-
-
+    Integer saveLike(@RequestHeader String authorization, @RequestBody LikeState likeState);
 
 }
 

@@ -65,7 +65,7 @@ public class ArticleServiceImp implements FallbackFactory<ArticleService> {
             }
 
             @Override
-            public ResponseEntity<Map<String, Object>> saveLike(String authorization, LikeState likeState) {
+            public Integer saveLike(String authorization, LikeState likeState) {
                 return null;
             }
 
