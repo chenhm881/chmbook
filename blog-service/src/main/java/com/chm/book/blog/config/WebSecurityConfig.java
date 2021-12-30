@@ -37,7 +37,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     .and()
                     .csrf()
                     .disable()
-                    .logout().logoutSuccessUrl(customDispatchProperties.getRedirectUri()).logoutSuccessHandler(new UserLogoutSuccessHandler())
+                    .logout().logoutSuccessUrl(customDispatchProperties.getRedirectUri())
                     .and()
                     .authorizeRequests()
                     .antMatchers("/articles/**", "/article/**", "/tags", "/categories", "/save", "/register", "/comments/**", "/comment/**",

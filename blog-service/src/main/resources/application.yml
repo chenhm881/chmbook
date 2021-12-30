@@ -104,4 +104,5 @@ oauth2:
 custom:
   dispatch:
     redirectUri: http://localhost:3000/about
+    auth2LogoutUrl: http://localhost:8771/logout
 

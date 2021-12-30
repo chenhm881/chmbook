@@ -20,15 +20,19 @@ import java.io.IOException;
 @Component
 public class UserLogoutSuccessHandler implements LogoutSuccessHandler {
 
+    @Autowired
+    private CustomDispatchProperties customDispatchProperties;
+
     @Override
     public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        System.out.println(auth);
-        if (auth != null) {//清除认证
-            new SecurityContextLogoutHandler().logout(request, response, auth);
+        //Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+        System.out.println(authentication);
+        if (authentication != null) {//清除认证
+            new SecurityContextLogoutHandler().logout(request, response, authentication);
         }
 
-        response.sendRedirect("http://101.34.6.152:31073/logout?loginurl=http://101.34.6.152:31080/about");
+        response.sendRedirect(customDispatchProperties.getAuth2LogoutUrl() + "/logout?loginurl=" + customDispatchProperties.getRedirectUri());
 
     }
 }

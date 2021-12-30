@@ -10,5 +10,6 @@ import org.springframework.stereotype.Component;
 public class CustomDispatchProperties {
 
     private String redirectUri;
+    private String auth2LogoutUrl;
 
 }

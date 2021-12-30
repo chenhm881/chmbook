@@ -104,4 +104,6 @@ oauth2:
 custom:
   dispatch:
     redirectUri: http://101.34.6.152:31080/about
+    auth2LogoutUrl: http://101.34.6.152:31073/logout
+
 
