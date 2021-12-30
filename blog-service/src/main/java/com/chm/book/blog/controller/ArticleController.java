@@ -4,10 +4,8 @@ import com.chm.book.blog.client.Oauth2UserClient;
 import com.chm.book.blog.config.CustomDispatchProperties;
 import com.chm.book.blog.domain.*;
 import com.chm.book.blog.entityservice.ArticleEntityService;
-import com.chm.book.blog.service.FileService;
-import com.chm.book.blog.service.ArticleService;
-import com.chm.book.blog.service.OauthService;
-import com.chm.book.blog.service.TicketService;
+import com.chm.book.blog.entityservice.UserEntityService;
+import com.chm.book.blog.service.*;
 import com.chm.book.blog.utils.HttpUtils;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang3.StringUtils;
@@ -59,6 +57,9 @@ public class ArticleController {
 
     @Autowired
     private Oauth2UserClient oauth2UserClient;
+
+    @Autowired
+    private UserEntityService userEntityService;
 
     @Autowired
     private CustomDispatchProperties customDispatchProperties;
@@ -162,6 +163,8 @@ public class ArticleController {
     @RequestMapping("comment/save")
     public ResponseEntity<Map<String,Object>> saveComment(HttpServletRequest request, @RequestBody Comment comment) {
         String authorization =  request.getHeader("authorization");
+        SysUser sysUser = userEntityService.findAuthenticationUser(authorization);
+        comment.setAuthorId(sysUser.getId().longValue());
         Integer retInt = articleService.saveComment(authorization, comment);
         Map<String, Object> responseMap = new HashMap<>();
         responseMap.put("status", retInt > 0 ? HttpStatus.OK.value() : HttpStatus.EXPECTATION_FAILED.value());
@@ -172,9 +175,10 @@ public class ArticleController {
     }
 
     @RequestMapping("like")
-    public ResponseEntity<Map<String,Object>> getLike(HttpServletRequest request, @RequestParam(value = "articleId") Integer articleId, @RequestParam(value = "articleId") Integer authorId) {
+    public ResponseEntity<Map<String,Object>> getLike(HttpServletRequest request, @RequestParam(value = "articleId") Integer articleId) {
         String authorization =  request.getHeader("authorization");
-        LikeState likeState = articleService.getOneLike(authorization, articleId, authorId);
+        SysUser sysUser = userEntityService.findAuthenticationUser(authorization);
+        LikeState likeState = articleService.getOneLike(authorization, articleId, sysUser.getId());
         Map<String, Object> responseMap = new HashMap<>();
         responseMap.put("status", HttpStatus.OK.value());
         responseMap.put("data", likeState);
@@ -186,6 +190,8 @@ public class ArticleController {
     @RequestMapping("like/save")
     public ResponseEntity<Map<String,Object>> saveLike(HttpServletRequest request, @RequestBody LikeState likeState) {
         String authorization =  request.getHeader("authorization");
+        SysUser sysUser = userEntityService.findAuthenticationUser(authorization);
+        likeState.setAuthorId(sysUser.getId().longValue());
         Integer retInt = articleService.saveLike(authorization, likeState);
         Map<String, Object> responseMap = new HashMap<>();
         responseMap.put("status", retInt > 0 ? HttpStatus.OK.value() : HttpStatus.EXPECTATION_FAILED.value());
