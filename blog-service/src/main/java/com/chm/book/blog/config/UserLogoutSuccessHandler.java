@@ -25,13 +25,11 @@ public class UserLogoutSuccessHandler implements LogoutSuccessHandler {
 
     @Override
     public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
-        //Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         System.out.println(authentication);
         if (authentication != null) {//清除认证
-            new SecurityContextLogoutHandler().logout(request, response, authentication);
+            new SecurityContextLogoutHandler().logout(request, response, auth);
         }
-
         response.sendRedirect(customDispatchProperties.getAuth2LogoutUrl() + "/logout?loginurl=" + customDispatchProperties.getRedirectUri());
 
     }

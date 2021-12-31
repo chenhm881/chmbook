@@ -14,6 +14,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private CustomDispatchProperties customDispatchProperties;
 
+    @Autowired
+    private UserLogoutSuccessHandler userLogoutSuccessHandler;
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
@@ -37,7 +40,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     .and()
                     .csrf()
                     .disable()
-                    .logout().logoutSuccessUrl(customDispatchProperties.getRedirectUri())
+                    .logout().logoutSuccessUrl(customDispatchProperties.getRedirectUri()).logoutSuccessHandler(userLogoutSuccessHandler)
                     .and()
                     .authorizeRequests()
                     .antMatchers("/articles/**", "/article/**", "/tags", "/categories", "/save", "/register", "/comments/**", "/comment/**",
