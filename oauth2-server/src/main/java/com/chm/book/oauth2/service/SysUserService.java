@@ -11,7 +11,10 @@ public class SysUserService {
     private SysUserMapper sysUserMapper;
 
     public int insert(SysUser sysUser) {
-        return sysUserMapper.insert(sysUser);
+
+        Integer retInt = sysUserMapper.insert(sysUser);
+        sysUserMapper.addToBlogUserGroup(sysUser.getId(), 2);
+        return retInt;
     }
 
 }

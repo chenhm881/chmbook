@@ -26,7 +26,16 @@
     </select>
 
     <insert id="insert" parameterType="com.chm.book.oauth2.domain.SysUser" keyColumn="id" useGeneratedKeys="true">
+        <selectKey keyProperty="id" resultType="int" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
         insert into sys_user (username, password, email)
         values (#{username}, #{password}, #{email})
     </insert>
+
+    <insert id="addToBlogUserGroup" parameterType="Integer">
+        insert into user_group (user_id, group_id)
+        values (#{userId}, #{groupId,jdbcType=INTEGER}})
+    </insert>
+
 </mapper>
