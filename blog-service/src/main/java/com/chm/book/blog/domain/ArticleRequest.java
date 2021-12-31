@@ -19,7 +19,7 @@ public class ArticleRequest {
 
     private Integer viewCounts;
 
-    private Integer likeCount;
+    private Integer likeCounts;
 
     private Integer weight;
 

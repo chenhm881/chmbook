@@ -8,7 +8,7 @@
     <result column="summary" jdbcType="VARCHAR" property="summary" />
     <result column="title" jdbcType="VARCHAR" property="title" />
     <result column="view_counts" jdbcType="INTEGER" property="viewCounts" />
-    <result column="like_count" jdbcType="INTEGER" property="likeCount" />
+    <result column="like_counts" jdbcType="INTEGER" property="likeCounts" />
     <result column="weight" jdbcType="INTEGER" property="weight" />
     <result column="status" jdbcType="INTEGER" property="status" />
     <result column="author_id" jdbcType="BIGINT" property="authorId" />
@@ -24,7 +24,7 @@
     <result column="summary" jdbcType="VARCHAR" property="summary" />
     <result column="title" jdbcType="VARCHAR" property="title" />
     <result column="view_counts" jdbcType="INTEGER" property="viewCounts" />
-    <result column="like_count" jdbcType="INTEGER" property="likeCount" />
+    <result column="like_counts" jdbcType="INTEGER" property="likeCounts" />
     <result column="weight" jdbcType="INTEGER" property="weight" />
     <result column="status" jdbcType="INTEGER" property="status" />
     <result column="author_id" jdbcType="BIGINT" property="authorId" />

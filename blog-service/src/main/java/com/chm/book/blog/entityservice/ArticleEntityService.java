@@ -31,7 +31,7 @@ public class ArticleEntityService {
         entity.setTitle(articleTags.getTitle());
         entity.setAuthorId(articleTags.getAuthorId());
         entity.setCategoryId(articleTags.getCategoryId());
-        entity.setLikeCount(articleTags.getLikeCount());
+        entity.setLikeCounts(articleTags.getLikeCount());
         entity.setCreateDate(articleTags.getCreateDate());
         entity.setSummary(articleTags.getSummary());
         entity.setContent(articleTags.getContent());

@@ -18,7 +18,7 @@ public class ArticleEntity {
 
     private Integer viewCounts;
 
-    private Integer likeCount;
+    private Integer likeCounts;
 
     private Integer weight;
 
