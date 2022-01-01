@@ -34,7 +34,6 @@ public class JwtUserDetailsService implements UserDetailsService {
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
-
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         SysUser sysUser = sysUserMapper.selectSysUser(username);
@@ -42,7 +41,7 @@ public class JwtUserDetailsService implements UserDetailsService {
         Arrays.stream(sysUser.getAuthorities().split(",")).forEach(authority -> {
             authorities.add(new SimpleGrantedAuthority(authority));
         });
-        User user = new User(sysUser.getUsername(), bCryptPasswordEncoder.encode(sysUser.getPassword()), authorities);
+        User user = new User(sysUser.getUsername(), new BCryptPasswordEncoder().encode(sysUser.getPassword()), authorities);
         if (user != null) {
             return user;
         } else {
@@ -57,7 +56,7 @@ public class JwtUserDetailsService implements UserDetailsService {
         Arrays.stream(sysUser.getAuthorities().split(",")).forEach(authority -> {
             authorities.add(new SimpleGrantedAuthority(authority));
         });
-        User user = new User(sysUser.getUsername(), bCryptPasswordEncoder.encode(sysUser.getPassword()), authorities);
+        User user = new User(sysUser.getUsername(), new BCryptPasswordEncoder().encode(sysUser.getPassword()), authorities);
         if (user != null) {
             return user;
         } else {

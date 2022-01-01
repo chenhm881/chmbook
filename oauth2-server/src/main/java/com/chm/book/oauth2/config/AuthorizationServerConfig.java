@@ -50,13 +50,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     @Autowired
     private JwtUserDetailsService jwtUserDetailsService;
 
-    @Autowired
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    @Bean
-    public BCryptPasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
 
     @Override
     public void configure(AuthorizationServerSecurityConfigurer security) {
@@ -130,7 +124,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
         DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
         daoAuthenticationProvider.setUserDetailsService(jwtUserDetailsService);
         daoAuthenticationProvider.setHideUserNotFoundExceptions(false);
-        daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
+        daoAuthenticationProvider.setPasswordEncoder(new BCryptPasswordEncoder());
         return daoAuthenticationProvider;
     }
 
@@ -139,14 +133,4 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
        return new JwtClientDetailsService();
     }
 
-
-    @Bean
-    public SqlSessionFactory sqlSessionFactory(@Qualifier("dataSource") DataSource dataSource) throws Exception {
-        SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();
-        sqlSessionFactoryBean.setDataSource(dataSource);
-        sqlSessionFactoryBean.setTypeAliasesPackage(env.getProperty("mybatis.type-aliases-package"));
-        sqlSessionFactoryBean.setConfigLocation(
-                new DefaultResourceLoader().getResource(env.getProperty("mybatis.config-location")));
-        return sqlSessionFactoryBean.getObject();
-    }
 }
