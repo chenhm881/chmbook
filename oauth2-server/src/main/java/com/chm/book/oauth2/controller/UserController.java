@@ -1,19 +1,24 @@
 package com.chm.book.oauth2.controller;
 
+import com.chm.book.oauth2.config.RsaKeyProperties;
 import com.chm.book.oauth2.domain.SysUser;
 import com.chm.book.oauth2.service.JwtClientDetailsService;
 import com.chm.book.oauth2.service.SysUserService;
+import com.mysql.cj.conf.RuntimeProperty;
+import io.jsonwebtoken.Jwts;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.client.OAuth2ClientContext;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
-import org.springframework.security.oauth2.provider.OAuth2Authentication;
+import org.springframework.security.oauth2.provider.authentication.OAuth2AuthenticationDetails;
 import org.springframework.security.oauth2.provider.token.ConsumerTokenServices;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
@@ -23,6 +28,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.security.interfaces.RSAPrivateKey;
+import java.security.interfaces.RSAPublicKey;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -43,6 +50,9 @@ public class UserController {
     private TokenStore tokenStore;
 
     @Autowired
+    private RsaKeyProperties prop;
+
+    @Autowired
     private SysUserService sysUserService;
 
     @Autowired
@@ -51,27 +61,45 @@ public class UserController {
     @Autowired
     JwtClientDetailsService jwtClientDetailsService;
 
-    @CrossOrigin
-    @ResponseBody
-    @RequestMapping({"/user"})
-    public Map<String, Object> user(@RequestHeader String authorization) {
 
-        Map<String, Object> map = new HashMap<>();
-        OAuth2Authentication authen = null;
-        try {
-            String[] arr = authorization.split(" ");
-            authen = tokenStore.readAuthentication(arr[arr.length - 1]);
-            if(authen == null)
-            {
-                map.put("error", "invalid token!");
-                return map;
-            }
-        } catch (Exception ex) {
-            map.put("error", ex);
-        }
-        map.put("user", authen.getPrincipal());
-        map.put("authorities", authen.getAuthorities());
-        return map;
+    @Qualifier("oauth2ClientContext")
+    @Autowired
+    private OAuth2ClientContext oauth2ClientContext;
+
+//    @CrossOrigin
+//    @ResponseBody
+//    @RequestMapping({"/user"})
+//    public Map<String, Object> user(@RequestHeader String authorization) {
+//
+//        Map<String, Object> map = new HashMap<>();
+//        OAuth2Authentication authen = null;
+//        try {
+//            String[] arr = authorization.split(" ");
+//            authen = tokenStore.readAuthentication(arr[arr.length - 1]);
+//            if(authen == null)
+//            {
+//                map.put("error", "invalid token!");
+//                return map;
+//            }
+//        } catch (Exception ex) {
+//            map.put("error", ex);
+//        }
+//        map.put("user", authen.getPrincipal());
+//        map.put("authorities", authen.getAuthorities());
+//        return map;
+//    }
+
+    @CrossOrigin
+    @RequestMapping("/user")
+    public Object getUser(Authentication authentication, HttpServletRequest request)  {
+        String header = request.getHeader("Authorization");
+        String token = header.substring(header.lastIndexOf("bearer") + 8);
+
+        RSAPrivateKey privateKey = (RSAPrivateKey) prop.getPrivateKey();
+        RSAPublicKey publicKey = (RSAPublicKey) prop.getPublicKey();
+        //Object obj = Jwts.parserBuilder().setSigningKey(publicKey).build().parseClaimsJws(token);
+        Object obj = Jwts.parser().setSigningKey(publicKey).build().parseClaimsJws(token);
+        return obj;
     }
 
 
@@ -112,39 +140,51 @@ public class UserController {
     //登出操作
     @CrossOrigin
     @RequestMapping({"/oauth/exit"})
-    public void logout(HttpServletRequest request, HttpServletResponse response, String url) throws IOException {
+    public void logout(HttpServletRequest request, HttpServletResponse response, String url, String accessToken) throws IOException {
 
-        SecurityContext securityContext = SecurityContextHolder.getContext();
-        Authentication authentication = securityContext.getAuthentication();
-
-        new SecurityContextLogoutHandler().logout(request, response, authentication);
-        try {
-            System.out.println("referer" + request.getHeader("referer"));
-            if (!StringUtils.isEmpty(url)) {
-                response.sendRedirect(url);
-            } else {
-                throw new BadCredentialsException("Bad credentials");
+//        SecurityContext securityContext = SecurityContextHolder.getContext();
+//        Authentication authentication = securityContext.getAuthentication();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null) {
+            new SecurityContextLogoutHandler().logout(request, null, null);
+            try {
+                System.out.println("referer" + request.getHeader("referer"));
+                if (!StringUtils.isEmpty(url)) {
+                    //accountService.logout(url, request.getHeader("Authorization"));
+                    //String accessToken = request.getHeader("accessToken");
+                    consumerTokenServices.revokeToken(accessToken);
+                    response.sendRedirect(url);
+                } else {
+                    throw new BadCredentialsException("Bad credentials");
+                }
+                //response.sendRedirect(request.getHeader("referer"));
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-        } catch (IOException e) {
-            e.printStackTrace();
         }
-//        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-//        if (auth != null) {//清除认证
-//            new SecurityContextLogoutHandler().logout(request, response, auth);
-//        }
-        //重定向到指定页面
-
     }
 
 
     /**
      * 退出登录,并清除token
      **/
-    @GetMapping("/removeToken")
-    public Boolean removeToken(String accessToken){
+    @CrossOrigin
+    @RequestMapping("/remove")
+    public Object removeToken(Authentication authentication, HttpServletRequest request){
+        String oauth2Header = request.getHeader("Authorization");
+        if (oauth2Header != null && oauth2Header.startsWith("Bearer")) {
+            String token = oauth2Header.substring("Bearer".length()).trim();
+            OAuth2AccessToken oAuth2AccessToken = tokenStore.readAccessToken(token);
+            if (oAuth2AccessToken != null) {
+                tokenStore.removeAccessToken(oAuth2AccessToken);
+                tokenStore.readAuthentication(oAuth2AccessToken);
+                return "success";
+            }
 
-        return consumerTokenServices.revokeToken(accessToken);
+        }
+       return "fail";
     }
+
 
     /**
      * @Description 账号退出

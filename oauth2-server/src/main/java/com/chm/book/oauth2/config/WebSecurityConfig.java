@@ -29,20 +29,32 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http
-                .cors()
+
+        http.cors().and().authorizeRequests().antMatchers("/oauth/**", "/login/**", "/logout/**", "/user")
+                .permitAll().anyRequest().authenticated()
+                .and().formLogin()
                 .and()
-                .csrf()
-                .disable()
-                .authorizeRequests()
-                .antMatchers("/user", "/check_user","/oauth/**", "/getToken", "/register").permitAll()
-                .and()
-                .logout().logoutSuccessHandler(userLogoutSuccessHandler)
-                .and()
-                .formLogin().loginProcessingUrl("/login").and().authorizeRequests()
-                .anyRequest().authenticated();
-        //http.sessionManagement().invalidSessionUrl("/login");
-        http.sessionManagement().maximumSessions(1).maxSessionsPreventsLogin(false);
+                .logout()
+                .logoutSuccessHandler(userLogoutSuccessHandler)
+                .invalidateHttpSession(true)
+                .clearAuthentication(true)
+                .permitAll()
+                .and().csrf().disable();
+//        http
+//
+//                .cors()
+//                .and()
+//                .csrf()
+//                .disable()
+//                .authorizeRequests()
+//                .antMatchers("/user", "/check_user","/oauth/**", "/getToken", "/register").permitAll()
+//                .and()
+//                .logout().logoutSuccessHandler(userLogoutSuccessHandler)
+//                .and()
+//                .formLogin().loginProcessingUrl("/login").and().authorizeRequests()
+//                .anyRequest().authenticated();
+//        //http.sessionManagement().invalidSessionUrl("/login");
+//        http.sessionManagement().maximumSessions(1).maxSessionsPreventsLogin(false);
     }
 
 }

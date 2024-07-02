@@ -1,4 +1,6 @@
 spring:
+  main:
+    allow-bean-definition-overriding: true
   application:
     name: blog-service
   datasource:
@@ -32,6 +34,7 @@ server:
     session:
       cookie:
         name: OAUTH2SESSION
+        path: /
 
 feign:
   circuitbreaker:
@@ -86,10 +89,17 @@ security:
       access-token-uri: http://localhost:8771/oauth/token
       user-authorization-uri: http://localhost:8771/oauth/authorize
     resource:
-      tokenInfoUri: http://localhost:8771/oauth/check_token
+      #tokenInfoUri: http://localhost:8771/oauth/check_token
       #user-info-uri: http://localhost:8771/oauth/user
-#      jwt:
-#        key-uri: http://localhost:8771/oauth/token_key
+      #user-info-uri: http://localhost:8771/user
+      jwt:
+        key-uri: http://localhost:8771/oauth/token_key
+    sso:
+      login-path: /login
+
+rsa:
+  key:
+    publicKeyPath: oauth2/rsa_public_key.pem
 
 mybatis:
   config-location:  classpath:mybatis-config.xml
@@ -97,12 +107,7 @@ mybatis:
   configuration:
     map-underscore-to-camel-case: true
 
-oauth2:
-  key:
-    publicKey: oauth2/rsa_public_key.pem
-
 custom:
   dispatch:
     redirectUri: http://localhost:3000/about
     auth2LogoutUrl: http://localhost:8771/logout
-

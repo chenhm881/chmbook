@@ -20,10 +20,7 @@
 		<springfox-swagger2.version>2.9.2</springfox-swagger2.version>
 	</properties>
 	<dependencies>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-security</artifactId>
-		</dependency>
+
 
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
@@ -158,10 +155,7 @@
 			<groupId>org.springframework.security.oauth.boot</groupId>
 			<artifactId>spring-security-oauth2-autoconfigure</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>org.springframework.security</groupId>
-			<artifactId>spring-security-web</artifactId>
-		</dependency>
+
 	</dependencies>
 
 	<dependencyManagement>

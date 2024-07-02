@@ -21,9 +21,9 @@ import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
 
 import java.util.Arrays;
 
-@Configuration
-@EnableOAuth2Client
-public class Oauth2ClientConfig {
+//@Configuration
+//@EnableOAuth2Client
+//public class Oauth2ClientConfig {
 
 //    @Bean
 //    @ConfigurationProperties("oauth2")
@@ -117,4 +117,4 @@ public class Oauth2ClientConfig {
 //        tokenService.setClientSecret(details.getClientSecret());
 //        return tokenService;
 //    }
-}
+//

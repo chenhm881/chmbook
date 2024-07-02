@@ -17,8 +17,13 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.codec.Base64;
 import org.springframework.security.jwt.crypto.sign.RsaSigner;
 import org.springframework.security.jwt.crypto.sign.RsaVerifier;
+import org.springframework.security.oauth2.client.DefaultOAuth2ClientContext;
+import org.springframework.security.oauth2.client.OAuth2ClientContext;
+import org.springframework.security.oauth2.client.OAuth2RestTemplate;
+import org.springframework.security.oauth2.client.resource.OAuth2ProtectedResourceDetails;
 import org.springframework.security.oauth2.common.DefaultOAuth2AccessToken;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
@@ -69,8 +74,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
         endpoints
                 .authenticationManager(authenticationManager())
                 .tokenStore(jwtTokenStore())
-                .accessTokenConverter(accessTokenConverter())
-                .allowedTokenEndpointRequestMethods(HttpMethod.GET, HttpMethod.POST);
+                .accessTokenConverter(accessTokenConverter());
     }
 
     @Bean
@@ -98,24 +102,19 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
         final RsaVerifier verifier = new RsaVerifier(publicKey);
         converter.setVerifier(verifier);
         converter.setSigner(signer);
+        String verifierKey = "-----BEGIN PUBLIC KEY-----\n" + new String(Base64.encode(publicKey.getEncoded())) + "\n-----END PUBLIC KEY-----";
+        converter.setVerifierKey(verifierKey);
         return converter;
     }
 
-
-//    @Bean
-//    public JwtAccessTokenConverter accessTokenConverter() {
-//        JwtAccessTokenConverter jwtAccessTokenConverter = new JwtAccessTokenConverter();
-//        jwtAccessTokenConverter.setSigningKey("cjssjc");   //  Sets the JWT signing key
-//        return jwtAccessTokenConverter;
-//    }
-
     @Bean
     public JwtTokenStore jwtTokenStore() {
-        return new JwtTokenStore(accessTokenConverter());
+        return new MyJwtTokenStore(accessTokenConverter());
     }
 
     @Bean
     public AuthenticationManager authenticationManager() {
+
         return authentication -> daoAuthenticationProvider().authenticate(authentication);
     }
 
@@ -131,6 +130,11 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     @Bean("jwtClientDetailsService")
     public JwtClientDetailsService jwtClientDetailsService() {
        return new JwtClientDetailsService();
+    }
+
+    @Bean("oauth2ClientContext")
+    public OAuth2ClientContext oauth2ClientContext() {
+        return new DefaultOAuth2ClientContext();
     }
 
 }

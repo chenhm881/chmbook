@@ -1,5 +1,9 @@
 
 spring:
+  mvc:
+    view:
+      prefix: /WEB-INF/
+      suffix: .jsp
   application:
     name: file-api
   kafka:

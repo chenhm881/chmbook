@@ -8,18 +8,13 @@ import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import lombok.SneakyThrows;
 import org.apache.commons.io.IOUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.security.KeyFactory;
-import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
-import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
@@ -79,7 +74,8 @@ public class JwtUtils {
     }
 
     private Jws<Claims> parserToken(String token, PublicKey publicKey) {
-        return Jwts.parserBuilder().setSigningKey(publicKey).build().parseClaimsJws(token);
+        return Jwts.parser().setSigningKey(publicKey).build().parseClaimsJws(token);
+        //return Jwts.parserBuilder().setSigningKey(publicKey).build().parseClaimsJws(token);
     }
 
 }

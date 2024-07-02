@@ -10,6 +10,10 @@ spring:
 
 server:
   port: 8771
+  servlet:
+    session:
+      cookie:
+        path: /
 
 eureka:
   instance:

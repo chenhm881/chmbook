@@ -4,7 +4,10 @@ import com.chm.book.fileapi.domain.BatchInfo;
 import com.chm.book.fileapi.service.EntityPronPublish;
 import com.chm.book.fileapi.service.FileHitProducer;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Date;
 
 @RestController
 public class IndexController {
@@ -17,17 +20,24 @@ public class IndexController {
 
     @CrossOrigin
     @RequestMapping("hello/{mes}")
-    public String helloWorld(@PathVariable String mes) {
+    public String helloWorld(@PathVariable Date mes) {
         //int a = 5/0;
-        fileHitProducer.send(mes);
-        return mes;
+        fileHitProducer.send(mes.toString());
+        return mes.toString();
     }
 
     @RequestMapping("find")
-    public String getBlog(@RequestBody BatchInfo batchInfo)
+    public String getBlog(Date batchInfo)
     {
-        fileHitProducer.send(batchInfo);
-        return "hello article";
+        fileHitProducer.send(batchInfo.toString());
+        return batchInfo.toString();
+    }
+
+    @GetMapping("date")
+    public String getDate(@RequestParam("date") Date batchInfo)
+    {
+        fileHitProducer.send(batchInfo.toString());
+        return batchInfo.toString();
     }
 
     @CrossOrigin
