@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chm.book.article.mapper.ArticleMapper">
+  <resultMap id="BaseResultMap" type="com.chm.book.article.domain.ArticleEntity">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="comment_counts" jdbcType="INTEGER" property="commentCounts" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="summary" jdbcType="VARCHAR" property="summary" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="view_counts" jdbcType="INTEGER" property="viewCounts" />
+    <result column="like_counts" jdbcType="INTEGER" property="likeCounts" />
+    <result column="weight" jdbcType="INTEGER" property="weight" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="author_id" jdbcType="BIGINT" property="authorId" />
+    <result column="category_id" jdbcType="INTEGER" property="categoryId" />
+    <result column="content" jdbcType="LONGVARCHAR" property="content" />
+    <result column="content_html" jdbcType="LONGVARCHAR" property="contentHtml" />
+  </resultMap>
+
+  <resultMap id="ArticleMap" type="com.chm.book.article.domain.Article">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="comment_counts" jdbcType="INTEGER" property="commentCounts" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="summary" jdbcType="VARCHAR" property="summary" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="view_counts" jdbcType="INTEGER" property="viewCounts" />
+    <result column="like_counts" jdbcType="INTEGER" property="likeCounts" />
+    <result column="weight" jdbcType="INTEGER" property="weight" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="author_id" jdbcType="BIGINT" property="authorId" />
+    <result column="content" jdbcType="LONGVARCHAR" property="content" />
+    <result column="content_html" jdbcType="LONGVARCHAR" property="contentHtml" />
+
+    <association property="category" column="category_id" javaType="com.chm.book.article.domain.CategoryEntity">
+       <result column="category_id" property="categoryId"></result>
+       <result column="category_name" property="categoryName"></result>
+    </association>
+
+    <collection property="tags" ofType="com.chm.book.article.domain.TagEntity" javaType="ArrayList"
+                select="com.chm.book.article.mapper.TagMapper.findByArticleId" column="id" />
+
+  </resultMap>
+
+  <sql id="Column_List">
+    id, comment_counts, create_date, summary, title, view_counts, like_count, weight,
+    status, author_id, category_id, content, content_html
+  </sql>
+
+  <sql id="Column_Count_List">
+    select articles.id, articles.create_date, articles.summary, articles.title, articles.view_counts, articles.weight,
+    articles.status, articles.author_id, articles.category_id, articles.content, articles.content_html, comments.comment_counts, likestate.like_counts from article articles
+    left join (select count(id) as comment_counts, article_id from comment group by article_id) comments on comments.article_id = articles.id
+    left join (select count(id) as like_counts, article_id from like_state where like_state.like = 1 group by article_id) likestate on likestate.article_id = articles.id
+  </sql>
+
+  <sql id="Select_Article" >
+   select article.*, category.category_id, category.category_name from article_storage.article article left join article_storage.category category on article.category_id = category.category_id
+  </sql>
+
+  <select id="find" parameterType="java.lang.Integer" resultMap="ArticleMap">
+    <include refid="Select_Article" />
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+
+  <select id="findAll" resultMap="BaseResultMap" parameterType="com.chm.book.article.domain.ArticleRequest">
+    select * from (<include refid="Column_Count_List" />) articlecounts
+    <where>
+      <choose>
+       <when test="authorId != null">
+         articlecounts.author_id = ${authorId}
+       </when>
+        <when test="tagId != null">
+          articlecounts.id in (select article_id from article_tag where tag_id = ${tagId} )
+        </when>
+        <when test="categoryId != null">
+          articlecounts.category_id = ${categoryId}
+        </when>
+      </choose>
+    </where>
+  </select>
+
+  <insert id="insertOrUpdate" parameterType="com.chm.book.article.domain.ArticleEntity" keyColumn="id" keyProperty="id" useGeneratedKeys="true">
+    insert into article (id, comment_counts, create_date,
+      summary, title, view_counts,
+      like_count, weight, status,
+      author_id, category_id, content,
+      content_html)
+    values (#{id}, #{commentCounts,jdbcType=INTEGER}, #{createDate,jdbcType=TIMESTAMP},
+      #{summary,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, #{viewCounts,jdbcType=INTEGER},
+      #{likeCount,jdbcType=INTEGER}, #{weight,jdbcType=INTEGER}, #{status,jdbcType=INTEGER},
+      #{authorId,jdbcType=BIGINT}, #{categoryId,jdbcType=INTEGER}, #{content,jdbcType=LONGVARCHAR},
+      #{contentHtml,jdbcType=LONGVARCHAR})
+    ON DUPLICATE KEY UPDATE
+      summary = values(summary), title = values(title), category_id = values(category_id),
+      content = values(content), content_html = values(content_html)
+  </insert>
+
+</mapper>

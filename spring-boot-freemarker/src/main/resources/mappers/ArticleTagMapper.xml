@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chm.book.article.mapper.ArticleTagMapper">
+  <resultMap id="BaseResultMap" type="com.chm.book.article.domain.ArticleTag">
+    <id property="articleId" column="article_id"/>
+    <id property="tagId" column="tag_id" />
+    <id property="status" column="status" jdbcType="BIT" javaType="boolean"/>
+  </resultMap>
+
+  <select id="findAll" parameterType="java.lang.Integer" resultMap="BaseResultMap" >
+    select * from article_tag where article_id = #{article_id,jdbcType=INTEGER}
+  </select>
+
+  <select id="find" parameterType="java.lang.Integer" resultMap="BaseResultMap" >
+    select * from article_tag where status = 1 and article_id = #{article_id,jdbcType=INTEGER}
+  </select>
+
+  <insert id="insertList" parameterType="java.util.List" keyColumn="article_id, tag_id" keyProperty="articleId, tagId">
+    insert into article_tag (article_id, tag_id, status)
+    VALUES
+    <foreach collection="list" item="c" separator=",">
+      (#{c.articleId}, #{c.tagId}, #{c.status}
+      )
+    </foreach>
+  </insert>
+
+  <update id="updateList">
+    update article_tag
+    <trim prefix="set" suffixOverrides=",">
+      <trim prefix="status =case" suffix="end,">
+        <foreach collection="articleTagList" item="item" index="index">
+          when tag_id=#{item.tagId} then #{item.status, jdbcType=BIT}
+        </foreach>
+      </trim>
+    </trim>
+    where article_id=#{articleId} and tag_id in
+    <foreach collection="articleTagList" index="index" item="item" separator="," open="(" close=")">
+      #{item.tagId}
+    </foreach>
+  </update>
+
+</mapper>

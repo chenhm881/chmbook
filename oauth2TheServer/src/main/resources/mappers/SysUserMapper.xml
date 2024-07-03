@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.oauth2theserver.mapper.SysUserMapper">
+    <resultMap id="resultMap" type="com.example.oauth2theserver.domain.SysUser">
+      <result column="id" property="id" jdbcType="INTEGER"/>
+      <result column="username" property="username" jdbcType="VARCHAR"/>
+      <result column="password" property="password" jdbcType="VARCHAR"/>
+      <result column="authorities" property="authorities" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <resultMap id="resultGroupMap" type="com.example.oauth2theserver.domain.SysUser">
+        <result column="id" property="id" jdbcType="INTEGER"/>
+        <result column="groupname" property="username" jdbcType="VARCHAR"/>
+        <result column="authorities" property="authorities" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <select id="selectSysUser" resultMap="resultMap">
+      select usergroup.*, ogroup.authorities from (select suser.*, ugroup.group_id from sys_user suser
+         inner join user_group ugroup on suser.id = ugroup.user_id where suser.username = #{username})
+      usergroup inner join oauth_group ogroup on usergroup.group_id = ogroup.id
+    </select>
+
+    <select id="selectSysUserByClientId" resultMap="resultGroupMap">
+        select `group`.* from oauth_group `group` inner join oauth_client_group client_group on `group`.id = client_group.group_id
+        where client_group.client_id = #{clientId} limit 1
+    </select>
+
+    <insert id="insert" parameterType="com.example.oauth2theserver.domain.SysUser" keyColumn="id" useGeneratedKeys="true">
+        <selectKey keyProperty="id" resultType="int" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into sys_user (username, password, email)
+        values (#{username}, #{password}, #{email})
+    </insert>
+
+    <insert id="addToBlogUserGroup" parameterType="Integer">
+        insert into user_group (user_id, group_id)
+        values (#{userId}, #{groupId,jdbcType=INTEGER}})
+    </insert>
+
+</mapper>

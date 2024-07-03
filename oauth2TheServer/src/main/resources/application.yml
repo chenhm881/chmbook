@@ -1,0 +1,24 @@
+spring:
+  application:
+    name: oauth2TheServer
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://101.34.6.152:32306/security_authority?useSSL=false&allowMultiQueries=true&autoReconnect=true&allowPublicKeyRetrieval=true
+    username: root
+    password: mysql
+
+server:
+  port: 8772
+
+rsa:
+  key:
+    publicKeyPath: oauth2/rsa_public_key.pem
+    privateKeyPath: oauth2/rsa_private_key_pkcs8.pem
+
+
+mybatis:
+  config-location:  classpath:mybatis-config.xml
+  type-aliases-package: com.example.oauth2theserver.domain
+  configuration:
+    map-underscore-to-camel-case: true

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chm.book.article.mapper.CategoryMapper">
+  <resultMap id="BaseResultMap" type="com.chm.book.article.domain.CategoryEntity">
+    <id column="category_id" jdbcType="INTEGER" property="categoryId" />
+    <result column="category_pid" jdbcType="INTEGER" property="categoryPid" />
+    <result column="category_name" jdbcType="VARCHAR" property="categoryName" />
+    <result column="category_description" jdbcType="VARCHAR" property="categoryDescription" />
+    <result column="category_order" jdbcType="INTEGER" property="categoryOrder" />
+    <result column="category_icon" jdbcType="VARCHAR" property="categoryIcon" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    category_id, category_pid, category_name, category_description, category_order, category_icon
+  </sql>
+
+  <select id="find" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from category
+    where category_id = #{categoryId,jdbcType=INTEGER}
+  </select>
+
+  <select id="findAll" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from category
+  </select>
+
+  <delete id="delete" parameterType="java.lang.Integer">
+    delete from category
+    where category_id = #{categoryId,jdbcType=INTEGER}
+  </delete>
+
+  <insert id="insert" parameterType="com.chm.book.article.domain.CategoryEntity">
+    insert into category (category_id, category_pid, category_name,
+      category_description, category_order, category_icon
+      )
+    values (#{categoryId,jdbcType=INTEGER}, #{categoryPid,jdbcType=INTEGER}, #{categoryName,jdbcType=VARCHAR},
+      #{categoryDescription,jdbcType=VARCHAR}, #{categoryOrder,jdbcType=INTEGER}, #{categoryIcon,jdbcType=VARCHAR}
+      )
+  </insert>
+
+  <update id="update" parameterType="com.chm.book.article.domain.CategoryEntity">
+    update category
+    set category_pid = #{categoryPid,jdbcType=INTEGER},
+      category_name = #{categoryName,jdbcType=VARCHAR},
+      category_description = #{categoryDescription,jdbcType=VARCHAR},
+      category_order = #{categoryOrder,jdbcType=INTEGER},
+      category_icon = #{categoryIcon,jdbcType=VARCHAR}
+    where category_id = #{categoryId,jdbcType=INTEGER}
+  </update>
+
+  <insert id="insertOrUpdate" parameterType="com.chm.book.article.domain.CategoryEntity" keyColumn="category_id" keyProperty="categoryId" useGeneratedKeys="true">
+    insert into category (category_id, category_pid, category_name,
+                          category_description, category_order, category_icon
+    )
+    values (#{categoryId,jdbcType=INTEGER}, #{categoryPid,jdbcType=INTEGER}, #{categoryName,jdbcType=VARCHAR},
+            #{categoryDescription,jdbcType=VARCHAR}, #{categoryOrder,jdbcType=INTEGER}, #{categoryIcon,jdbcType=VARCHAR}
+           )
+      ON DUPLICATE KEY UPDATE
+          category_pid = values(category_pid), category_name = values(category_name), category_description = values(category_description),
+          category_order = values(category_order), category_icon = values(category_icon)
+  </insert>
+
+</mapper>

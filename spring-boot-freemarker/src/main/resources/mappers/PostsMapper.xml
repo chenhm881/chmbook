@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chm.book.article.mapper.PostsMapper">
+  <resultMap id="BaseResultMap" type="com.chm.book.article.domain.Posts">
+    <id column="posts_id" jdbcType="INTEGER" property="postsId" />
+    <result column="posts_user_id" jdbcType="INTEGER" property="postsUserId" />
+    <result column="posts_title" jdbcType="VARCHAR" property="postsTitle" />
+    <result column="posts_view_count" jdbcType="INTEGER" property="postsViewCount" />
+    <result column="posts_comment_count" jdbcType="INTEGER" property="postsCommentCount" />
+    <result column="posts_like_count" jdbcType="INTEGER" property="postsLikeCount" />
+    <result column="posts_is_comment" jdbcType="INTEGER" property="postsIsComment" />
+    <result column="posts_status" jdbcType="INTEGER" property="postsStatus" />
+    <result column="posts_order" jdbcType="INTEGER" property="postsOrder" />
+    <result column="posts_update_time" jdbcType="TIMESTAMP" property="postsUpdateTime" />
+    <result column="posts_create_time" jdbcType="TIMESTAMP" property="postsCreateTime" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.chm.book.article.domain.PostsWithBLOBs">
+    <result column="posts_content" jdbcType="LONGVARCHAR" property="postsContent" />
+    <result column="posts_summary" jdbcType="LONGVARCHAR" property="postsSummary" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    posts_id, posts_user_id, posts_title, posts_view_count, posts_comment_count, posts_like_count, 
+    posts_is_comment, posts_status, posts_order, posts_update_time, posts_create_time
+  </sql>
+  <sql id="Blob_Column_List">
+    posts_content, posts_summary
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from posts
+    where posts_id = #{postsId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from posts
+    where posts_id = #{postsId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.chm.book.article.domain.PostsWithBLOBs">
+    insert into posts (posts_id, posts_user_id, posts_title, 
+      posts_view_count, posts_comment_count, posts_like_count, 
+      posts_is_comment, posts_status, posts_order, 
+      posts_update_time, posts_create_time, posts_content, 
+      posts_summary)
+    values (#{postsId,jdbcType=INTEGER}, #{postsUserId,jdbcType=INTEGER}, #{postsTitle,jdbcType=VARCHAR}, 
+      #{postsViewCount,jdbcType=INTEGER}, #{postsCommentCount,jdbcType=INTEGER}, #{postsLikeCount,jdbcType=INTEGER}, 
+      #{postsIsComment,jdbcType=INTEGER}, #{postsStatus,jdbcType=INTEGER}, #{postsOrder,jdbcType=INTEGER}, 
+      #{postsUpdateTime,jdbcType=TIMESTAMP}, #{postsCreateTime,jdbcType=TIMESTAMP}, #{postsContent,jdbcType=LONGVARCHAR}, 
+      #{postsSummary,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.chm.book.article.domain.PostsWithBLOBs">
+    insert into posts
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="postsId != null">
+        posts_id,
+      </if>
+      <if test="postsUserId != null">
+        posts_user_id,
+      </if>
+      <if test="postsTitle != null">
+        posts_title,
+      </if>
+      <if test="postsViewCount != null">
+        posts_view_count,
+      </if>
+      <if test="postsCommentCount != null">
+        posts_comment_count,
+      </if>
+      <if test="postsLikeCount != null">
+        posts_like_count,
+      </if>
+      <if test="postsIsComment != null">
+        posts_is_comment,
+      </if>
+      <if test="postsStatus != null">
+        posts_status,
+      </if>
+      <if test="postsOrder != null">
+        posts_order,
+      </if>
+      <if test="postsUpdateTime != null">
+        posts_update_time,
+      </if>
+      <if test="postsCreateTime != null">
+        posts_create_time,
+      </if>
+      <if test="postsContent != null">
+        posts_content,
+      </if>
+      <if test="postsSummary != null">
+        posts_summary,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="postsId != null">
+        #{postsId,jdbcType=INTEGER},
+      </if>
+      <if test="postsUserId != null">
+        #{postsUserId,jdbcType=INTEGER},
+      </if>
+      <if test="postsTitle != null">
+        #{postsTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="postsViewCount != null">
+        #{postsViewCount,jdbcType=INTEGER},
+      </if>
+      <if test="postsCommentCount != null">
+        #{postsCommentCount,jdbcType=INTEGER},
+      </if>
+      <if test="postsLikeCount != null">
+        #{postsLikeCount,jdbcType=INTEGER},
+      </if>
+      <if test="postsIsComment != null">
+        #{postsIsComment,jdbcType=INTEGER},
+      </if>
+      <if test="postsStatus != null">
+        #{postsStatus,jdbcType=INTEGER},
+      </if>
+      <if test="postsOrder != null">
+        #{postsOrder,jdbcType=INTEGER},
+      </if>
+      <if test="postsUpdateTime != null">
+        #{postsUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="postsCreateTime != null">
+        #{postsCreateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="postsContent != null">
+        #{postsContent,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="postsSummary != null">
+        #{postsSummary,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.chm.book.article.domain.PostsWithBLOBs">
+    update posts
+    <set>
+      <if test="postsUserId != null">
+        posts_user_id = #{postsUserId,jdbcType=INTEGER},
+      </if>
+      <if test="postsTitle != null">
+        posts_title = #{postsTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="postsViewCount != null">
+        posts_view_count = #{postsViewCount,jdbcType=INTEGER},
+      </if>
+      <if test="postsCommentCount != null">
+        posts_comment_count = #{postsCommentCount,jdbcType=INTEGER},
+      </if>
+      <if test="postsLikeCount != null">
+        posts_like_count = #{postsLikeCount,jdbcType=INTEGER},
+      </if>
+      <if test="postsIsComment != null">
+        posts_is_comment = #{postsIsComment,jdbcType=INTEGER},
+      </if>
+      <if test="postsStatus != null">
+        posts_status = #{postsStatus,jdbcType=INTEGER},
+      </if>
+      <if test="postsOrder != null">
+        posts_order = #{postsOrder,jdbcType=INTEGER},
+      </if>
+      <if test="postsUpdateTime != null">
+        posts_update_time = #{postsUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="postsCreateTime != null">
+        posts_create_time = #{postsCreateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="postsContent != null">
+        posts_content = #{postsContent,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="postsSummary != null">
+        posts_summary = #{postsSummary,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where posts_id = #{postsId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.chm.book.article.domain.PostsWithBLOBs">
+    update posts
+    set posts_user_id = #{postsUserId,jdbcType=INTEGER},
+      posts_title = #{postsTitle,jdbcType=VARCHAR},
+      posts_view_count = #{postsViewCount,jdbcType=INTEGER},
+      posts_comment_count = #{postsCommentCount,jdbcType=INTEGER},
+      posts_like_count = #{postsLikeCount,jdbcType=INTEGER},
+      posts_is_comment = #{postsIsComment,jdbcType=INTEGER},
+      posts_status = #{postsStatus,jdbcType=INTEGER},
+      posts_order = #{postsOrder,jdbcType=INTEGER},
+      posts_update_time = #{postsUpdateTime,jdbcType=TIMESTAMP},
+      posts_create_time = #{postsCreateTime,jdbcType=TIMESTAMP},
+      posts_content = #{postsContent,jdbcType=LONGVARCHAR},
+      posts_summary = #{postsSummary,jdbcType=LONGVARCHAR}
+    where posts_id = #{postsId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.chm.book.article.domain.Posts">
+    update posts
+    set posts_user_id = #{postsUserId,jdbcType=INTEGER},
+      posts_title = #{postsTitle,jdbcType=VARCHAR},
+      posts_view_count = #{postsViewCount,jdbcType=INTEGER},
+      posts_comment_count = #{postsCommentCount,jdbcType=INTEGER},
+      posts_like_count = #{postsLikeCount,jdbcType=INTEGER},
+      posts_is_comment = #{postsIsComment,jdbcType=INTEGER},
+      posts_status = #{postsStatus,jdbcType=INTEGER},
+      posts_order = #{postsOrder,jdbcType=INTEGER},
+      posts_update_time = #{postsUpdateTime,jdbcType=TIMESTAMP},
+      posts_create_time = #{postsCreateTime,jdbcType=TIMESTAMP}
+    where posts_id = #{postsId,jdbcType=INTEGER}
+  </update>
+
+
+  <insert id="insertList" parameterType="java.util.List" keyColumn="posts_id" keyProperty="postsId" useGeneratedKeys="true">
+    INSERT INTO posts (posts_id, posts_user_id, posts_title,
+    posts_view_count, posts_comment_count, posts_like_count,
+    posts_is_comment, posts_status, posts_order,
+    posts_update_time, posts_create_time, posts_content,
+    posts_summary)
+    VALUES
+    <foreach collection="list" item="c" separator=",">
+      (#{c.postsUserId}, #{c.postsTitle}, #{c.postsViewCount}, #{c.postsCommentCount}, #{c.postsLikeCount},
+      #{c.postsIsComment}, #{c.postsStatus}, #{c.postsOrder}, #{c.postsUpdateTime}, #{c.postsCreateTime},
+      #{c.postsContent}, #{c.postsSummary}
+      )
+    </foreach>
+  </insert>
+
+  <update id="updateList" parameterType="java.util.List">
+    update posts
+    <trim prefix="set" suffixOverrides=",">
+      <trim prefix="posts_content =case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when posts_id=#{item.postsId} then #{item.postsContent}
+        </foreach>
+      </trim>
+      <trim prefix="posts_summary =case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when posts_id=#{item.postsId} then #{item.postsSummary}
+        </foreach>
+      </trim>
+      <trim prefix="posts_update_time =case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when posts_id=#{item.postsId} then #{item.postsUpdateTime}
+        </foreach>
+      </trim>
+      posts_status = 1
+    </trim>
+    where posts_id in
+    <foreach collection="list" index="index" item="item" separator="," open="(" close=")">
+      #{item.postsId}
+    </foreach>
+  </update>
+
+</mapper>

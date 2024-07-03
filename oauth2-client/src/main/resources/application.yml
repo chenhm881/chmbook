@@ -1,0 +1,23 @@
+spring:
+  application:
+    name: Oauth2Client
+server:
+  port: 8381
+  servlet:
+    session:
+      cookie:
+        name: OAUTH2SESSION2
+        path: /
+
+security:
+  oauth2:
+    client:
+      client-id: client
+      client-secret: 123
+      access-token-uri: http://localhost:8771/oauth/token
+      user-authorization-uri: http://localhost:8771/oauth/authorize
+      scope: all
+    resource:
+      #jwt:
+#        key-uri: http://localhost:8771/oauth/token_key
+      user-info-uri: http://localhost:8771/user

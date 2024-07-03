@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chm.book.article.mapper.LikeStateMapper">
+  <resultMap id="BaseResultMap" type="com.chm.book.article.domain.LikeState">
+    <id column="article_id" jdbcType="INTEGER" property="articleId" />
+    <id column="author_id" jdbcType="BIGINT" property="authorId" />
+    <result column="id" jdbcType="VARCHAR" property="id" />
+    <result column="like" jdbcType="BIT" property="like" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    article_id, author_id, id, `like`
+  </sql>
+
+  <select id="selectByPrimaryKey" parameterType="com.chm.book.article.domain.LikeStateKey" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from like_state
+    where article_id = #{articleId,jdbcType=INTEGER}
+      and author_id = #{authorId,jdbcType=BIGINT}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="Integer">
+    delete from like_state
+    where article_id = #{articleId,jdbcType=INTEGER}
+      and author_id = #{authorId,jdbcType=BIGINT}
+  </delete>
+
+  <insert id="insertOrUpdate" keyColumn="article_id, author_id" keyProperty="articleId, authorId" parameterType="com.chm.book.article.domain.LikeState">
+    <selectKey keyProperty="id" resultType="String" order="BEFORE">
+      select replace(uuid(),'-','') from dual
+    </selectKey>
+
+    insert into like_state (article_id, author_id, id,
+                            `like`)
+    values (#{articleId,jdbcType=INTEGER}, #{authorId,jdbcType=BIGINT}, #{id,jdbcType=INTEGER},
+            #{like,jdbcType=BIT})
+      ON DUPLICATE KEY UPDATE
+          `like` = values(`like`)
+  </insert>
+</mapper>
